@@ -2,3 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+    --gray-dark:#868686;
+}
+
+html{
+    font-size: 90%;
+}
+
+body{
+    background-color:rgb(242, 242, 242);
+    font-family: 'Lato',sans-serif;
+    
+}
+.homeScreen{
+    height: 1400px;
+}
+.navbar li{
+    font-weight: bold;
+    position: relative;
+    padding: 5px;
+    overflow: hidden;
+    cursor: pointer;
+}
+.navbar li:after{
+    content: "";
+    width: 100%;
+    height: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: lawngreen;
+    transform: translateX(-100%);
+    transition: all .2s;
+    /* z-index: -1; */
+}
+
+.navbar li:hover::after{
+    transform: translate(0);
+}

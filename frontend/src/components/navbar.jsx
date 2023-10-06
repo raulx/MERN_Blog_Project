@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 
 function Navbar() {
+  const auth = false;
+  const handleLogout = () => {
+    console.log("logged out successfully.");
+  };
   return (
-    <nav className="flex p-6 justify-between items-center bg-white uppercase">
-      <div>
+    <nav className="flex p-6 navbar justify-between items-center bg-white uppercase h-full">
+      <div className="text-5xl">
         <h1 className="text-3xl tracking-widest">
           <span className="text-5xl font-semibold text-orange-400">B</span>lo
           <span className="text-4xl text-orange-300">g</span>
@@ -22,8 +26,19 @@ function Navbar() {
           </li>
         </ul>
       </div>
-      <div>
-        <Link>Profile</Link>
+      <div className="flex gap-4 mr-10">
+        {auth ? (
+          <>
+            <Link to={"/profile"}>Profile</Link>
+            <button onClick={handleLogout} className="uppercase">
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to={"/auth"}>Login/Register</Link>
+          </>
+        )}
       </div>
     </nav>
   );

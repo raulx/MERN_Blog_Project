@@ -14,6 +14,7 @@ import MusicContent from "../screens/categoriesScreens/musicScreen";
 import FinanceContent from "../screens/categoriesScreens/financeBussinessScreen";
 import SportsContent from "../screens/categoriesScreens/sportsScreen";
 import ProtectedRoute from "../hooks/authenticateRoutesHook";
+import AllCategories from "../screens/categoriesScreens/allContent";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
             path: "/categories",
             element: <ProtectedRoute />,
             children: [
+              { path: "/categories/all", element: <AllCategories /> },
               { path: "/categories/politics", element: <PoliticsContent /> },
               { path: "/categories/sports", element: <SportsContent /> },
               {
