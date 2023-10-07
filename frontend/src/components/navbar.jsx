@@ -13,7 +13,7 @@ function Navbar() {
           <span className="text-4xl text-orange-300">g</span>
         </h1>
       </div>
-      <div>
+      <div className="md:block hidden">
         <ul className="flex gap-10 text-xl text-gray-700">
           <li>
             <Link to={"/"}>Home</Link>
@@ -26,7 +26,7 @@ function Navbar() {
           </li>
         </ul>
       </div>
-      <div className="flex gap-4 mr-10">
+      <div className="flex gap-4  mr-10">
         {auth ? (
           <>
             <Link to={"/profile"}>Profile</Link>

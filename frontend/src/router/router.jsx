@@ -15,6 +15,7 @@ import FinanceContent from "../screens/categoriesScreens/financeBussinessScreen"
 import SportsContent from "../screens/categoriesScreens/sportsScreen";
 import ProtectedRoute from "../hooks/authenticateRoutesHook";
 import AllCategories from "../screens/categoriesScreens/allContent";
+import AuthScreen from "../screens/authScreen";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
         element: <HomeContent />,
         children: [
           {
+            // these are protect routes
             path: "/categories",
             element: <ProtectedRoute />,
             children: [
@@ -50,17 +52,27 @@ const router = createBrowserRouter([
               { path: "/categories/food", element: <FoodContent /> },
             ],
           },
-          {
-            path: "/categories/fashionlifestyle",
-            element: <FashionLifestyleContent />,
-          },
         ],
       },
       { path: "/about", element: <AboutPage /> },
       { path: "/contact", element: <ContactPage /> },
+      { path: "/auth", element: <AuthScreen /> },
     ],
   },
   { path: "*", element: <NotFound /> },
 ]);
+
+export const categoryLinks = [
+  { category: "all", url: "/categories/all" },
+  { category: "politics", url: "/categories/politics" },
+  { category: "sports", url: "/categories/sports" },
+  { category: "finance & bussiness", url: "/categories/financeBussiness" },
+  { category: "music", url: "/categories/music" },
+  { category: "travel", url: "/categories/travel" },
+  { category: "fashion & lifestyle", url: "/categories/fashionLifestyle" },
+  { category: "health", url: "/categories/health" },
+  { category: "food", url: "/categories/food" },
+  { category: "science & tech", url: "/categories/scienceTech" },
+];
 
 export default router;

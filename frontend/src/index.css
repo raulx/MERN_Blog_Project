@@ -4,6 +4,8 @@
 
 :root{
     --gray-dark:#868686;
+    --extra-light-green:#F0FDF4;
+    --light-green:#DCFCE7;
 }
 
 html{
@@ -11,7 +13,7 @@ html{
 }
 
 body{
-    background-color:rgb(242, 242, 242);
+    background-color:var(--extra-light-green);
     font-family: 'Lato',sans-serif;
     
 }
@@ -35,9 +37,275 @@ body{
     background-color: lawngreen;
     transform: translateX(-100%);
     transition: all .2s;
-    /* z-index: -1; */
 }
 
 .navbar li:hover::after{
     transform: translate(0);
+}
+
+/* class for authScreen */
+
+
+
+.width{
+    width: 44rem   
+}  
+
+
+/* responsive media queries*/
+
+/* width responsive  */
+
+/* desktop screens  */
+@media(max-width:2048px){
+    .width{
+        width: 65rem;
+    }
+}
+@media(max-width:1920px){
+    .width{
+        width:61rem
+    }
+}
+@media(max-width:1728px){
+    .width{
+        width: 54rem;
+    }
+}
+@media(max-width:1600px){
+    .width{
+        width: 49.5rem;
+    }
+}
+@media(max-width:1536px){
+    .width{
+        width: 47.25rem;
+    }
+}
+@media(max-width:1440px){
+    .width{
+        width:44rem
+    }
+}
+@media(max-width:1366px){
+    .width{
+        width:41.5rem
+    }
+}
+@media(max-width:1280px){
+   
+    .width{
+        width:38.5rem
+    }
+}
+@media(max-width:1024px){
+    .auth_box{
+        width: 35%;
+    }
+    .width{
+        width:43.9rem
+    }
+}
+@media(max-width:962px){
+    .width{
+        width: 41rem;
+    }
+}
+/* table screens  */
+
+@media(max-width:834px){
+    .auth_box{
+        width: 70%;
+    }
+    .width{
+        width: 75rem;
+    }
+}
+@media(max-width:820px){
+    .auth_box{
+        width: 70%;
+    }
+    .width{
+        width: 73.5rem;
+    }
+}
+
+
+
+
+@media(max-width:810px){
+    .auth_box{
+        width: 65%;
+    }
+    .width{
+        width: 67.5rem;
+    }
+}
+
+@media(max-width:800px){
+    .auth_box{
+        width: 60%;
+    }
+    .width{
+        width: 60.5rem;
+    }
+}
+
+@media(max-width:768px){
+    .auth_box{
+        width: 58%;
+    }
+    .width{
+        width: 56rem;
+    }
+}
+@media(max-width:720px){
+    .width{
+        width:52rem
+    }
+}
+@media (max-width:712px) {
+    .width{
+        width: 51.5rem;
+    } 
+}
+@media(max-width:601px){
+    .width{
+        width: 42.5rem;
+    }
+}
+
+
+/* mobile screens */
+
+@media(max-width:540px){
+    .width{
+        width:37.5rem
+    }
+}
+
+@media(max-width:512px){
+    .width{
+        width: 35rem;
+    }
+}
+@media(max-width:428px){
+    .auth_box{
+        width: 80%;
+    }
+    .width{
+        width: 41.5rem;
+    }
+}
+
+@media(max-width:414px){
+    .auth_box{
+        width: 90%;
+    }
+    .width{
+        width: 46rem;
+    }
+}
+@media(max-width:412px){
+    .auth_box{
+        width: 90%;
+    }
+    .width{
+        width: 45.5rem;
+    }
+}
+@media(max-width:393px){
+    .auth_box{
+        width: 90%;
+    }
+    .width{
+        width: 43.25rem;
+    }
+}
+@media(max-width:390px){
+    .auth_box{
+        width: 90%;
+    }
+    .width{
+        width: 43rem;
+    }
+
+}
+@media(max-width:375px){
+    .width{
+        width:40.9rem
+    }
+}
+@media(max-width:360px){
+    .auth_box{
+        width: 90%;
+    }
+    .width{
+        width: 39.15rem;
+    }
+}
+@media(max-width:280px){
+    
+    .auth_box{
+        font-size: 60%;
+
+        width: 95%;
+    }
+    .width{
+        width: 31rem;
+    }
+}
+
+
+/* height responsive  */
+@media(max-height:1280px){
+    .auth_box{
+        height: 40%;
+    }
+}
+
+@media(max-height:1138px){
+    .auth_box{
+        height: 48%;
+}}
+@media(max-height:1024px){
+    .auth_box{
+        height: 52%;
+    }
+}
+@media(max-height:900px){
+    .auth_box{
+        height: 58.5%;
+    }
+}
+@media(max-height:768px){
+    .auth_box{
+        height: 62.5%;
+    }
+}
+@media(max-height:720px){
+    .auth_box{
+        height: 70%;
+    }
+}
+@media(max-height:640px){
+    .auth_box{
+        height:75%
+    }
+}
+@media(max-height:540px){
+    .auth_box{
+        height: 85%;
+    }
+}
+@media(max-height:280px){
+    html{
+        font-size: 40%;
+    }
+    .auth_box{
+        width: 30%;
+    }
+    .width{
+        width: 55.5rem;
+    }
 }

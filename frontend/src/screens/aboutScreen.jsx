@@ -7,7 +7,7 @@ function AboutPage() {
       <div>
         <Navbar />
       </div>
-      <div className="container mx-auto ">About Us...</div>
+      <div className="container mx-auto ">about page...</div>
       <div className="h-48">
         <Footer />
       </div>
