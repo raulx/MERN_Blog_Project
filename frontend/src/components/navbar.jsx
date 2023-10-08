@@ -66,7 +66,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
           )}
         </div>
       </nav>
-      <div className="md:hidden bg-green-950 p-2 rounded-xl font-bold  flex justify-center items-center my-2 w-2/3 mx-auto ">
+      <div className="md:hidden bg-green-950  py-2 px-6 rounded-xl font-bold  flex justify-center items-center my-2 md:w-2/3 w-4/5 mx-auto ">
         <ul className="flex gap-10 text-xl text-green-100 capitalize">
           {pages.map((page) => {
             return (

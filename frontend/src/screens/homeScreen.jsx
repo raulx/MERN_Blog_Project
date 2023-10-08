@@ -16,7 +16,7 @@ function HomePage() {
         <div className="bg-green-500 ">Carousel</div>
       </div>
       <div
-        className={`col-span-2  text-lg flex md:static absolute top-16 left-0 w-96 md:w-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center bg-white md:py-2 transition-all duration-200 ${
+        className={`col-span-2  text-lg flex md:static absolute top-16 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center bg-white md:py-2 transition-all duration-200 ${
           phoneNav ? "translate-x-0" : "-translate-x-full"
         }`}
       >

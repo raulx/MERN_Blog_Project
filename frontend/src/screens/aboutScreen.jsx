@@ -8,7 +8,7 @@ function AboutPage() {
       <div>
         <Navbar />
       </div>
-      <div className="container mx-auto overflow-y-scroll">
+      <div className="container mx-auto my-2 p-4">
         <div className="container mx-auto flex md:flex-row mb-6 flex-col justify-center md:items-start md:justify-normal items-center gap-4 ">
           <div className=" w-11/12">
             <img src={aboutUs} alt="about Us" />
@@ -26,7 +26,7 @@ function AboutPage() {
               est aperiam. Vel similique perferendis aperiam tempora beatae
               blanditiis nemo qui ex mollitia, illum nobis voluptatem quam!
             </p>
-            <h1 className="text-4xl">Lorem ipsum dolor sit amet.</h1>
+            <h1 className="md:text-4xl text-xl">Lorem ipsum dolor sit amet.</h1>
             <p>
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Pariatur
               assumenda, nam voluptates quas esse totam fuga temporibus sed eos

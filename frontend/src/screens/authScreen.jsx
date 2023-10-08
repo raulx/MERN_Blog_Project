@@ -7,7 +7,7 @@ function AuthScreen() {
       <div className="auth_box w-1/4  bg-white shadow-2xl rounded-2xl px-6 py-4 ">
         <div className="relative w-full h-full overflow-hidden">
           <div
-            className={`h-full width flex transition-all duration-200 text-center ${
+            className={`h-full custom_width flex transition-all duration-200 text-center ${
               authType.login ? "translate-x-0" : "-translate-x-2/4"
             }`}
           >

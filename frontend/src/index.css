@@ -27,7 +27,7 @@ body{
 
 
 
-.width{
+.custom_width{
     width: 44rem   
 }  
 
@@ -38,43 +38,43 @@ body{
 
 /* desktop screens  */
 @media(max-width:2048px){
-    .width{
+    .custom_width{
         width: 65rem;
     }
 }
 @media(max-width:1920px){
-    .width{
+    .custom_width{
         width:61rem
     }
 }
 @media(max-width:1728px){
-    .width{
+    .custom_width{
         width: 54rem;
     }
 }
 @media(max-width:1600px){
-    .width{
+    .custom_width{
         width: 49.5rem;
     }
 }
 @media(max-width:1536px){
-    .width{
+    .custom_width{
         width: 47.25rem;
     }
 }
 @media(max-width:1440px){
-    .width{
+    .custom_width{
         width:44rem
     }
 }
 @media(max-width:1366px){
-    .width{
+    .custom_width{
         width:41.5rem
     }
 }
 @media(max-width:1280px){
    
-    .width{
+    .custom_width{
         width:38.5rem
     }
 }
@@ -82,12 +82,12 @@ body{
     .auth_box{
         width: 35%;
     }
-    .width{
+    .custom_width{
         width:43.9rem
     }
 }
 @media(max-width:962px){
-    .width{
+    .custom_width{
         width: 41rem;
     }
     .homeScreen{
@@ -100,7 +100,7 @@ body{
     .auth_box{
         width: 70%;
     }
-    .width{
+    .custom_width{
         width: 75rem;
     }
 }
@@ -108,7 +108,7 @@ body{
     .auth_box{
         width: 70%;
     }
-    .width{
+    .custom_width{
         width: 73.5rem;
     }
 }
@@ -120,7 +120,7 @@ body{
     .auth_box{
         width: 65%;
     }
-    .width{
+    .custom_width{
         width: 67.5rem;
     }
 }
@@ -129,7 +129,7 @@ body{
     .auth_box{
         width: 60%;
     }
-    .width{
+    .custom_width{
         width: 60.5rem;
     }
 }
@@ -138,23 +138,23 @@ body{
     .auth_box{
         width: 58%;
     }
-    .width{
+    .custom_width{
         width: 56rem;
     }
     
 }
 @media(max-width:720px){
-    .width{
+    .custom_width{
         width:52rem
     }
 }
 @media (max-width:712px) {
-    .width{
+    .custom_width{
         width: 51.5rem;
     } 
 }
 @media(max-width:601px){
-    .width{
+    .custom_width{
         width: 42.5rem;
     }
 }
@@ -163,13 +163,13 @@ body{
 /* mobile screens */
 
 @media(max-width:540px){
-    .width{
+    .custom_width{
         width:37.5rem
     }
 }
 
 @media(max-width:512px){
-    .width{
+    .custom_width{
         width: 35rem;
     }
 }
@@ -177,7 +177,7 @@ body{
     .auth_box{
         width: 80%;
     }
-    .width{
+    .custom_width{
         width: 41.5rem;
     }
 }
@@ -186,7 +186,7 @@ body{
     .auth_box{
         width: 90%;
     }
-    .width{
+    .custom_width{
         width: 46rem;
     }
 }
@@ -194,7 +194,7 @@ body{
     .auth_box{
         width: 90%;
     }
-    .width{
+    .custom_width{
         width: 45.5rem;
     }
 }
@@ -202,7 +202,7 @@ body{
     .auth_box{
         width: 90%;
     }
-    .width{
+    .custom_width{
         width: 43.25rem;
     }
 }
@@ -210,13 +210,13 @@ body{
     .auth_box{
         width: 90%;
     }
-    .width{
+    .custom_width{
         width: 43rem;
     }
 
 }
 @media(max-width:375px){
-    .width{
+    .custom_width{
         width:40.9rem
     }
 }
@@ -224,7 +224,7 @@ body{
     .auth_box{
         width: 90%;
     }
-    .width{
+    .custom_width{
         width: 39.15rem;
     }
 }
@@ -235,7 +235,7 @@ body{
 
         width: 95%;
     }
-    .width{
+    .custom_width{
         width: 31rem;
     }
 }
@@ -289,7 +289,7 @@ body{
     .auth_box{
         width: 30%;
     }
-    .width{
+    .custom_width{
         width: 55.5rem;
     }
 }
