@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import NotFound from "../screens/notFoundScreen";
-import HomeContent from "../screens/homeScreen";
+import HomePage from "../screens/homeScreen";
+import { HomeContent } from "../screens/homeScreen";
 import ContactPage from "../screens/contactScreen";
 import AboutPage from "../screens/aboutScreen";
 import PoliticsContent from "../screens/categoriesScreens/politicsScreen";
@@ -24,8 +25,9 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <HomeContent />,
+        element: <HomePage />,
         children: [
+          { index: true, element: <HomeContent /> },
           {
             // these are protect routes
             path: "/categories",
@@ -62,6 +64,11 @@ const router = createBrowserRouter([
   { path: "*", element: <NotFound /> },
 ]);
 
+export const pages = [
+  { name: "Home", url: "/" },
+  { name: "about", url: "/about" },
+  { name: "contact", url: "/contact" },
+];
 export const categoryLinks = [
   { category: "all", url: "/categories/all" },
   { category: "politics", url: "/categories/politics" },

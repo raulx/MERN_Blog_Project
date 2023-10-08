@@ -4,9 +4,10 @@ export default {
   theme: {
     extend: {
       screens: {
+        mobile: "360px",
         sm: "480px",
-        md: "768px",
-        lg: "976px",
+        tablet: "768px",
+        md: "976px",
         xl: "1440px",
       },
       gridTemplateRows: {

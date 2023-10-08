@@ -8,7 +8,7 @@ function ContactPage() {
         <Navbar />
       </div>
       <div className="container mx-auto ">contact page...</div>
-      <div className="h-48">
+      <div>
         <Footer />
       </div>
     </div>
