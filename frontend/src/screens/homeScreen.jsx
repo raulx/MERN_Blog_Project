@@ -8,13 +8,13 @@ function HomePage() {
   const location = useLocation();
   const [phoneNav, setPhoneNav] = useState(false);
   return (
-    <div className="md:grid grid-cols-10 grid-rows-8 gap-4 flex flex-col  justify-between overflow-hidden homeScreen">
+    <div className="md:grid grid-cols-10 h-screen grid-rows-8 gap-4 flex flex-col  justify-between overflow-hidden">
       <div className="md:col-span-10 md:row-span-1 h-32  md:h-full">
         <Navbar phoneNav={phoneNav} handlePhoneNav={setPhoneNav} />
       </div>
 
       <div
-        className={`col-span-2  text-lg flex md:static absolute top-16 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center border bg-white md:py-6 transition-all duration-200 md:px-4 ${
+        className={`col-span-2  text-lg flex md:static absolute top-16 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center border bg-white md:py-6 transition-all duration-200 md:px-4 overflow-y-scroll ${
           phoneNav ? "translate-x-0" : "-translate-x-full"
         }`}
       >
