@@ -39,10 +39,10 @@ function Navbar({ phoneNav, handlePhoneNav }) {
               return (
                 <li
                   key={page.name}
-                  className={`rounded-2xl transition-all duration-200 font-bold py-2 px-6 ${
+                  className={` rounded-xl transition-all duration-200 font-bold py-2 px-6 ${
                     location.pathname === page.url
-                      ? "bg-green-600"
-                      : "hover:bg-green-600"
+                      ? " border-b border-lime-300"
+                      : "hover:text-green-300"
                   }`}
                 >
                   <Link to={page.url}>{page.name}</Link>

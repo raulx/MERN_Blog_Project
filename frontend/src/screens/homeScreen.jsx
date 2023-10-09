@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { categoryLinks } from "../router/router";
+import Carousel from "../components/carousel";
 import { useState } from "react";
 
 function HomePage() {
@@ -13,7 +14,7 @@ function HomePage() {
         <Navbar phoneNav={phoneNav} handlePhoneNav={setPhoneNav} />
       </div>
       <div className="md:col-span-10 md:row-span-2 bg-green-500 md:h-full md:block hidden w-full">
-        <div className="bg-green-500 ">Carousel</div>
+        <Carousel />
       </div>
       <div
         className={`col-span-2  text-lg flex md:static absolute top-16 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center bg-white md:py-2 transition-all duration-200 ${
