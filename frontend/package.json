@@ -9,7 +9,8 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "json-server": "json-server db.json --watch --port 3500",
-    "faker": "node ./dev/fake.js"
+    "faker": "node ./dev/fake.js",
+    "testApi": "node ./src/store/api/testApi.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.6",

@@ -16,7 +16,7 @@ dist
 dist-ssr
 *.local
 db.json
-
+testApi.js
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

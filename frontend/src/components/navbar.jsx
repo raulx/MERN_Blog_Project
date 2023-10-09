@@ -11,7 +11,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
   };
 
   return (
-    <div className="flex flex-col justify-between">
+    <div className="flex flex-col justify-between md:h-full">
       <nav className="flex md:p-6 p-2 navbar relative justify-between md:items-center items-start  text-green-100 bg-green-950 uppercase h-full w-full">
         <div className="text-5xl flex gap-2 justify-center items-center">
           <div

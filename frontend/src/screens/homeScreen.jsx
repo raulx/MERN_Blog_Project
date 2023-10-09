@@ -2,28 +2,25 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { categoryLinks } from "../router/router";
-import Carousel from "../components/carousel";
 import { useState } from "react";
 
 function HomePage() {
   const location = useLocation();
   const [phoneNav, setPhoneNav] = useState(false);
   return (
-    <div className="md:grid grid-cols-10 grid-rows-10 gap-4 flex flex-col  justify-between overflow-hidden homeScreen ">
+    <div className="md:grid grid-cols-10 grid-rows-8 gap-4 flex flex-col  justify-between overflow-hidden homeScreen">
       <div className="md:col-span-10 md:row-span-1 h-32  md:h-full">
         <Navbar phoneNav={phoneNav} handlePhoneNav={setPhoneNav} />
       </div>
-      <div className="md:col-span-10 md:row-span-2 bg-green-500 md:h-full md:block hidden w-full">
-        <Carousel />
-      </div>
+
       <div
-        className={`col-span-2  text-lg flex md:static absolute top-16 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center bg-white md:py-2 transition-all duration-200 ${
+        className={`col-span-2  text-lg flex md:static absolute top-16 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center border bg-white md:py-6 transition-all duration-200 md:px-4 ${
           phoneNav ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <Link
           to={"/create"}
-          className="uppercase  text-center bg-blue-500 hover:bg-blue-700 transition-all duration-200 rounded text-white w-full py-2"
+          className="uppercase  mb-4 text-center bg-blue-500 hover:bg-blue-700 transition-all duration-200 rounded text-white w-full py-2"
         >
           Create Blog
         </Link>
@@ -31,9 +28,9 @@ function HomePage() {
           return (
             <Link
               key={link.category}
-              className={`w-full hover:bg-green-400 hover:text-white uppercase py-4 rounded transition-all duration-200 text-center ${
+              className={`w-full hover:bg-green-400 hover:text-white uppercase py-4 rounded transition-all duration-200 text-center  ${
                 location.pathname === link.url
-                  ? "bg-green-400 text-white"
+                  ? "bg-green-500 text-white"
                   : null
               }`}
               to={link.url}
