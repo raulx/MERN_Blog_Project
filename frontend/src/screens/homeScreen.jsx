@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import { categoryLinks } from "../router/router";
+import { contentTypeLinks } from "../router/router";
 import { useState } from "react";
 
 function HomePage() {
@@ -18,16 +18,10 @@ function HomePage() {
           phoneNav ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <Link
-          to={"/create"}
-          className="uppercase  mb-4 text-center bg-blue-500 hover:bg-blue-700 transition-all duration-200 rounded text-white w-full py-2"
-        >
-          Create Blog
-        </Link>
-        {categoryLinks.map((link) => {
+        {contentTypeLinks.map((link) => {
           return (
             <Link
-              key={link.category}
+              key={link.type}
               className={`w-full hover:bg-green-400 hover:text-white uppercase py-4 rounded transition-all duration-200 text-center  ${
                 location.pathname === link.url
                   ? "bg-green-500 text-white"
@@ -36,7 +30,7 @@ function HomePage() {
               to={link.url}
               onClick={() => setPhoneNav(false)}
             >
-              {link.category}
+              {link.type}
             </Link>
           );
         })}
@@ -59,7 +53,7 @@ function HomeContent() {
           Welcome to Entertainment point
         </h1>
         <Link
-          to={"/categories/all"}
+          to={"/blogs/categories/all"}
           className="px-4 py-2 text-2xl bg-blue-500 w-72 mx-auto text-white rounded-lg "
         >
           Explore
