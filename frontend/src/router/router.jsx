@@ -21,9 +21,11 @@ const router = createBrowserRouter([
           { index: true, element: <HomeContent /> },
           {
             // these are protect routes
-            path: "/categories",
+            path: "/blogs/categories",
             element: <ProtectedRoute />,
-            children: [{ path: "/categories/:type", element: <BlogsScreen /> }],
+            children: [
+              { path: "/blogs/categories/:type", element: <BlogsScreen /> },
+            ],
           },
         ],
       },
@@ -40,17 +42,15 @@ export const pages = [
   { name: "about", url: "/about" },
   { name: "contact", url: "/contact" },
 ];
-export const categoryLinks = [
-  { category: "all", url: "/categories/all" },
-  { category: "politics", url: "/categories/Politics" },
-  { category: "sports", url: "/categories/Sports" },
-  { category: "finance & bussiness", url: "/categories/Finance & Bussiness" },
-  { category: "music", url: "/categories/Music" },
-  { category: "travel", url: "/categories/Travel" },
-  { category: "fashion & lifestyle", url: "/categories/Fashion & Lifestyle" },
-  { category: "health", url: "/categories/Health" },
-  { category: "food", url: "/categories/Food" },
-  { category: "science & tech", url: "/categories/Science & Technology" },
+
+export const contentTypeLinks = [
+  { type: "blogs", url: "/blogs/categories/all" },
+  { type: "news", url: "/news/all" },
+  { type: "memes", url: "/memes/all" },
+  { type: "shorts", url: "/shorts/all" },
+  { type: "games", url: "/games/all" },
+  { type: "south movies", url: "/southMovies/all" },
+  { type: "shopping deals", url: "/shopping/all" },
 ];
 
 export default router;

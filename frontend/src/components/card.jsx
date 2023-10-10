@@ -5,7 +5,7 @@ import { FaTag } from "react-icons/fa";
 function Card({ cardData }) {
   return (
     <>
-      <div className="w-96 h-96 border-2">
+      <div className="md:w-96 md:h-96 w-full h-96 border-2">
         <img
           src={cardData.imageUrl}
           className="w-full h-1/2 object-cover object-center rounded-lg"
@@ -18,7 +18,7 @@ function Card({ cardData }) {
               Read More
             </Link>
           </p>
-          <p className="rounded bg-gray-200 py-2 px-4 w-2/3 flex justify-start items-center gap-4">
+          <p className="rounded bg-gray-200 py-2 px-4 w-2/3 mt-4 flex justify-start items-center gap-4">
             <FaTag />
             {cardData.category}
           </p>
