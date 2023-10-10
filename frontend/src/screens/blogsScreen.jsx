@@ -2,11 +2,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useGetBlogsQuery } from "../store/api/blogApi";
 import { addBlog, addPage } from "../store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Card from "../components/card";
 import CardSkeleton from "../components/cardSkeleton";
+import { FaFilter, FaChevronLeft, FaChevronDown } from "react-icons/fa";
 
 function Blogs() {
+  const [filterNav, setFilterNav] = useState({
+    isOpen: false,
+    currentCategory: "all",
+  });
   const { blogs, currentPage, pageSize } = useSelector((state) => {
     return state.blogs;
   });
@@ -19,7 +24,6 @@ function Blogs() {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       dispatch(addBlog(data));
     }
   }, [data, dispatch]);
@@ -37,8 +41,39 @@ function Blogs() {
   }
 
   return (
-    <>
-      <div className="p-4 flex flex-wrap w-full gap-4 h-full justify-center ">
+    <div className="w-full h-full flex flex-col gap-6 p-4 ">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl text-gray-400 font-extrabold uppercase">
+          Results
+        </h1>
+        <div
+          className="flex gap-6 items-center cursor-pointer  "
+          onClick={() => {
+            setFilterNav((prevValue) => {
+              return { ...prevValue, isOpen: !prevValue.isOpen };
+            });
+          }}
+        >
+          <div className="flex gap-4 items-center p-2">
+            <p className="text-2xl hidden md:block text-gray-400 font-extrabold uppercase">
+              Sort By
+            </p>
+            <FaFilter className="text-2xl" />
+          </div>
+
+          <div className="h-full border-2 w-64 rounded py-2 px-4 text-lg uppercase flex items-center justify-between">
+            <p>{filterNav.currentCategory}</p>
+            <div>
+              {filterNav.isOpen ? <FaChevronDown /> : <FaChevronLeft />}
+            </div>
+          </div>
+          {/* <div className="md:hidden block text-2xl">
+            <FaEllipsisV />
+          </div> */}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap w-full gap-4 justify-between ">
         {blogData.map((blog) => {
           return <Card key={blog.id} cardData={blog} />;
         })}
@@ -52,7 +87,7 @@ function Blogs() {
           </>
         ) : null}
       </div>
-    </>
+    </div>
   );
 }
 
