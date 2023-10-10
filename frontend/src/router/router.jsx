@@ -50,7 +50,7 @@ export const categoryLinks = [
   { category: "fashion & lifestyle", url: "/categories/Fashion & Lifestyle" },
   { category: "health", url: "/categories/Health" },
   { category: "food", url: "/categories/Food" },
-  { category: "science & tech", url: "/categories/Science & Technology" },
+  { category: "science & technology", url: "/categories/Science & Technology" },
 ];
 
 export default router;

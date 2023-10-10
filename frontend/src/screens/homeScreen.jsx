@@ -14,7 +14,7 @@ function HomePage() {
       </div>
 
       <div
-        className={`col-span-2  text-lg flex md:static absolute top-16 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center border bg-white md:py-6 transition-all duration-200 md:px-4 overflow-y-scroll ${
+        className={`col-span-2  text-lg flex md:static absolute z-20 top-16 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center border bg-white md:py-6 transition-all duration-200 md:px-4 overflow-y-scroll ${
           phoneNav ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -52,7 +52,21 @@ function HomePage() {
 }
 
 function HomeContent() {
-  return <div>HomeContent...</div>;
+  return (
+    <div className="flex justify-center items-center h-full w-full">
+      <div className="text-center capitalize flex flex-col max-w-2xl h-96 gap-6 justify-center">
+        <h1 className="font-bold text-lime-600 text-5xl ">
+          Welcome to Entertainment point
+        </h1>
+        <Link
+          to={"/categories/all"}
+          className="px-4 py-2 text-2xl bg-blue-500 w-72 mx-auto text-white rounded-lg "
+        >
+          Explore
+        </Link>
+      </div>
+    </div>
+  );
 }
 
 export { HomeContent };
