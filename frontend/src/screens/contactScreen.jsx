@@ -1,6 +1,6 @@
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import contactImg from "../screens/screenAssets/contact.jpg";
+import contactImg from "../assets/screenAssets/contact.jpg";
 function ContactPage() {
   return (
     <div className="md:h-screen w-screen flex flex-col justify-between overflow-hidden">

@@ -1,6 +1,6 @@
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import aboutUs from "./screenAssets/aboutUs.jpg";
+import aboutUs from "../assets/screenAssets/aboutUs.jpg";
 
 function AboutPage() {
   return (

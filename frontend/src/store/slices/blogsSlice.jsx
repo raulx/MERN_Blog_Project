@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const blogsSlice = createSlice({
   name: "blogs",
-  initialState: { blogs: [], currentPage: 1 },
+  initialState: { blogs: [], currentPage: 1, pageSize: 15 },
   reducers: {
     addBlog(state, action) {
       const newData = action.payload;

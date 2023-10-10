@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+//FOR DEV USE ONLY
 const pause = (duration) => {
   return new Promise((resolve) => {
     setTimeout(resolve, duration);
@@ -10,7 +11,7 @@ const blogApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3500/blogs",
     fetchFn: async (...args) => {
-      await pause(1000);
+      await pause(2000);
       return fetch(...args);
     },
   }),
