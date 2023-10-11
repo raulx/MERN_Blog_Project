@@ -8,6 +8,7 @@ import AboutPage from "../screens/aboutScreen";
 import ProtectedRoute from "../hooks/authenticateRoutesHook";
 import BlogsScreen from "../screens/blogsScreen";
 import AuthScreen from "../screens/authScreen";
+import NewsScreen from "../screens/newsScreen";
 
 const router = createBrowserRouter([
   {
@@ -21,10 +22,11 @@ const router = createBrowserRouter([
           { index: true, element: <HomeContent /> },
           {
             // these are protect routes
-            path: "/blogs/categories",
+            path: "/categories",
             element: <ProtectedRoute />,
             children: [
-              { path: "/blogs/categories/:type", element: <BlogsScreen /> },
+              { path: "/categories/blogs/all", element: <BlogsScreen /> },
+              { path: "/categories/news/all", element: <NewsScreen /> },
             ],
           },
         ],
@@ -44,8 +46,8 @@ export const pages = [
 ];
 
 export const contentTypeLinks = [
-  { type: "blogs", url: "/blogs/categories/all" },
-  { type: "news", url: "/news/all" },
+  { type: "blogs", url: "/categories/blogs/all" },
+  { type: "news", url: "/categories/news/all" },
   { type: "memes", url: "/memes/all" },
   { type: "shorts", url: "/shorts/all" },
   { type: "games", url: "/games/all" },

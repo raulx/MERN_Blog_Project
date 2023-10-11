@@ -1,7 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
 import { useGetBlogsQuery } from "../store/api/blogApi";
-import { addBlog, addPage } from "../store";
+import { addBlog, addPage, setPrevData } from "../store";
 import { useEffect, useState } from "react";
 import Card from "../components/card";
 import CardSkeleton from "../components/cardSkeleton";
@@ -23,15 +22,15 @@ const blogCategories = [
     category: "fashion & lifestyle",
   },
   { id: 8, category: "health" },
-  { category: "food" },
+  { id: 9, category: "food" },
   {
-    id: 9,
+    id: 10,
     category: "science & technology",
   },
 ];
 
 function Blogs() {
-  const { blogs, currentPage, pageSize } = useSelector((state) => {
+  const { blogs, prevData, currentPage, pageSize } = useSelector((state) => {
     return state.blogs;
   });
 
@@ -40,7 +39,6 @@ function Blogs() {
     pageSize: pageSize,
   });
   const dispatch = useDispatch();
-  const { type } = useParams();
 
   const [filterNav, setFilterNav] = useState({
     isOpen: false,
@@ -49,9 +47,12 @@ function Blogs() {
 
   useEffect(() => {
     if (data) {
-      dispatch(addBlog(data));
+      if (!(JSON.stringify(prevData) === JSON.stringify(data))) {
+        dispatch(addBlog(data));
+        dispatch(setPrevData(data));
+      }
     }
-  }, [data, dispatch]);
+  }, [data, dispatch, prevData]);
 
   const handleAddMoreData = () => {
     dispatch(addPage());
@@ -66,7 +67,6 @@ function Blogs() {
   }
   const handleClick = (e) => {
     const categoryChoosen = e.target.innerText;
-
     setFilterNav((prevValue) => {
       return {
         ...prevValue,
@@ -78,7 +78,7 @@ function Blogs() {
   return (
     <div className="w-full h-full flex flex-col p-4 relative">
       {filterNav.isOpen ? (
-        <div className="border shadow-xl p-2 bg-slate-100 rounded-lg flex flex-col gap-2 absolute z-10 md:right-20 right-6 w-80 top-16 md:w-96">
+        <div className="border shadow-xl p-2 bg-slate-100 rounded-lg flex flex-col gap-2 absolute z-10 md:right-20 right-6 w-80 md:top-32 top-28 md:w-96">
           {blogCategories.map((d) => {
             return (
               <p
@@ -135,7 +135,7 @@ function Blogs() {
         {blogData.map((blog) => {
           return <Card key={blog.id} cardData={blog} />;
         })}
-        {type === "all" ? (
+        {filterNav.currentCategory === "All" ? (
           <>
             {isFetching ? (
               <CardSkeleton times={pageSize} />

@@ -53,7 +53,7 @@ function HomeContent() {
           Welcome to Entertainment point
         </h1>
         <Link
-          to={"/blogs/categories/all"}
+          to={"/categories/blogs/all"}
           className="px-4 py-2 text-2xl bg-blue-500 w-72 mx-auto text-white rounded-lg "
         >
           Explore
