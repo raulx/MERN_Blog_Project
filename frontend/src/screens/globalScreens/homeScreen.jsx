@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
-import { contentTypeLinks } from "../router/router";
+import Navbar from "../../components/navbar";
+import Footer from "../../components/footer";
+import { contentTypeLinks } from "../../router/router";
 import { useState } from "react";
 
 function HomePage() {
@@ -53,7 +53,7 @@ function HomeContent() {
           Welcome to Entertainment point
         </h1>
         <Link
-          to={"/categories/blogs/all"}
+          to={"/content"}
           className="px-4 py-2 text-2xl bg-blue-500 w-72 mx-auto text-white rounded-lg "
         >
           Explore

@@ -1,14 +1,20 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import NotFound from "../screens/notFoundScreen";
-import HomePage from "../screens/homeScreen";
-import { HomeContent } from "../screens/homeScreen";
-import ContactPage from "../screens/contactScreen";
-import AboutPage from "../screens/aboutScreen";
+import NotFound from "../screens/globalScreens/notFoundScreen";
+import HomePage from "../screens/globalScreens/homeScreen";
+import { HomeContent } from "../screens/globalScreens/homeScreen";
+import ContactPage from "../screens/globalScreens/contactScreen";
+import AboutPage from "../screens//globalScreens/aboutScreen";
 import ProtectedRoute from "../hooks/authenticateRoutesHook";
-import BlogsScreen from "../screens/blogsScreen";
-import AuthScreen from "../screens/authScreen";
-import NewsScreen from "../screens/newsScreen";
+import BlogsScreen from "../screens/protectedScreens/blogsScreen";
+import AuthScreen from "../screens/globalScreens/authScreen";
+import NewsScreen from "../screens/protectedScreens/newsScreen";
+import LandingScreen from "../screens/globalScreens/landingScreen";
+import MemeScreen from "../screens/protectedScreens/memeScreen";
+import GamesScreen from "../screens/protectedScreens/gamesScreen";
+import MovieScreen from "../screens/protectedScreens/moviesScreen";
+import ShoppingScreen from "../screens/protectedScreens/moviesScreen";
+import ShortsScreen from "../screens/protectedScreens/shortsScreen";
 
 const router = createBrowserRouter([
   {
@@ -17,23 +23,33 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <HomePage />,
+        element: <LandingScreen />,
         children: [
           { index: true, element: <HomeContent /> },
+          { path: "/about", element: <AboutPage /> },
+          { path: "/contact", element: <ContactPage /> },
+          { path: "/auth", element: <AuthScreen /> },
+        ],
+      },
+      {
+        path: "/content",
+        element: <ProtectedRoute />,
+        children: [
           {
-            // these are protect routes
-            path: "/categories",
-            element: <ProtectedRoute />,
+            path: "/content",
+            element: <HomePage />,
             children: [
-              { path: "/categories/blogs/all", element: <BlogsScreen /> },
-              { path: "/categories/news/all", element: <NewsScreen /> },
+              { index: true, element: <BlogsScreen /> },
+              { path: "/content/news", element: <NewsScreen /> },
+              { path: "/content/memes", element: <MemeScreen /> },
+              { path: "/content/shorts", element: <ShortsScreen /> },
+              { path: "/content/games", element: <GamesScreen /> },
+              { path: "/content/movies", element: <MovieScreen /> },
+              { path: "/content/shopping", element: <ShoppingScreen /> },
             ],
           },
         ],
       },
-      { path: "/about", element: <AboutPage /> },
-      { path: "/contact", element: <ContactPage /> },
-      { path: "/auth", element: <AuthScreen /> },
     ],
   },
   { path: "*", element: <NotFound /> },
@@ -46,13 +62,13 @@ export const pages = [
 ];
 
 export const contentTypeLinks = [
-  { type: "blogs", url: "/categories/blogs/all" },
-  { type: "news", url: "/categories/news/all" },
-  { type: "memes", url: "/memes/all" },
-  { type: "shorts", url: "/shorts/all" },
-  { type: "games", url: "/games/all" },
-  { type: "south movies", url: "/southMovies/all" },
-  { type: "shopping deals", url: "/shopping/all" },
+  { type: "blogs", url: "/content" },
+  { type: "news", url: "/content/news" },
+  { type: "memes", url: "/content/memes" },
+  { type: "shorts", url: "/content/shorts" },
+  { type: "games", url: "/content/games" },
+  { type: "movies", url: "/content/movies" },
+  { type: "shopping", url: "/content/shopping" },
 ];
 
 export default router;

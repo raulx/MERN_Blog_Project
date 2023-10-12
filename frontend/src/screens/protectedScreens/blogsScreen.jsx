@@ -1,9 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useGetBlogsQuery } from "../store/api/blogApi";
-import { addBlog, addPage, setPrevData } from "../store";
+import { useGetBlogsQuery } from "../../store/api/blogApi";
+import { addBlog, addPage, setPrevData } from "../../store";
 import { useEffect, useState } from "react";
-import Card from "../components/card";
-import CardSkeleton from "../components/cardSkeleton";
+import Card from "../../components/card";
+import CardSkeleton from "../../components/cardSkeleton";
 import { FaFilter, FaChevronLeft, FaChevronDown, FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
