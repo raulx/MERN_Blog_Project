@@ -1,13 +1,20 @@
 /* eslint-disable react/prop-types */
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { pages } from "../router/router";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../store";
 
 function Navbar({ phoneNav, handlePhoneNav }) {
-  const auth = false;
+  const { auth } = useSelector((state) => {
+    return state.auth;
+  });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
   const handleLogout = () => {
-    console.log("logged out successfully.");
+    dispatch(logOut());
+    navigate("/");
   };
 
   return (

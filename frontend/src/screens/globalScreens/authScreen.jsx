@@ -1,7 +1,45 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logIn } from "../../store";
+
 function AuthScreen() {
   const [authType, setAuthType] = useState({ login: true, register: false });
+  const [loginState, setLoginState] = useState({ email: "", password: "" });
+  const [registerState, setRegisterState] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    dispatch(logIn());
+    navigate("/content");
+  };
+  const handleRegister = () => {
+    console.log(registerState);
+  };
+
+  const setInput = (prevValue, inputType, typedInput) => {
+    const key = inputType;
+    return { ...prevValue, [key]: typedInput };
+  };
+
+  const handleChange = (event, inputType) => {
+    const typedInput = event.target.value;
+    if (authType.login) {
+      setLoginState((prevValue) => {
+        return setInput(prevValue, inputType, typedInput);
+      });
+    } else if (authType.register) {
+      setRegisterState((prevValue) => {
+        return setInput(prevValue, inputType, typedInput);
+      });
+    }
+  };
+
   return (
     <div className="flex justify-center items-center h-screen w-screen bg-gradient-to-r">
       <div className="auth_box w-1/4  bg-white shadow-2xl rounded-2xl px-6 py-4 ">
@@ -19,13 +57,21 @@ function AuthScreen() {
                 <input
                   type="email"
                   placeholder="email address"
-                  className="p-4  uppercase border rounded-xl focus:outline-gray-400"
+                  className="p-4  border rounded-xl focus:outline-gray-400"
                   autoFocus
+                  value={loginState.email}
+                  onChange={(e) => {
+                    handleChange(e, "email");
+                  }}
                 />
                 <input
                   type="password"
                   placeholder="password"
-                  className="p-4  uppercase border rounded-xl focus:outline-gray-400"
+                  className="p-4  border rounded-xl focus:outline-gray-400"
+                  value={loginState.password}
+                  onChange={(e) => {
+                    handleChange(e, "password");
+                  }}
                 />
                 <Link
                   to={"/recoverAccount"}
@@ -33,7 +79,10 @@ function AuthScreen() {
                 >
                   Forgot password ?
                 </Link>
-                <button className="bg-gradient-to-r from-green-700 to-green-500 text-white p-4  rounded-2xl text-xl">
+                <button
+                  className="bg-gradient-to-r from-green-700 to-green-500 text-white p-4  rounded-2xl text-xl"
+                  onClick={handleLogin}
+                >
                   Login
                 </button>
                 <p>
@@ -57,20 +106,35 @@ function AuthScreen() {
                 <input
                   type="email"
                   placeholder="email address"
-                  className=" p-4 uppercase  border rounded-xl focus:outline-gray-400"
+                  className=" p-4 border rounded-xl focus:outline-gray-400"
+                  value={registerState.email}
+                  onChange={(e) => {
+                    handleChange(e, "email");
+                  }}
                 />
                 <input
                   type="password"
                   placeholder="password"
-                  className="p-4 uppercase  border rounded-xl focus:outline-gray-400"
+                  className="p-4  border rounded-xl focus:outline-gray-400"
+                  value={registerState.password}
+                  onChange={(e) => {
+                    handleChange(e, "password");
+                  }}
                 />
                 <input
                   type="password"
                   placeholder="confirm password"
-                  className="p-4 uppercase  border rounded-xl focus:outline-gray-400"
+                  className="p-4 border rounded-xl focus:outline-gray-400"
+                  value={registerState.confirmPassword}
+                  onChange={(e) => {
+                    handleChange(e, "confirmPassword");
+                  }}
                 />
 
-                <button className="bg-gradient-to-r  from-green-700 to-green-500 text-white p-4 rounded-2xl text-xl">
+                <button
+                  className="bg-gradient-to-r  from-green-700 to-green-500 text-white p-4 rounded-2xl text-xl"
+                  onClick={handleRegister}
+                >
                   Sign Up
                 </button>
               </div>

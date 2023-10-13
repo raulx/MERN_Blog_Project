@@ -5,7 +5,7 @@ import HomePage from "../screens/globalScreens/homeScreen";
 import { HomeContent } from "../screens/globalScreens/homeScreen";
 import ContactPage from "../screens/globalScreens/contactScreen";
 import AboutPage from "../screens//globalScreens/aboutScreen";
-import ProtectedRoute from "../hooks/authenticateRoutesHook";
+import ProtectedRoutes from "../hooks/authenticateRoutesHook";
 import BlogsScreen from "../screens/protectedScreens/blogsScreen";
 import AuthScreen from "../screens/globalScreens/authScreen";
 import NewsScreen from "../screens/protectedScreens/newsScreen";
@@ -13,7 +13,7 @@ import LandingScreen from "../screens/globalScreens/landingScreen";
 import MemeScreen from "../screens/protectedScreens/memeScreen";
 import GamesScreen from "../screens/protectedScreens/gamesScreen";
 import MovieScreen from "../screens/protectedScreens/moviesScreen";
-import ShoppingScreen from "../screens/protectedScreens/moviesScreen";
+import ShoppingScreen from "../screens/protectedScreens/shoppingScreen";
 import ShortsScreen from "../screens/protectedScreens/shortsScreen";
 
 const router = createBrowserRouter([
@@ -28,12 +28,11 @@ const router = createBrowserRouter([
           { index: true, element: <HomeContent /> },
           { path: "/about", element: <AboutPage /> },
           { path: "/contact", element: <ContactPage /> },
-          { path: "/auth", element: <AuthScreen /> },
         ],
       },
       {
         path: "/content",
-        element: <ProtectedRoute />,
+        element: <ProtectedRoutes />,
         children: [
           {
             path: "/content",
@@ -52,6 +51,8 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: "/auth", element: <AuthScreen /> },
+
   { path: "*", element: <NotFound /> },
 ]);
 

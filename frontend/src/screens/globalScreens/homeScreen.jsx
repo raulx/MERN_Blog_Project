@@ -1,7 +1,9 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import Footer from "../../components/footer";
 import { contentTypeLinks } from "../../router/router";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { useState } from "react";
 
 function HomePage() {
@@ -46,6 +48,15 @@ function HomePage() {
 }
 
 function HomeContent() {
+  const { auth } = useSelector((state) => {
+    return state.auth;
+  });
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (auth) {
+      navigate("/content");
+    }
+  }, [auth, navigate]);
   return (
     <div className="flex justify-center items-center h-full w-full">
       <div className="text-center capitalize flex flex-col max-w-2xl h-96 gap-6 justify-center">
@@ -53,7 +64,7 @@ function HomeContent() {
           Welcome to Entertainment point
         </h1>
         <Link
-          to={"/content"}
+          to={"/auth"}
           className="px-4 py-2 text-2xl bg-blue-500 w-72 mx-auto text-white rounded-lg "
         >
           Explore
