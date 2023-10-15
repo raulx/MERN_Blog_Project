@@ -61,7 +61,16 @@ function Navbar({ phoneNav, handlePhoneNav }) {
         <div className="flex gap-4  mr-10 p-4">
           {auth ? (
             <>
-              <Link to={"/profile"}>Profile</Link>
+              <Link
+                to={"/content/profile"}
+                className={`${
+                  location.pathname === "/content/profile"
+                    ? "border-b-lime-400"
+                    : "border-b-0"
+                }`}
+              >
+                Profile
+              </Link>
               <button onClick={handleLogout} className="uppercase">
                 Logout
               </button>

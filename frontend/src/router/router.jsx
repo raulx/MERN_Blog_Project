@@ -6,7 +6,7 @@ import { HomeContent } from "../screens/globalScreens/homeScreen";
 import ContactPage from "../screens/globalScreens/contactScreen";
 import AboutPage from "../screens//globalScreens/aboutScreen";
 import ProtectedRoutes from "../hooks/authenticateRoutesHook";
-import BlogsScreen from "../screens/protectedScreens/blogsScreen";
+import BlogsScreen from "../screens/protectedScreens/blogScreens/blogsScreen";
 import AuthScreen from "../screens/globalScreens/authScreen";
 import NewsScreen from "../screens/protectedScreens/newsScreen";
 import LandingScreen from "../screens/globalScreens/landingScreen";
@@ -15,6 +15,7 @@ import GamesScreen from "../screens/protectedScreens/gamesScreen";
 import MovieScreen from "../screens/protectedScreens/moviesScreen";
 import ShoppingScreen from "../screens/protectedScreens/shoppingScreen";
 import ShortsScreen from "../screens/protectedScreens/shortsScreen";
+import ProfileScreen from "../screens/protectedScreens/profileScreen";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "/profile",
+        element: <ProfileScreen />,
+      },
+      {
         path: "/content",
         element: <ProtectedRoutes />,
         children: [
@@ -38,7 +43,10 @@ const router = createBrowserRouter([
             path: "/content",
             element: <HomePage />,
             children: [
-              { index: true, element: <BlogsScreen /> },
+              {
+                index: true,
+                element: <BlogsScreen />,
+              },
               { path: "/content/news", element: <NewsScreen /> },
               { path: "/content/memes", element: <MemeScreen /> },
               { path: "/content/shorts", element: <ShortsScreen /> },
@@ -57,7 +65,7 @@ const router = createBrowserRouter([
 ]);
 
 export const pages = [
-  { name: "Home", url: "/" },
+  { name: "home", url: "/content" },
   { name: "about", url: "/about" },
   { name: "contact", url: "/contact" },
 ];

@@ -1,11 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useGetBlogsQuery } from "../../store/api/blogApi";
-import { addBlog, addPage, setPrevData } from "../../store";
-import { useEffect, useState } from "react";
-import Card from "../../components/card";
-import CardSkeleton from "../../components/cardSkeleton";
-import { FaFilter, FaChevronLeft, FaChevronDown, FaPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useGetBlogsQuery } from "../../../store";
+import { useState, useEffect } from "react";
+import { addBlog, setPrevData, addPage } from "../../../store";
+import Card from "../../../components/card";
+import CardSkeleton from "../../../components/cardSkeleton";
+import { FaFilter, FaChevronDown, FaChevronLeft } from "react-icons/fa";
 
 const blogCategories = [
   { id: 1, category: "all" },
@@ -29,7 +28,7 @@ const blogCategories = [
   },
 ];
 
-function Blogs() {
+function BlogsIndex() {
   const { blogs, prevData, currentPage, pageSize } = useSelector((state) => {
     return state.blogs;
   });
@@ -76,7 +75,7 @@ function Blogs() {
     });
   };
   return (
-    <div className="w-full h-full flex flex-col p-4 relative">
+    <>
       {filterNav.isOpen ? (
         <div className="border shadow-xl p-2 bg-slate-100 rounded-lg flex flex-col gap-2 absolute z-10 md:right-20 right-6 w-80 md:top-32 top-28 md:w-96">
           {blogCategories.map((d) => {
@@ -96,13 +95,6 @@ function Blogs() {
           })}
         </div>
       ) : null}
-      <Link
-        to={"/create"}
-        className="uppercase md:mr-10 mr-6 text-center self-end flex items-center justify-center gap-4 bg-blue-500 hover:bg-blue-700 transition-all duration-200 rounded-lg text-white w-48 py-2"
-      >
-        <FaPlus />
-        Create Blog
-      </Link>
       <div className="flex justify-between items-center my-2">
         <h1 className="text-2xl text-gray-400 font-extrabold uppercase">
           Results
@@ -145,8 +137,8 @@ function Blogs() {
           </>
         ) : null}
       </div>
-    </div>
+    </>
   );
 }
 
-export default Blogs;
+export default BlogsIndex;
