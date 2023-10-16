@@ -16,6 +16,7 @@ import MovieScreen from "../screens/protectedScreens/moviesScreen";
 import ShoppingScreen from "../screens/protectedScreens/shoppingScreen";
 import ShortsScreen from "../screens/protectedScreens/shortsScreen";
 import ProfileScreen from "../screens/protectedScreens/profileScreen";
+import DisplayBlog from "../screens/protectedScreens/blogScreens/displayBlog";
 
 const router = createBrowserRouter([
   {
@@ -60,7 +61,7 @@ const router = createBrowserRouter([
     ],
   },
   { path: "/auth", element: <AuthScreen /> },
-
+  { path: "/blog/:id", element: <DisplayBlog /> },
   { path: "*", element: <NotFound /> },
 ]);
 

@@ -41,7 +41,7 @@ function AuthScreen() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen w-screen bg-gradient-to-r">
+    <div className="flex justify-center items-center h-screen w-screen">
       <div className="auth_box w-1/4  bg-white shadow-2xl rounded-2xl px-6 py-4 ">
         <div className="relative w-full h-full overflow-hidden">
           <div

@@ -1,5 +1,5 @@
 function CreateBlog() {
-  return <div>CreateBlog...</div>;
+  return <div className="text-black">CreateBlog...</div>;
 }
 
 export default CreateBlog;

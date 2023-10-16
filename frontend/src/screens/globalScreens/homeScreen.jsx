@@ -37,7 +37,7 @@ function HomePage() {
           );
         })}
       </div>
-      <div className="md:col-span-8 md:row-span-6 grow bg-white overflow-y-scroll">
+      <div className="md:col-span-8 md:row-span-6 grow bg-white overflow-hidden">
         <Outlet />
       </div>
       <div className="col-span-10 row-span-1 md:h-full ">

@@ -1,15 +1,18 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+export const API_URL = "http://localhost:3500/";
+
 //FOR DEV USE ONLY
 const pause = (duration) => {
   return new Promise((resolve) => {
     setTimeout(resolve, duration);
   });
 };
+
 const blogApi = createApi({
   reducerPath: "blog",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3500/blogs",
+    baseUrl: API_URL,
     fetchFn: async (...args) => {
       await pause(2000);
       return fetch(...args);
@@ -20,7 +23,7 @@ const blogApi = createApi({
       getBlogs: builder.query({
         query: ({ page, pageSize }) => {
           return {
-            url: `/?_page=${page}&_limit=${pageSize}`,
+            url: `/blogs/?_page=${page}&_limit=${pageSize}`,
             method: "GET",
           };
         },

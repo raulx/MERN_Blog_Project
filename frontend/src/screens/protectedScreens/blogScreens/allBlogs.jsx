@@ -77,7 +77,7 @@ function BlogsIndex() {
   return (
     <>
       {filterNav.isOpen ? (
-        <div className="border shadow-xl p-2 bg-slate-100 rounded-lg flex flex-col gap-2 absolute z-10 md:right-20 right-6 w-80 md:top-32 top-28 md:w-96">
+        <div className="border shadow-xl p-2 bg-slate-100 rounded-lg flex flex-col gap-2 absolute z-10 md:right-20 right-4 w-80 md:top-16 top-14 md:w-96">
           {blogCategories.map((d) => {
             return (
               <p
