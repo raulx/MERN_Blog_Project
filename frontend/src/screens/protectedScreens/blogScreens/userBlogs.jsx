@@ -4,7 +4,6 @@ import CardSkeleton from "../../../components/cardSkeleton";
 function UserBlogs() {
   const { id } = JSON.parse(localStorage.getItem("user"));
   const { data, isFetching } = useUsersBlogsQuery(id);
-  console.log(data);
   return (
     <div className="flex justify-evenly gap-6 flex-wrap my-20">
       {isFetching ? (

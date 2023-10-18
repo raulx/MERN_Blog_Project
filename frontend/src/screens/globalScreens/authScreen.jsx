@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loggedIn } from "../../store";
 import { useLogInMutation } from "../../store";
+import { setUserId } from "../../store";
 
 function AuthScreen() {
   const [authType, setAuthType] = useState({ login: true, register: false });
@@ -22,6 +23,7 @@ function AuthScreen() {
       const res = await logIn(loginState.email);
       const userId = res.data[0].id;
       dispatch(loggedIn(userId));
+      dispatch(setUserId(userId));
       navigate("/content");
     } catch (err) {
       console.log(`Error:${err}`);

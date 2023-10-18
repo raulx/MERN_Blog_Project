@@ -7,8 +7,7 @@ import { FormControl, Select, MenuItem, InputLabel } from "@mui/material";
 import { blogCategories } from "../../../variables/variable";
 import { useNavigate } from "react-router-dom";
 
-const presetKey = import.meta.env.CLOUDINARY_PRESET;
-
+const presetKey = import.meta.env.VITE_CLOUDINARY_PRESET;
 function CreateBlog() {
   const [postImage] = usePostImageMutation();
   const [postBlog, postBlogResults] = usePostBlogMutation();
@@ -22,7 +21,7 @@ function CreateBlog() {
   const [blogData, setBlogData] = useState({
     title: "",
     content: "",
-    category: "Science & Technology",
+    category: "science & technology",
   });
   function pad(number) {
     return number < 10 ? "0" + number : number;
@@ -53,7 +52,7 @@ function CreateBlog() {
         date: formattedDate,
         comments: [],
         creatorId: id,
-        image: { publicId: imagePublicId, url: remoteImageUrl },
+        image: { publicId: imagePublicId, remote_url: remoteImageUrl },
       };
       await postBlog(data);
       navigate("/");

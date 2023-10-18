@@ -34,4 +34,5 @@ export * from "./api/blogApi";
 export * from "./api/userApi";
 export * from "./api/authApi";
 export * from "./api/imgApi";
+export * from "./slices/userSlice";
 export default store;

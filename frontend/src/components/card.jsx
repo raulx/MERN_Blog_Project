@@ -7,7 +7,7 @@ function Card({ cardData }) {
     <>
       <div className="md:w-96 md:h-96 w-full h-96 border-2">
         <img
-          src={cardData.image.url}
+          src={cardData.image.remote_url}
           className="w-full h-1/2 object-cover object-center rounded-lg"
         />
         <div className="flex flex-col p-4">
