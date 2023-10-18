@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const cloud = "dj5yf27lr";
+const cloud = import.meta.env.CLOUDINARY_CLOUD;
 
 const imageApi = createApi({
   reducerPath: "imageApi",

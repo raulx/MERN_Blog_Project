@@ -4,8 +4,11 @@ import { usePostImageMutation, usePostBlogMutation } from "../../../store";
 import { Spinner } from "baseui/spinner";
 import { nanoid } from "nanoid";
 import { FormControl, Select, MenuItem, InputLabel } from "@mui/material";
-import { blogCategories } from "./allBlogs";
+import { blogCategories } from "../../../variables/variable";
 import { useNavigate } from "react-router-dom";
+
+const presetKey = import.meta.env.CLOUDINARY_PRESET;
+
 function CreateBlog() {
   const [postImage] = usePostImageMutation();
   const [postBlog, postBlogResults] = usePostBlogMutation();
@@ -21,10 +24,7 @@ function CreateBlog() {
     content: "",
     category: "Science & Technology",
   });
-  const presetKey = "ttmvomfe";
-  // const cloud = "dj5yf27lr";
   function pad(number) {
-    // Helper function to pad single digits with a leading zero
     return number < 10 ? "0" + number : number;
   }
 

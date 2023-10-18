@@ -5,28 +5,7 @@ import { addBlog, setPrevData, addPage } from "../../../store";
 import Card from "../../../components/card";
 import CardSkeleton from "../../../components/cardSkeleton";
 import { FaFilter, FaChevronDown, FaChevronLeft } from "react-icons/fa";
-
-const blogCategories = [
-  { id: 1, category: "all" },
-  { id: 2, category: "politics" },
-  { id: 3, category: "sports" },
-  {
-    id: 4,
-    category: "finance & bussiness",
-  },
-  { id: 5, category: "music" },
-  { id: 6, category: "travel" },
-  {
-    id: 7,
-    category: "fashion & lifestyle",
-  },
-  { id: 8, category: "health" },
-  { id: 9, category: "food" },
-  {
-    id: 10,
-    category: "science & technology",
-  },
-];
+import { blogCategories } from "../../../variables/variable";
 
 function BlogsIndex() {
   const { blogs, prevData, currentPage, pageSize } = useSelector((state) => {
@@ -123,7 +102,7 @@ function BlogsIndex() {
         </div>
       </div>
 
-      <div className="flex flex-wrap w-full gap-4 mt-4">
+      <div className="flex flex-wrap w-full justify-evenly gap-4 mt-4">
         {blogData.map((blog) => {
           return <Card key={blog.id} cardData={blog} />;
         })}
@@ -142,4 +121,3 @@ function BlogsIndex() {
 }
 
 export default BlogsIndex;
-export { blogCategories };
