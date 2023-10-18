@@ -3,17 +3,20 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { pages } from "../router/router";
 import { useDispatch, useSelector } from "react-redux";
-import { logOut } from "../store";
+import { loggedOut } from "../store";
+import { useState } from "react";
 
 function Navbar({ phoneNav, handlePhoneNav }) {
   const { auth } = useSelector((state) => {
     return state.auth;
   });
+  const [currentPage, setCurrentPage] = useState("home");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+
   const handleLogout = () => {
-    dispatch(logOut());
+    dispatch(loggedOut());
     navigate("/");
   };
 
@@ -42,7 +45,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
         </div>
         <div className="md:block hidden">
           <ul className="flex gap-4 text-xl ">
-            {pages.map((page) => {
+            {/* {pages.map((page) => {
               return (
                 <li
                   key={page.name}
@@ -55,6 +58,24 @@ function Navbar({ phoneNav, handlePhoneNav }) {
                   <Link to={page.url}>{page.name}</Link>
                 </li>
               );
+            })} */}
+            {pages.map((page) => {
+              return (
+                <Link
+                  to={page.url}
+                  key={page.name}
+                  className={` rounded-xl transition-all duration-200 font-bold py-2 px-6 ${
+                    page.name === currentPage
+                      ? " border-b border-lime-300"
+                      : "hover:text-green-300"
+                  }`}
+                  onClick={() => {
+                    setCurrentPage(page.name);
+                  }}
+                >
+                  {page.name}
+                </Link>
+              );
             })}
           </ul>
         </div>
@@ -62,7 +83,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
           {auth ? (
             <>
               <Link
-                to={"/content/profile"}
+                to={"/profile"}
                 className={`${
                   location.pathname === "/content/profile"
                     ? "border-b-lime-400"

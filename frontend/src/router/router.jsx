@@ -1,22 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import NotFound from "../screens/globalScreens/notFoundScreen";
-import HomePage from "../screens/globalScreens/homeScreen";
-import { HomeContent } from "../screens/globalScreens/homeScreen";
 import ContactPage from "../screens/globalScreens/contactScreen";
 import AboutPage from "../screens//globalScreens/aboutScreen";
 import ProtectedRoutes from "../hooks/authenticateRoutesHook";
 import BlogsScreen from "../screens/protectedScreens/blogScreens/blogsScreen";
 import AuthScreen from "../screens/globalScreens/authScreen";
-import NewsScreen from "../screens/protectedScreens/newsScreen";
+import NewsScreen from "../screens/protectedScreens/newsScreens/newsScreen";
 import LandingScreen from "../screens/globalScreens/landingScreen";
-import MemeScreen from "../screens/protectedScreens/memeScreen";
-import GamesScreen from "../screens/protectedScreens/gamesScreen";
-import MovieScreen from "../screens/protectedScreens/moviesScreen";
-import ShoppingScreen from "../screens/protectedScreens/shoppingScreen";
-import ShortsScreen from "../screens/protectedScreens/shortsScreen";
-import ProfileScreen from "../screens/protectedScreens/profileScreen";
+import MemeScreen from "../screens/protectedScreens/memeScreens/memeScreen";
+import GamesScreen from "../screens/protectedScreens/gamesScreen/gamesScreen";
+import MovieScreen from "../screens/protectedScreens/movieScreens/moviesScreen";
+import ShoppingScreen from "../screens/protectedScreens/shoppingScreens/shoppingScreen";
+import ShortsScreen from "../screens/protectedScreens/shortsScreens/shortsScreen";
+import ProfileScreen from "../screens/protectedScreens/userProfileScreens/profileScreen";
 import DisplayBlog from "../screens/protectedScreens/blogScreens/displayBlog";
+import HomePage from "../screens/homePage";
+import ContentScreen from "../screens/protectedScreens/contentScreen";
 
 const router = createBrowserRouter([
   {
@@ -25,43 +25,45 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <LandingScreen />,
+        element: <HomePage />,
         children: [
-          { index: true, element: <HomeContent /> },
-          { path: "/about", element: <AboutPage /> },
-          { path: "/contact", element: <ContactPage /> },
-        ],
-      },
-      {
-        path: "/profile",
-        element: <ProfileScreen />,
-      },
-      {
-        path: "/content",
-        element: <ProtectedRoutes />,
-        children: [
+          { index: true, element: <LandingScreen /> },
           {
             path: "/content",
-            element: <HomePage />,
+            element: <ProtectedRoutes />,
             children: [
               {
-                index: true,
-                element: <BlogsScreen />,
+                path: "/content",
+                element: <ContentScreen />,
+                children: [
+                  {
+                    index: true,
+                    element: <BlogsScreen />,
+                  },
+                  { path: "/content/news", element: <NewsScreen /> },
+                  { path: "/content/memes", element: <MemeScreen /> },
+                  { path: "/content/shorts", element: <ShortsScreen /> },
+                  { path: "/content/games", element: <GamesScreen /> },
+                  { path: "/content/movies", element: <MovieScreen /> },
+                  { path: "/content/shopping", element: <ShoppingScreen /> },
+                ],
               },
-              { path: "/content/news", element: <NewsScreen /> },
-              { path: "/content/memes", element: <MemeScreen /> },
-              { path: "/content/shorts", element: <ShortsScreen /> },
-              { path: "/content/games", element: <GamesScreen /> },
-              { path: "/content/movies", element: <MovieScreen /> },
-              { path: "/content/shopping", element: <ShoppingScreen /> },
             ],
+          },
+          { path: "/blog/:id", element: <DisplayBlog /> },
+
+          { path: "/about", element: <AboutPage /> },
+          { path: "/contact", element: <ContactPage /> },
+          {
+            path: "/profile",
+            element: <ProfileScreen />,
           },
         ],
       },
+      { path: "/auth", element: <AuthScreen /> },
     ],
   },
-  { path: "/auth", element: <AuthScreen /> },
-  { path: "/blog/:id", element: <DisplayBlog /> },
+
   { path: "*", element: <NotFound /> },
 ]);
 

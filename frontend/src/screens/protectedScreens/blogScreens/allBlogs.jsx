@@ -142,3 +142,4 @@ function BlogsIndex() {
 }
 
 export default BlogsIndex;
+export { blogCategories };

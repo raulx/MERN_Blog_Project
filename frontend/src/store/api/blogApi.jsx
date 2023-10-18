@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const API_URL = "http://localhost:3500/";
 
 //FOR DEV USE ONLY
-const pause = (duration) => {
+export const pause = (duration) => {
   return new Promise((resolve) => {
     setTimeout(resolve, duration);
   });
@@ -20,6 +20,30 @@ const blogApi = createApi({
   }),
   endpoints(builder) {
     return {
+      postBlog: builder.mutation({
+        query: (data) => {
+          return {
+            url: `/blogs`,
+            method: "POST",
+            body: data,
+          };
+        },
+      }),
+      blogData: builder.query({
+        query: (id) => {
+          return {
+            url: `/blogs/?id=${id}`,
+          };
+        },
+      }),
+      usersBlogs: builder.query({
+        query: (id) => {
+          return {
+            url: `/blogs/?creatorId=${id}`,
+            method: "GET",
+          };
+        },
+      }),
       getBlogs: builder.query({
         query: ({ page, pageSize }) => {
           return {
@@ -32,5 +56,10 @@ const blogApi = createApi({
   },
 });
 
-export const { useGetBlogsQuery } = blogApi;
+export const {
+  useGetBlogsQuery,
+  useUsersBlogsQuery,
+  useBlogDataQuery,
+  usePostBlogMutation,
+} = blogApi;
 export default blogApi;

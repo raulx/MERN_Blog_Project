@@ -2,7 +2,7 @@ import aboutUs from "../../assets/screenAssets/aboutUs.jpg";
 
 function AboutPage() {
   return (
-    <>
+    <div className=" h-full w-full overflow-y-scroll">
       <div className=" w-11/12">
         <img src={aboutUs} alt="about Us" />
       </div>
@@ -28,7 +28,7 @@ function AboutPage() {
           ab natus repellendus earum!
         </p>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -45,10 +45,14 @@ function BlogScreen() {
       <div className="overflow-y-scroll relative grow" key={screen.name}>
         {allBlogScreens.map((screen) => {
           const newScreen =
-            screen.name === currentScreen ? <>{screen.element}</> : null;
+            screen.name === currentScreen ? (
+              <div key={screen.name}>{screen.element}</div>
+            ) : null;
           return newScreen;
         })}
-        {currentScreen === "create" ? <CreateBlog /> : null}
+        {currentScreen === "create" ? (
+          <CreateBlog ChangeScreen={setCurrentScreen} />
+        ) : null}
       </div>
     </div>
   );
