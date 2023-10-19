@@ -4,7 +4,7 @@ import { usePostImageMutation, usePostBlogMutation } from "../../../store";
 import { Spinner } from "baseui/spinner";
 import { nanoid } from "nanoid";
 import { FormControl, Select, MenuItem, InputLabel } from "@mui/material";
-import { blogCategories } from "../../../variables/variable";
+import { blogCategories } from "../../../utils/variables";
 import { useNavigate } from "react-router-dom";
 
 const presetKey = import.meta.env.VITE_CLOUDINARY_PRESET;

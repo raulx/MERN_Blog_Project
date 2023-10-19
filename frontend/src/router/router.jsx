@@ -67,20 +67,4 @@ const router = createBrowserRouter([
   { path: "*", element: <NotFound /> },
 ]);
 
-export const pages = [
-  { name: "home", url: "/content" },
-  { name: "about", url: "/about" },
-  { name: "contact", url: "/contact" },
-];
-
-export const contentTypeLinks = [
-  { type: "blogs", url: "/content" },
-  { type: "news", url: "/content/news" },
-  { type: "memes", url: "/content/memes" },
-  { type: "shorts", url: "/content/shorts" },
-  { type: "games", url: "/content/games" },
-  { type: "movies", url: "/content/movies" },
-  { type: "shopping", url: "/content/shopping" },
-];
-
 export default router;

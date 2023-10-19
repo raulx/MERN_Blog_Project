@@ -1,4 +1,4 @@
-import { contentTypeLinks } from "../../router/router";
+import { contentTypeLinks } from "../../utils/variables";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import UseMyContext from "../../hooks/useMyContext";
 

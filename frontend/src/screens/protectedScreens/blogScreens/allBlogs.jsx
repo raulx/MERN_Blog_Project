@@ -5,7 +5,7 @@ import { addBlog, setPrevData, addPage } from "../../../store";
 import Card from "../../../components/card";
 import CardSkeleton from "../../../components/cardSkeleton";
 import { FaFilter, FaChevronDown, FaChevronLeft } from "react-icons/fa";
-import { blogCategories } from "../../../variables/variable";
+import { blogCategories } from "../../../utils/variables";
 
 function BlogsIndex() {
   const { blogs, prevData, currentPage, pageSize } = useSelector((state) => {

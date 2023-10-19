@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { pages } from "../router/router";
+import { pages } from "../utils/variables";
 import { useDispatch, useSelector } from "react-redux";
 import { loggedOut } from "../store";
 import { useState } from "react";

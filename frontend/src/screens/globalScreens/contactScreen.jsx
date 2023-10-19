@@ -1,7 +1,8 @@
 import contactImg from "../../assets/screenAssets/contact.jpg";
+import Footer from "../../components/footer";
 function ContactPage() {
   return (
-    <div className="w-full h-full text-center md:flex-row overflow-y-scroll flex flex-col-reverse">
+    <div className="w-full h-full text-center md:flex-row overflow-y-scroll flex flex-col">
       <div className="p-4 md:w-3/4">
         <h1 className="font-extrabold text-4xl ">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis
@@ -31,6 +32,9 @@ function ContactPage() {
       </div>
       <div className=" rounded-full border-2 md:overflow-hidden ">
         <img src={contactImg} alt="contact image" className="h-full w-full" />
+      </div>
+      <div className="md:hidden">
+        <Footer />
       </div>
     </div>
   );

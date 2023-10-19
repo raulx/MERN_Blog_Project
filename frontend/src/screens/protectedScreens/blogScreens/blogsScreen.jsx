@@ -13,8 +13,8 @@ const allBlogScreens = [
 function BlogScreen() {
   const [currentScreen, setCurrentScreen] = useState("all");
   return (
-    <div className="w-full h-full flex flex-col px-4 ">
-      <div className="flex md:justify-center justify-between items-center relative rounded-xl text-green-800 w-full bg-green-100">
+    <div className="w-full h-full flex flex-col px-4 relative">
+      <div className="flex md:justify-center justify-between items-center md:relative fixed z-10  md:rounded-xl text-green-800 md:w-full w-11/12  bg-green-100">
         <ul className="p-4  gap-6 flex">
           {allBlogScreens.map((screen) => {
             return (
@@ -35,14 +35,17 @@ function BlogScreen() {
           })}
         </ul>
         <div
-          className="flex items-center md:text-xl text-xs  md:gap-4 gap-2 uppercase rounded-lg justify-center py-2 md:px-6 px-4 bg-blue-600 text-white absolute top-1/2 cursor-pointer -translate-y-1/2 md:right-16 right-2 hover:bg-blue-700 transition-all duration-200"
+          className="flex items-center md:text-xl text-xs md:gap-4 gap-2 uppercase rounded-lg justify-center py-2 md:px-6 px-4 bg-blue-600 text-white absolute top-1/2 cursor-pointer -translate-y-1/2 md:right-16 right-2 hover:bg-blue-700 transition-all duration-200"
           onClick={() => setCurrentScreen("create")}
         >
           <FaPlus />
           create blog
         </div>
       </div>
-      <div className="md:overflow-y-scroll relative grow" key={screen.name}>
+      <div
+        className="md:overflow-y-scroll relative grow md:mt-0 mt-20"
+        key={screen.name}
+      >
         {allBlogScreens.map((screen) => {
           const newScreen =
             screen.name === currentScreen ? (

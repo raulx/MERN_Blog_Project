@@ -61,5 +61,6 @@ export const {
   useUsersBlogsQuery,
   useBlogDataQuery,
   usePostBlogMutation,
+  useLazyBlogDataQuery,
 } = blogApi;
 export default blogApi;
