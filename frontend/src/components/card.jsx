@@ -14,7 +14,10 @@ function Card({ cardData }) {
           <h1 className="font-bold text-2xl">{cardData.title}</h1>
           <p>
             {cardData.content.substring(0, 100)}...
-            <Link to={`/blog/${cardData.creatorId}`} className="text-blue-500">
+            <Link
+              to={`/blog/${cardData.creatorId}?blog=${cardData.id}`}
+              className="text-blue-500"
+            >
               Read More
             </Link>
           </p>

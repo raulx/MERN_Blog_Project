@@ -1,9 +1,9 @@
 import contactImg from "../../assets/screenAssets/contact.jpg";
 function ContactPage() {
   return (
-    <div className="w-full h-full overflow-y-scroll">
-      <div className="p-4 md:w-1/2">
-        <h1 className=" font-extrabold text-4xl ">
+    <div className="w-full h-full text-center md:flex-row overflow-y-scroll flex flex-col-reverse">
+      <div className="p-4 md:w-3/4">
+        <h1 className="font-extrabold text-4xl ">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis
         </h1>
         <p className=" my-6 text-xl">
