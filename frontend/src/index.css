@@ -30,7 +30,9 @@ body{
 .custom_width{
     width: 44rem   
 }  
-
+.w-custom{
+    width:95%;
+}
 
 /* responsive media queries*/
 
@@ -165,6 +167,9 @@ body{
 @media(max-width:540px){
     .custom_width{
         width:37.5rem
+    }
+    html{
+        font-size: 75%;
     }
 }
 

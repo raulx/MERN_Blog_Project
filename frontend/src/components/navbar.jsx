@@ -5,11 +5,13 @@ import { pages } from "../utils/variables";
 import { useDispatch, useSelector } from "react-redux";
 import { loggedOut } from "../store";
 import { useState } from "react";
+import Avatar from "@mui/material/Avatar";
 
 function Navbar({ phoneNav, handlePhoneNav }) {
-  const { auth } = useSelector((state) => {
-    return state.auth;
+  const { auth, user } = useSelector((state) => {
+    return state;
   });
+
   const [currentPage, setCurrentPage] = useState("home");
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,7 +24,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
 
   return (
     <div className="flex flex-col justify-between md:h-full">
-      <nav className="flex md:p-6 p-2 navbar relative justify-between md:items-center items-start  text-green-100 bg-green-950 uppercase h-full w-full">
+      <nav className="flex md:p-6 p-2 navbar relative justify-between items-center   text-green-100 bg-green-950 uppercase h-full w-full">
         <div className="text-5xl flex gap-2 justify-center items-center">
           <div
             onClick={() => {
@@ -45,20 +47,6 @@ function Navbar({ phoneNav, handlePhoneNav }) {
         </div>
         <div className="md:block hidden">
           <ul className="flex gap-4 text-xl ">
-            {/* {pages.map((page) => {
-              return (
-                <li
-                  key={page.name}
-                  className={` rounded-xl transition-all duration-200 font-bold py-2 px-6 ${
-                    location.pathname === page.url
-                      ? " border-b border-lime-300"
-                      : "hover:text-green-300"
-                  }`}
-                >
-                  <Link to={page.url}>{page.name}</Link>
-                </li>
-              );
-            })} */}
             {pages.map((page) => {
               return (
                 <Link
@@ -80,11 +68,12 @@ function Navbar({ phoneNav, handlePhoneNav }) {
           </ul>
         </div>
         <div className="flex gap-4  mr-10 p-4">
-          {auth ? (
+          {auth.auth ? (
             <>
+              <Avatar alt={user.userData.name} src={user.userData.profilePic} />
               <Link
                 to={"/profile"}
-                className={`${
+                className={`flex justify-center items-center ${
                   location.pathname === "/content/profile"
                     ? "border-b-lime-400"
                     : "border-b-0"

@@ -23,4 +23,4 @@ const userApi = createApi({
 });
 
 export default userApi;
-export const { useGetUserQuery } = userApi;
+export const { useGetUserQuery, useLazyGetUserQuery } = userApi;

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useGetUserQuery } from "../../../store";
@@ -14,7 +13,7 @@ function DisplayBlog() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const blogId = searchParams.get("blog");
-  const { data: authorData, isFetching } = useGetUserQuery(id);
+  const { data: authorData } = useGetUserQuery(id);
   const [fetchBlogData] = useLazyBlogDataQuery();
 
   useEffect(() => {
@@ -30,7 +29,7 @@ function DisplayBlog() {
       setBlogData(selectedBlog);
     };
     getBlog();
-  }, []);
+  }, [blogId, blogs.blogs, fetchBlogData, user.blogs]);
 
   return (
     <div className="overflow-y-scroll">
@@ -42,12 +41,12 @@ function DisplayBlog() {
               <p>{blogData.title}</p>
               <p>{blogData.content}</p>
             </div>
-            {isFetching ? null : (
+            {authorData ? (
               <div>
                 <p>{authorData.name}</p>
                 <img src={authorData.profilePic} />
               </div>
-            )}
+            ) : null}
           </>
         ) : (
           <p>Fetching Data</p>

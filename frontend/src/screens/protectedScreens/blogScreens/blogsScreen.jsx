@@ -13,9 +13,9 @@ const allBlogScreens = [
 function BlogScreen() {
   const [currentScreen, setCurrentScreen] = useState("all");
   return (
-    <div className="w-full h-full flex flex-col px-4 relative">
-      <div className="flex md:justify-center justify-between items-center md:relative fixed z-10  md:rounded-xl text-green-800 md:w-full w-11/12  bg-green-100">
-        <ul className="p-4  gap-6 flex">
+    <div className="w-full h-full flex flex-col px-4 ">
+      <div className="flex md:justify-center justify-between md:items-center md:relative fixed z-10  md:rounded-xl text-green-800 md:w-full w-custom  bg-green-100">
+        <ul className="p-4 gap-6 flex">
           {allBlogScreens.map((screen) => {
             return (
               <li
@@ -42,10 +42,7 @@ function BlogScreen() {
           create blog
         </div>
       </div>
-      <div
-        className="md:overflow-y-scroll relative grow md:mt-0 mt-20"
-        key={screen.name}
-      >
+      <div className="md:overflow-y-scroll relative grow md:mt-0 ">
         {allBlogScreens.map((screen) => {
           const newScreen =
             screen.name === currentScreen ? (
