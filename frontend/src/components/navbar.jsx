@@ -32,7 +32,10 @@ function Navbar({ phoneNav, handlePhoneNav }) {
             }}
             className="cursor-pointer  md:hidden text-4xl"
           >
-            {phoneNav != null && phoneNav != undefined ? (
+            {phoneNav != null &&
+            phoneNav != undefined &&
+            auth.auth &&
+            location.pathname === "/content" ? (
               phoneNav ? (
                 <FaTimes />
               ) : (

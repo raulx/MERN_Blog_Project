@@ -33,7 +33,7 @@ function HomePage() {
         <Navbar phoneNav={phoneNav} handlePhoneNav={setPhoneNav} />
       </div>
 
-      <div className="col-span-10 grow row-span-6 mt-6 md:mt-4 overflow-y-scroll">
+      <div className="col-span-10 grow row-span-6  overflow-y-scroll">
         <Outlet />
       </div>
       <div className="col-span-10 row-span-1 md:h-full hidden md:block">

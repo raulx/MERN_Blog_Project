@@ -166,7 +166,7 @@ body{
 
 @media(max-width:540px){
     .custom_width{
-        width:37.5rem
+        width:46.5rem
     }
     html{
         font-size: 75%;
@@ -175,7 +175,7 @@ body{
 
 @media(max-width:512px){
     .custom_width{
-        width: 35rem;
+        width: 44rem;
     }
 }
 @media(max-width:428px){
@@ -183,7 +183,7 @@ body{
         width: 80%;
     }
     .custom_width{
-        width: 41.5rem;
+        width: 51rem;
     }
 }
 
@@ -192,7 +192,7 @@ body{
         width: 90%;
     }
     .custom_width{
-        width: 46rem;
+        width: 56rem;
     }
 }
 @media(max-width:412px){
@@ -200,7 +200,7 @@ body{
         width: 90%;
     }
     .custom_width{
-        width: 45.5rem;
+        width: 56rem;
     }
 }
 @media(max-width:393px){
@@ -208,7 +208,7 @@ body{
         width: 90%;
     }
     .custom_width{
-        width: 43.25rem;
+        width: 53rem;
     }
 }
 @media(max-width:390px){
@@ -216,13 +216,13 @@ body{
         width: 90%;
     }
     .custom_width{
-        width: 43rem;
+        width: 52.5rem;
     }
 
 }
 @media(max-width:375px){
     .custom_width{
-        width:40.9rem
+        width:50.5rem
     }
 }
 @media(max-width:360px){
@@ -230,7 +230,7 @@ body{
         width: 90%;
     }
     .custom_width{
-        width: 39.15rem;
+        width: 48rem;
     }
 }
 @media(max-width:280px){
@@ -241,7 +241,7 @@ body{
         width: 95%;
     }
     .custom_width{
-        width: 31rem;
+        width: 38.5rem;
     }
 }
 
