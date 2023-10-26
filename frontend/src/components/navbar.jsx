@@ -8,9 +8,8 @@ import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 
 function Navbar({ phoneNav, handlePhoneNav }) {
-  const { auth, user } = useSelector((state) => {
-    return state;
-  });
+  const auth = useSelector((state) => state.auth.auth);
+  const userData = useSelector((state) => state.user.userData);
 
   const [currentPage, setCurrentPage] = useState("home");
   const navigate = useNavigate();
@@ -71,9 +70,9 @@ function Navbar({ phoneNav, handlePhoneNav }) {
           </ul>
         </div>
         <div className="flex gap-4  mr-10 p-4">
-          {auth.auth ? (
+          {auth ? (
             <>
-              <Avatar alt={user.userData.name} src={user.userData.profilePic} />
+              <Avatar alt={userData.name} src={userData.profilePic} />
               <Link
                 to={"/profile"}
                 className={`flex justify-center items-center ${

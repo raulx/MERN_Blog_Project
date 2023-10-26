@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
-import { FaTag } from "react-icons/fa";
+import { FaTag, FaEye } from "react-icons/fa";
 
 function Card({ cardData }) {
   return (
@@ -15,16 +15,22 @@ function Card({ cardData }) {
           <p>
             {cardData.content.substring(0, 100)}...
             <Link
-              to={`/blog/${cardData.creatorId}?blog=${cardData.id}`}
+              to={`/blog/${cardData.creatorId}?blogId=${cardData.id}`}
               className="text-blue-500"
             >
               Read More
             </Link>
           </p>
-          <p className="rounded bg-gray-200 py-2 px-4 w-2/3 mt-4 flex justify-start items-center gap-4">
-            <FaTag />
-            {cardData.category}
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="rounded bg-gray-200 py-2 px-4 w-2/3 mt-4 flex justify-start items-center gap-4">
+              <FaTag />
+              {cardData.category}
+            </p>
+            <div className="flex gap-2 items-center py-2 mt-4">
+              <FaEye />
+              <>{cardData.likes}</>
+            </div>
+          </div>
         </div>
       </div>
     </>

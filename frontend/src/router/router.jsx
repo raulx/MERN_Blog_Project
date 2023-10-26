@@ -1,19 +1,39 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import NotFound from "../screens/globalScreens/notFoundScreen";
 import ContactPage from "../screens/globalScreens/contactScreen";
-import AboutPage from "../screens//globalScreens/aboutScreen";
-import ProtectedRoutes from "../hooks/authenticateRoutesHook";
-import BlogsScreen from "../screens/protectedScreens/blogScreens/blogsScreen";
-import AuthScreen from "../screens/globalScreens/authScreen";
-import NewsScreen from "../screens/protectedScreens/newsScreens/newsScreen";
-import LandingScreen from "../screens/globalScreens/landingScreen";
-import MemeScreen from "../screens/protectedScreens/memeScreens/memeScreen";
-import GamesScreen from "../screens/protectedScreens/gamesScreen/gamesScreen";
-import MovieScreen from "../screens/protectedScreens/movieScreens/moviesScreen";
-import ShoppingScreen from "../screens/protectedScreens/shoppingScreens/shoppingScreen";
-import ShortsScreen from "../screens/protectedScreens/shortsScreens/shortsScreen";
-import ProfileScreen from "../screens/protectedScreens/userProfileScreens/profileScreen";
+const AboutPage = lazy(() => import("../screens/globalScreens/aboutScreen"));
+const ProtectedRoutes = lazy(() => import("../hooks/authenticateRoutesHook"));
+const BlogsScreen = lazy(() =>
+  import("../screens/protectedScreens/blogScreens/blogsScreen")
+);
+const AuthScreen = lazy(() => "../screens/globalScreens/authScreen");
+const NewsScreen = lazy(() =>
+  import("../screens/protectedScreens/newsScreens/newsScreen")
+);
+const LandingScreen = lazy(() =>
+  import("../screens/globalScreens/landingScreen")
+);
+const MemeScreen = lazy(() =>
+  import("../screens/protectedScreens/memeScreens/memeScreen")
+);
+const GamesScreen = lazy(() =>
+  import("../screens/protectedScreens/gamesScreen/gamesScreen")
+);
+const MovieScreen = lazy(() =>
+  import("../screens/protectedScreens/movieScreens/moviesScreen")
+);
+const ShoppingScreen = lazy(() =>
+  import("../screens/protectedScreens/shoppingScreens/shoppingScreen")
+);
+const ShortsScreen = lazy(() =>
+  import("../screens/protectedScreens/shortsScreens/shortsScreen")
+);
+const ProfileScreen = lazy(() =>
+  import("../screens/protectedScreens/userProfileScreens/profileScreen")
+);
 import DisplayBlog from "../screens/protectedScreens/blogScreens/displayBlog";
 import HomePage from "../screens/homePage";
 import ContentScreen from "../screens/protectedScreens/contentScreen";
@@ -21,7 +41,11 @@ import ContentScreen from "../screens/protectedScreens/contentScreen";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <Suspense>
+        <App />
+      </Suspense>
+    ),
     children: [
       {
         path: "/",
