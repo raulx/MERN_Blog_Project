@@ -1,15 +1,17 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
-import NotFound from "../screens/globalScreens/notFoundScreen";
-import ContactPage from "../screens/globalScreens/contactScreen";
+const App = lazy(() => import("../App"));
+const NotFound = lazy(() => import("../screens/globalScreens/notFoundScreen"));
+const ContactPage = lazy(() =>
+  import("../screens/globalScreens/contactScreen")
+);
 const AboutPage = lazy(() => import("../screens/globalScreens/aboutScreen"));
 const ProtectedRoutes = lazy(() => import("../hooks/authenticateRoutesHook"));
 const BlogsScreen = lazy(() =>
   import("../screens/protectedScreens/blogScreens/blogsScreen")
 );
-const AuthScreen = lazy(() => "../screens/globalScreens/authScreen");
+const AuthScreen = lazy(() => import("../screens/globalScreens/authScreen"));
 const NewsScreen = lazy(() =>
   import("../screens/protectedScreens/newsScreens/newsScreen")
 );
@@ -34,9 +36,13 @@ const ShortsScreen = lazy(() =>
 const ProfileScreen = lazy(() =>
   import("../screens/protectedScreens/userProfileScreens/profileScreen")
 );
-import DisplayBlog from "../screens/protectedScreens/blogScreens/displayBlog";
-import HomePage from "../screens/homePage";
-import ContentScreen from "../screens/protectedScreens/contentScreen";
+const DisplayBlog = lazy(() =>
+  import("../screens/protectedScreens/blogScreens/displayBlog")
+);
+const HomePage = lazy(() => import("../screens/homePage"));
+const ContentScreen = lazy(() =>
+  import("../screens/protectedScreens/contentScreen")
+);
 
 const router = createBrowserRouter([
   {
