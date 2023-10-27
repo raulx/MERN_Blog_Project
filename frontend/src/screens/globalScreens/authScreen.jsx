@@ -18,9 +18,10 @@ function AuthScreen() {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    const user = { email: loginState.email, password: loginState.password };
     try {
-      const res = await logIn(loginState.email);
-      const userId = res.data[0].id;
+      const res = await logIn(user);
+      const userId = res.data.id;
       dispatch(loggedIn(userId));
       navigate("/content");
     } catch (err) {

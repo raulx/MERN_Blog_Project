@@ -1,5 +1,5 @@
 import express from "express";
-import bodyParser from "body-parser";
+
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
@@ -14,9 +14,9 @@ const app = express();
 
 const PORT = process.env.PORT || 4000;
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/api/user", userRouter);
 
 if (process.env.NODE_ENV === "production") {
