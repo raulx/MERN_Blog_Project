@@ -5,7 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "server": "nodemon ./backend/server.js"
+    "server": "nodemon ./backend/server.js",
+    "client": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
@@ -19,5 +21,8 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
