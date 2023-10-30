@@ -1,3 +1,5 @@
+const BASE_URL = "/api";
+
 const blogCategories = [
   { id: 1, category: "all" },
   { id: 2, category: "politics" },
@@ -36,4 +38,4 @@ const contentTypeLinks = [
   { type: "shopping", url: "/content/shopping" },
 ];
 
-export { blogCategories, pages, contentTypeLinks };
+export { blogCategories, pages, contentTypeLinks, BASE_URL };

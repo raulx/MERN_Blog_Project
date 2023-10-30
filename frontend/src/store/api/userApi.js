@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { API_URL } from "./blogApi";
+import { BASE_URL } from "../../utils/variables";
 
 const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: API_URL,
+    baseUrl: BASE_URL,
     fetchFn: async (...args) => {
       return fetch(...args);
     },
@@ -12,9 +12,9 @@ const userApi = createApi({
   endpoints(builder) {
     return {
       getUser: builder.query({
-        query: (userId) => {
+        query: () => {
           return {
-            url: `/users/${userId}`,
+            url: `/user/getuser`,
           };
         },
       }),

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLazyGetUserQuery } from "../store";
 import { setUserData } from "../store";
+import { Toaster } from "react-hot-toast";
 
 import UseMyContext from "../hooks/useMyContext";
 
@@ -19,10 +20,9 @@ function HomePage() {
 
   useEffect(() => {
     if (auth) {
-      const { id } = JSON.parse(localStorage.getItem("user"));
       const getUser = async () => {
-        const res = await fetchUserData(id);
-        dispatch(setUserData(res.data));
+        const res = await fetchUserData();
+        dispatch(setUserData(res.data.data));
       };
       getUser();
     }
@@ -39,6 +39,7 @@ function HomePage() {
       <div className="col-span-10 row-span-1 md:h-full hidden md:block">
         <Footer />
       </div>
+      <Toaster />
     </div>
   );
 }

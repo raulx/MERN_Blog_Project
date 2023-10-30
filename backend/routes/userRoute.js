@@ -4,12 +4,14 @@ import {
   registerUser,
   logOutUser,
 } from "../controllers/authController.js";
+import { getUser } from "../controllers/userController.js";
 import protect from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/login").post(loginUser);
-router.route("/register").post(registerUser);
-router.route("/logout").post(logOutUser);
+router.post("/login", loginUser);
+router.post("/logout", logOutUser);
+router.post("/register", registerUser);
+router.route("/getuser").get(protect, getUser);
 
 export default router;

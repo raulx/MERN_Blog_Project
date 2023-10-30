@@ -4,15 +4,18 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loggedIn } from "../../store";
 import { useLogInMutation } from "../../store";
+import { useRegisterUserMutation } from "../../store";
+import toast, { Toaster } from "react-hot-toast";
 
 function AuthScreen() {
   const [authType, setAuthType] = useState({ login: true, register: false });
   const [loginState, setLoginState] = useState({ email: "", password: "" });
-  const [logIn, results] = useLogInMutation();
+  const [logIn, logging] = useLogInMutation();
+  const [registerUser, registering] = useRegisterUserMutation();
   const [registerState, setRegisterState] = useState({
+    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,14 +25,30 @@ function AuthScreen() {
     try {
       const res = await logIn(user);
       const userId = res.data.id;
-      dispatch(loggedIn(userId));
-      navigate("/content");
+      if (userId) {
+        dispatch(loggedIn(userId));
+        navigate("/content");
+      } else {
+        throw new Error(res.data.message);
+      }
     } catch (err) {
-      console.log(`Error:${err}`);
+      toast.error(`${err.message}`);
     }
   };
-  const handleRegister = () => {
-    console.log(registerState);
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const user = {
+      name: registerState.name,
+      email: registerState.email,
+      password: registerState.password,
+    };
+    try {
+      const res = await registerUser(user);
+      dispatch(loggedIn(res.data.id));
+      navigate("/content");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const setInput = (prevValue, inputType, typedInput) => {
@@ -52,13 +71,14 @@ function AuthScreen() {
 
   return (
     <>
-      {results.isLoading ? (
+      {logging.isLoading || registering.isLoading ? (
         <div className="h-screen w-full flex justify-center items-center">
           <Spinner $size="120px" $borderWidth="10px" />
         </div>
       ) : (
         <>
           <div className="flex justify-center items-center h-screen w-screen">
+            <Toaster />
             <div className="auth_box w-1/4  bg-white shadow-2xl rounded-2xl px-6 py-4 ">
               <div className="relative w-full h-full overflow-hidden">
                 <div
@@ -70,12 +90,18 @@ function AuthScreen() {
                     <h1 className="capitalize font-extrabold text-4xl py-4">
                       Login Form
                     </h1>
-                    <div className="mt-28 flex flex-col gap-4 w-full">
+                    <form
+                      className="mt-28 flex flex-col gap-4 w-full"
+                      onSubmit={(e) => {
+                        handleLogin(e);
+                      }}
+                    >
                       <input
                         type="email"
-                        placeholder="email address"
+                        placeholder="Email Address"
                         className="p-4  border rounded-xl focus:outline-gray-400"
                         autoFocus
+                        required
                         value={loginState.email}
                         onChange={(e) => {
                           handleChange(e, "email");
@@ -83,9 +109,10 @@ function AuthScreen() {
                       />
                       <input
                         type="password"
-                        placeholder="password"
+                        placeholder="Password"
                         className="p-4  border rounded-xl focus:outline-gray-400"
                         value={loginState.password}
+                        required
                         onChange={(e) => {
                           handleChange(e, "password");
                         }}
@@ -98,7 +125,7 @@ function AuthScreen() {
                       </Link>
                       <button
                         className="bg-gradient-to-r from-green-700 to-green-500 text-white p-4  rounded-2xl text-xl"
-                        onClick={handleLogin}
+                        type="submit"
                       >
                         Login
                       </button>
@@ -113,48 +140,51 @@ function AuthScreen() {
                           Sign up now
                         </span>
                       </p>
-                    </div>
+                    </form>
                   </div>
                   <div className="register w-full h-full">
                     <h1 className="capitalize font-extrabold text-4xl py-4">
                       Register Form
                     </h1>
-                    <div className="mt-24 flex flex-col gap-4 w-full">
+                    <form
+                      className="mt-24 flex flex-col gap-4 w-full"
+                      onSubmit={handleRegister}
+                    >
+                      <input
+                        type="text"
+                        placeholder="Enter Username"
+                        className=" p-4 border rounded-xl focus:outline-gray-400"
+                        value={registerState.name}
+                        required
+                        onChange={(e) => {
+                          handleChange(e, "name");
+                        }}
+                      />
                       <input
                         type="email"
-                        placeholder="email address"
-                        className=" p-4 border rounded-xl focus:outline-gray-400"
+                        placeholder="Enter Email"
+                        className="p-4  border rounded-xl focus:outline-gray-400"
                         value={registerState.email}
+                        required
                         onChange={(e) => {
                           handleChange(e, "email");
                         }}
                       />
                       <input
                         type="password"
-                        placeholder="password"
-                        className="p-4  border rounded-xl focus:outline-gray-400"
+                        placeholder="Enter Password"
+                        className="p-4 border rounded-xl focus:outline-gray-400"
                         value={registerState.password}
+                        required
                         onChange={(e) => {
                           handleChange(e, "password");
                         }}
                       />
-                      <input
-                        type="password"
-                        placeholder="confirm password"
-                        className="p-4 border rounded-xl focus:outline-gray-400"
-                        value={registerState.confirmPassword}
-                        onChange={(e) => {
-                          handleChange(e, "confirmPassword");
-                        }}
-                      />
 
-                      <button
-                        className="bg-gradient-to-r  from-green-700 to-green-500 text-white p-4 rounded-2xl text-xl"
-                        onClick={handleRegister}
-                      >
+                      <button className="bg-gradient-to-r  from-green-700 to-green-500 text-white p-4 rounded-2xl text-xl">
                         Sign Up
                       </button>
-                    </div>
+                    </form>
                   </div>
                 </div>
 

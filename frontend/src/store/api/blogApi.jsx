@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const API_URL = "http://localhost:3500/";
+import { BASE_URL } from "../../utils/variables";
 
 //FOR DEV USE ONLY
 export const pause = (duration) => {
@@ -12,7 +12,7 @@ export const pause = (duration) => {
 const blogApi = createApi({
   reducerPath: "blog",
   baseQuery: fetchBaseQuery({
-    baseUrl: API_URL,
+    baseUrl: BASE_URL,
     fetchFn: async (...args) => {
       await pause(2000);
       return fetch(...args);

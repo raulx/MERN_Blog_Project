@@ -5,20 +5,31 @@ import { pages } from "../utils/variables";
 import { useDispatch, useSelector } from "react-redux";
 import { loggedOut } from "../store";
 import { useState } from "react";
+import { useLogOutMutation } from "../store";
+// import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import Avatar from "@mui/material/Avatar";
 
 function Navbar({ phoneNav, handlePhoneNav }) {
   const auth = useSelector((state) => state.auth.auth);
   const userData = useSelector((state) => state.user.userData);
+  const [logOut] = useLogOutMutation();
 
   const [currentPage, setCurrentPage] = useState("home");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const handleLogout = () => {
-    dispatch(loggedOut());
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await logOut().unwrap();
+      // toast.promise(results.isLoading, { success: "successfully logged out" });
+
+      dispatch(loggedOut());
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -33,7 +44,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
           >
             {phoneNav != null &&
             phoneNav != undefined &&
-            auth.auth &&
+            auth &&
             location.pathname === "/content" ? (
               phoneNav ? (
                 <FaTimes />
@@ -70,7 +81,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
           </ul>
         </div>
         <div className="flex gap-4  mr-10 p-4">
-          {auth ? (
+          {userData ? (
             <>
               <Avatar alt={userData.name} src={userData.profilePic} />
               <Link
@@ -81,7 +92,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
                     : "border-b-0"
                 }`}
               >
-                Profile
+                {userData.name}
               </Link>
               <button onClick={handleLogout} className="uppercase">
                 Logout

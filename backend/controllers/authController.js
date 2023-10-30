@@ -4,18 +4,17 @@ import generateToken from "../utils/generateToken.js";
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body);
   const user = await User.findOne({ email });
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
-    res.json({ id: user._id });
+    res.json({ status: res.statusCode, id: user._id });
   } else {
-    throw new Error("password does not matched.");
+    throw new Error("Login Failed ! Either email or password is wrong.");
   }
 });
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
   if (userExists) {
@@ -23,13 +22,17 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists..");
   } else {
     try {
-      const newUser = { email, password, profilePic: "", name: "unknown" };
+      const newUser = {
+        name,
+        email,
+        password,
+        profilePic: "https://api.dicebear.com/7.x/lorelei/svg",
+      };
       const createdUser = await User.create(newUser);
       generateToken(res, createdUser._id);
       res.status(200).json({
         state: res.statusCode,
-        message: "registered user successfully",
-        data: createdUser,
+        id: createdUser._id,
       });
     } catch (err) {
       res.status(500);
@@ -40,7 +43,9 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const logOutUser = asyncHandler(async (req, res) => {
   res.cookie("token", "", { httpOnly: true, maxAge: new Date(0) });
-  res.status(200).json({ message: "successfully logged out" });
+  res
+    .status(200)
+    .json({ status: res.statusCode, message: "successfully logged out" });
 });
 
 export { loginUser, registerUser, logOutUser };
