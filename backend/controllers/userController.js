@@ -11,5 +11,10 @@ const getUser = asyncHandler(async (req, res) => {
     throw new Error("User not Found !");
   }
 });
+//FOR DEV ONLY
+const getAllUser = asyncHandler(async (req, res) => {
+  const allUsers = await User.find();
+  res.json({ status: 200, data: allUsers });
+});
 
-export { getUser };
+export { getUser, getAllUser };

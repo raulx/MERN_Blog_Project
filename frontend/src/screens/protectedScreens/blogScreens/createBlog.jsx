@@ -2,12 +2,13 @@
 import { useState } from "react";
 import { usePostImageMutation, usePostBlogMutation } from "../../../store";
 import { Spinner } from "baseui/spinner";
-import { nanoid } from "nanoid";
 import { FormControl, Select, MenuItem, InputLabel } from "@mui/material";
 import { blogCategories } from "../../../utils/variables";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const presetKey = import.meta.env.VITE_CLOUDINARY_PRESET;
+
 function CreateBlog() {
   const [postImage] = usePostImageMutation();
   const [postBlog, postBlogResults] = usePostBlogMutation();
@@ -23,41 +24,34 @@ function CreateBlog() {
     content: "",
     category: "science & technology",
   });
-  function pad(number) {
-    return number < 10 ? "0" + number : number;
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("file", image.file);
     formData.append("upload_preset", presetKey);
+    if (image.file) {
+      try {
+        const res = await postImage(formData);
+        const remoteImageUrl = res.data.secure_url;
+        const imagePublicId = res.data.public_id;
 
-    try {
-      const res = await postImage(formData);
-      const remoteImageUrl = res.data.secure_url;
-      const imagePublicId = res.data.public_id;
-      const currentDate = new Date();
-      let day = currentDate.getDate();
-      let month = currentDate.getMonth() + 1;
-      let year = currentDate.getFullYear();
-      var formattedDate = year + "-" + pad(month) + "-" + pad(day) + "";
-
-      const data = {
-        id: nanoid(),
-        title: blogData.title,
-        content: blogData.content,
-        likes: 0,
-        category: blogData.category,
-        date: formattedDate,
-        comments: [],
-        creatorId: id,
-        image: { publicId: imagePublicId, remote_url: remoteImageUrl },
-      };
-      await postBlog(data);
-      navigate("/");
-    } catch (err) {
-      console.log(`Error:${err}`);
+        const data = {
+          title: blogData.title,
+          content: blogData.content,
+          likes: 0,
+          category: blogData.category,
+          creator_id: id,
+          public_id: imagePublicId,
+          remote_url: remoteImageUrl,
+        };
+        await postBlog(data);
+        navigate("/");
+      } catch (err) {
+        console.log(`Error:${err}`);
+      }
+    } else {
+      toast.error("Image not selected !");
     }
   };
   const handleImageChange = (e) => {
@@ -75,6 +69,7 @@ function CreateBlog() {
       setImage((prevValue) => {
         return {
           ...prevValue,
+          file: "",
           localUrl: "",
         };
       });

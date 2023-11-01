@@ -25,9 +25,10 @@ function BlogsIndex() {
 
   useEffect(() => {
     if (data) {
-      if (!(JSON.stringify(prevData) === JSON.stringify(data))) {
-        dispatch(addBlog(data));
-        dispatch(setPrevData(data));
+      console.log(data.data);
+      if (!(JSON.stringify(prevData) === JSON.stringify(data.data))) {
+        dispatch(addBlog(data.data));
+        dispatch(setPrevData(data.data));
       }
     }
   }, [data, dispatch, prevData]);
@@ -103,8 +104,8 @@ function BlogsIndex() {
       </div>
 
       <div className="flex flex-wrap w-full justify-evenly gap-4 mt-4">
-        {blogData.map((blog) => {
-          return <Card key={blog.id} cardData={blog} />;
+        {blogData.map((blog, index) => {
+          return <Card key={index} cardData={blog} />;
         })}
         {filterNav.currentCategory === "All" ? (
           <>

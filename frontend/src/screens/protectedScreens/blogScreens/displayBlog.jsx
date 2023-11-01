@@ -1,37 +1,16 @@
-import { useSelector } from "react-redux";
-import { useParams, useSearchParams } from "react-router-dom";
-import { useGetUserQuery } from "../../../store";
-import { useLazyBlogDataQuery } from "../../../store";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useGetAuthorQuery } from "../../../store";
+import { useBlogDataQuery } from "../../../store";
 import { FaEye } from "react-icons/fa";
 import Avatar from "@mui/material//Avatar";
 import { Spinner } from "baseui/spinner";
 
 function DisplayBlog() {
-  const blogs = useSelector((state) => state.blogs);
-  const user = useSelector((state) => state.user);
-
-  const [blogData, setBlogData] = useState(null);
-  const { id } = useParams();
   const [searchParams] = useSearchParams();
   const blogId = searchParams.get("blogId");
-  const { data: authorData } = useGetUserQuery(id);
-  const [fetchBlogData] = useLazyBlogDataQuery();
-
-  useEffect(() => {
-    const getBlog = async () => {
-      let selectedBlog =
-        blogs.blogs.find((blog) => blog.id === blogId) ||
-        user.blogs.find((blog) => blog.id === blogId);
-
-      if (!selectedBlog) {
-        const res = await fetchBlogData(blogId);
-        selectedBlog = res.data[0];
-      }
-      setBlogData(selectedBlog);
-    };
-    getBlog();
-  }, [blogId, blogs.blogs, fetchBlogData, user.blogs]);
+  const authorId = searchParams.get("authorId");
+  const { data: authorData } = useGetAuthorQuery(authorId);
+  const { data: blogData } = useBlogDataQuery(blogId);
 
   return (
     <div className="w-11/12 mx-auto">
@@ -39,28 +18,34 @@ function DisplayBlog() {
         {blogData && authorData ? (
           <div>
             <div className="flex flex-wrap gap-4">
-              <img className=" rounded-lg" src={blogData.image.remote_url} />
+              <img
+                className=" rounded-lg"
+                src={blogData.data.image.remote_url}
+              />
               <div className="grow p-4">
                 <h1 className="text-5xl uppercase font-extrabold mt-10">
-                  {blogData.title}
+                  {blogData.data.title}
                 </h1>
                 <div className="mt-2">
                   <div className="flex gap-4  items-center ml-4">
                     <FaEye />
-                    {blogData.likes}
+                    {blogData.data.likes}
                   </div>
-                  <div className="mt-4">{blogData.date}</div>
+                  <div className="mt-4">{blogData.data.date}</div>
                 </div>
 
                 <div className="flex gap-4 items-center mt-4">
-                  <Avatar alt={authorData.name} src={authorData.profilePic} />
-                  <p className="font-bold  text-lg">{authorData.name}</p>
+                  <Avatar
+                    alt={authorData.data.name}
+                    src={authorData.data.profilePic}
+                  />
+                  <p className="font-bold  text-lg">{authorData.data.name}</p>
                 </div>
               </div>
             </div>
-            <div className="text-lg my-10">{blogData.content}</div>
+            <div className="text-lg my-10">{blogData.data.content}</div>
             <div>
-              {blogData.comments.map((comment) => {
+              {blogData.data.comments.map((comment) => {
                 return (
                   <div className="flex gap-4" key={comment.id}>
                     <Avatar src={comment.profilePic} />

@@ -13,6 +13,7 @@ const protect = asyncHandler(async (req, res, next) => {
       throw new Error("Invalid token");
     }
   } else {
+    res.status(401);
     throw new Error("Token Expired !");
   }
 });

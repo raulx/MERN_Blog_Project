@@ -15,7 +15,7 @@ function Card({ cardData }) {
           <p>
             {cardData.content.substring(0, 100)}...
             <Link
-              to={`/blog/${cardData.creatorId}?blogId=${cardData.id}`}
+              to={`/blog/?authorId=${cardData.creator_id}&blogId=${cardData._id}`}
               className="text-blue-500"
             >
               Read More

@@ -20,10 +20,18 @@ const blogApi = createApi({
   }),
   endpoints(builder) {
     return {
+      getAuthor: builder.query({
+        query: (authorId) => {
+          return {
+            url: `/blogs/getAuthor?authorId=${authorId}`,
+            method: "GET",
+          };
+        },
+      }),
       postBlog: builder.mutation({
         query: (data) => {
           return {
-            url: `/blogs`,
+            url: `/blogs/create`,
             method: "POST",
             body: data,
           };
@@ -32,7 +40,8 @@ const blogApi = createApi({
       blogData: builder.query({
         query: (id) => {
           return {
-            url: `/blogs/?id=${id}`,
+            url: `/blogs/getBlogData?blogId=${id}`,
+            method: "GET",
           };
         },
       }),
@@ -47,7 +56,7 @@ const blogApi = createApi({
       getBlogs: builder.query({
         query: ({ page, pageSize }) => {
           return {
-            url: `/blogs/?_page=${page}&_limit=${pageSize}`,
+            url: `/blogs/getblogs?page=${page}&limit=${pageSize}`,
             method: "GET",
           };
         },
@@ -61,6 +70,8 @@ export const {
   useUsersBlogsQuery,
   useBlogDataQuery,
   usePostBlogMutation,
-  useLazyBlogDataQuery,
+
+  useGetAuthorQuery,
+  useLazyGetAuthorQuery,
 } = blogApi;
 export default blogApi;
