@@ -3,11 +3,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { pages } from "../utils/variables";
 import { useDispatch, useSelector } from "react-redux";
-import { loggedOut } from "../store";
+import { loggedOut, setUserData } from "../store";
 import { useState } from "react";
 import { useLogOutMutation } from "../store";
-// import toast from "react-hot-toast";
-// import toast from "react-hot-toast";
 import Avatar from "@mui/material/Avatar";
 
 function Navbar({ phoneNav, handlePhoneNav }) {
@@ -23,9 +21,8 @@ function Navbar({ phoneNav, handlePhoneNav }) {
   const handleLogout = async () => {
     try {
       await logOut().unwrap();
-      // toast.promise(results.isLoading, { success: "successfully logged out" });
-
       dispatch(loggedOut());
+      dispatch(setUserData({ userData: "", blogs: [] }));
       navigate("/");
     } catch (err) {
       console.error(err);
@@ -42,10 +39,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
             }}
             className="cursor-pointer  md:hidden text-4xl"
           >
-            {phoneNav != null &&
-            phoneNav != undefined &&
-            auth &&
-            location.pathname === "/content" ? (
+            {phoneNav != null && phoneNav != undefined && auth ? (
               phoneNav ? (
                 <FaTimes />
               ) : (
@@ -65,7 +59,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
                 <Link
                   to={page.url}
                   key={page.name}
-                  className={` rounded-xl transition-all duration-200 font-bold py-2 px-6 ${
+                  className={`rounded-xl transition-all duration-200 font-bold py-2 px-6 ${
                     page.name === currentPage
                       ? " border-b border-lime-300"
                       : "hover:text-green-300"
@@ -81,7 +75,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
           </ul>
         </div>
         <div className="flex gap-4  mr-10 p-4">
-          {userData ? (
+          {auth ? (
             <>
               <Avatar alt={userData.name} src={userData.profilePic} />
               <Link

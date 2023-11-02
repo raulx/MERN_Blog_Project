@@ -9,7 +9,7 @@ function ContentScreen() {
   return (
     <div className="h-full w-full md:grid grid-cols-6 grid-rows-6 flex flex-col justify-between">
       <div
-        className={`col-span-1  text-lg flex md:static absolute z-20 top-16 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center border bg-white md:py-6 transition-all duration-200 md:px-4 overflow-y-scroll ${
+        className={`col-span-1  text-lg flex md:static absolute z-20 top-24 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center border bg-white md:py-6 transition-all duration-200 md:px-4 overflow-y-scroll ${
           phoneNav ? "translate-x-0" : "-translate-x-full"
         }`}
       >
