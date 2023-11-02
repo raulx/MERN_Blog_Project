@@ -5,13 +5,12 @@ import { setUserBlogs } from "../../../store";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 function UserBlogs() {
-  const { id } = JSON.parse(localStorage.getItem("user"));
-  const { data, isFetching } = useUsersBlogsQuery(id);
+  const { data, isFetching } = useUsersBlogsQuery();
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (data) {
-      dispatch(setUserBlogs(data));
+      dispatch(setUserBlogs(data.data));
     }
   }, [data, dispatch]);
   return (
@@ -20,7 +19,7 @@ function UserBlogs() {
         <CardSkeleton times={5} />
       ) : (
         <>
-          {data.map((d) => {
+          {data.data.map((d) => {
             return <Card cardData={d} key={d.id} />;
           })}
         </>

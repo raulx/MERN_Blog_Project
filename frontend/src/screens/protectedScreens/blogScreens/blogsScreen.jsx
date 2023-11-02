@@ -4,14 +4,37 @@ import TrendingBlogs from "./trendingBlogs";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import CreateBlog from "./createBlog";
+import { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { addPage } from "../../../store";
 
 const allBlogScreens = [
   { name: "all", element: <BlogsIndex /> },
   { name: "trending", element: <TrendingBlogs /> },
   { name: "your blogs", element: <UserBlogs /> },
 ];
+
 function BlogScreen() {
   const [currentScreen, setCurrentScreen] = useState("all");
+  const containerRef = useRef();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const handleScroll = () => {
+      if (
+        container.scrollHeight - container.scrollTop ===
+        container.clientHeight
+      ) {
+        dispatch(addPage());
+      }
+    };
+    container.addEventListener("scroll", handleScroll);
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, [dispatch]);
   return (
     <div className="w-full h-full flex flex-col px-4 ">
       <div className="flex md:justify-center justify-between md:items-center md:relative fixed z-10  md:rounded-xl text-green-800 md:w-full w-custom  bg-green-100">
@@ -42,7 +65,10 @@ function BlogScreen() {
           create blog
         </div>
       </div>
-      <div className="md:overflow-y-scroll relative grow md:mt-0 ">
+      <div
+        className="md:overflow-y-scroll relative grow md:mt-0 "
+        ref={containerRef}
+      >
         {allBlogScreens.map((screen) => {
           const newScreen =
             screen.name === currentScreen ? (

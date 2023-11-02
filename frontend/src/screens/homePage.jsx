@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLazyGetUserQuery } from "../store";
 import { setUserData } from "../store";
 import { Toaster } from "react-hot-toast";
+import { useRef } from "react";
+import { addPage } from "../store";
 
 import UseMyContext from "../hooks/useMyContext";
 
@@ -15,8 +17,27 @@ function HomePage() {
     return state.auth;
   });
 
-  const dispatch = useDispatch();
   const [fetchUserData] = useLazyGetUserQuery();
+
+  const containerRef = useRef();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const handleScroll = () => {
+      if (
+        container.scrollHeight - container.scrollTop ===
+        container.clientHeight
+      ) {
+        dispatch(addPage());
+      }
+    };
+    container.addEventListener("scroll", handleScroll);
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (auth) {
@@ -33,7 +54,10 @@ function HomePage() {
         <Navbar phoneNav={phoneNav} handlePhoneNav={setPhoneNav} />
       </div>
 
-      <div className="col-span-10 grow row-span-6  overflow-y-scroll">
+      <div
+        className="col-span-10 grow row-span-6  overflow-y-scroll"
+        ref={containerRef}
+      >
         <Outlet />
       </div>
       <div className="col-span-10 row-span-1 md:h-full hidden md:block">

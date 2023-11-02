@@ -12,7 +12,7 @@ function Card({ cardData }) {
         />
         <div className="flex flex-col p-4">
           <h1 className="font-bold text-2xl">{cardData.title}</h1>
-          <p>
+          <p className=" w-full overflow-hidden">
             {cardData.content.substring(0, 100)}...
             <Link
               to={`/blog/?authorId=${cardData.creator_id}&blogId=${cardData._id}`}

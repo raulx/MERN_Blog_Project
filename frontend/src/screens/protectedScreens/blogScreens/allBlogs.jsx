@@ -25,14 +25,12 @@ function BlogsIndex() {
 
   useEffect(() => {
     if (data) {
-      console.log(data.data);
       if (!(JSON.stringify(prevData) === JSON.stringify(data.data))) {
         dispatch(addBlog(data.data));
         dispatch(setPrevData(data.data));
       }
     }
   }, [data, dispatch, prevData]);
-
   const handleAddMoreData = () => {
     dispatch(addPage());
   };
@@ -112,7 +110,7 @@ function BlogsIndex() {
             {isFetching ? (
               <CardSkeleton times={pageSize} />
             ) : (
-              <button onClick={handleAddMoreData}>Add more Data</button>
+              <button onClick={handleAddMoreData}>add More</button>
             )}
           </>
         ) : null}

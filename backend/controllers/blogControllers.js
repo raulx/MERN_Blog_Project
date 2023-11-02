@@ -48,5 +48,10 @@ const getBlogData = asyncHandler(async (req, res) => {
     throw new Error("data not found");
   }
 });
+const getUserBlogs = asyncHandler(async (req, res) => {
+  const { userId } = req.token;
+  const userBlogs = await Blog.find({ creator_id: userId });
+  res.json({ status: req.status, data: userBlogs });
+});
 
-export { addBlog, getBlogs, getBlogData, getAuthorData };
+export { addBlog, getBlogs, getBlogData, getAuthorData, getUserBlogs };

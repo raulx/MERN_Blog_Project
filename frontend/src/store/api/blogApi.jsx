@@ -46,9 +46,9 @@ const blogApi = createApi({
         },
       }),
       usersBlogs: builder.query({
-        query: (id) => {
+        query: () => {
           return {
-            url: `/blogs/?creatorId=${id}`,
+            url: `/blogs/getUserBlogs`,
             method: "GET",
           };
         },
