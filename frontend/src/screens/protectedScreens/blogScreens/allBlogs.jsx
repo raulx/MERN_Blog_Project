@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useGetBlogsQuery } from "../../../store";
 import { useState, useEffect } from "react";
-import { addBlog, setPrevData, addPage } from "../../../store";
+import { addBlog, setPrevData } from "../../../store";
 import Card from "../../../components/card";
 import CardSkeleton from "../../../components/cardSkeleton";
 import { FaFilter, FaChevronDown, FaChevronLeft } from "react-icons/fa";
@@ -31,9 +31,6 @@ function BlogsIndex() {
       }
     }
   }, [data, dispatch, prevData]);
-  const handleAddMoreData = () => {
-    dispatch(addPage());
-  };
 
   let blogData = blogs;
 
@@ -106,13 +103,7 @@ function BlogsIndex() {
           return <Card key={index} cardData={blog} />;
         })}
         {filterNav.currentCategory === "All" ? (
-          <>
-            {isFetching ? (
-              <CardSkeleton times={pageSize} />
-            ) : (
-              <button onClick={handleAddMoreData}>add More</button>
-            )}
-          </>
+          <>{isFetching ? <CardSkeleton times={pageSize} /> : null}</>
         ) : null}
       </div>
     </>

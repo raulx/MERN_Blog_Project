@@ -6,8 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLazyGetUserQuery } from "../store";
 import { setUserData } from "../store";
 import { Toaster } from "react-hot-toast";
-import { useRef } from "react";
-import { addPage } from "../store";
 
 import UseMyContext from "../hooks/useMyContext";
 
@@ -19,25 +17,7 @@ function HomePage() {
 
   const [fetchUserData] = useLazyGetUserQuery();
 
-  const containerRef = useRef();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const container = containerRef.current;
-    const handleScroll = () => {
-      if (
-        container.scrollHeight - container.scrollTop ===
-        container.clientHeight
-      ) {
-        dispatch(addPage());
-      }
-    };
-    container.addEventListener("scroll", handleScroll);
-
-    return () => {
-      container.removeEventListener("scroll", handleScroll);
-    };
-  }, [dispatch]);
 
   useEffect(() => {
     if (auth) {
@@ -48,20 +28,16 @@ function HomePage() {
       getUser();
     }
   }, [auth, dispatch, fetchUserData]);
-
   return (
-    <div className="md:grid grid-cols-10 h-screen gap-4 grid-rows-8  flex flex-col  justify-between overflow-hidden">
+    <div className="md:grid grid-cols-10 md:h-screen gap-4 grid-rows-8  flex flex-col  justify-between overflow-hidden">
       <div className="md:col-span-10 md:row-span-1 h-36 md:h-full">
         <Navbar phoneNav={phoneNav} handlePhoneNav={setPhoneNav} />
       </div>
 
-      <div
-        className="col-span-10 grow row-span-6  overflow-y-scroll"
-        ref={containerRef}
-      >
+      <div className="col-span-10 grow row-span-6  h-screen md:h-full overflow-y-scroll ">
         <Outlet />
       </div>
-      <div className="col-span-10 row-span-1 md:h-full hidden md:block">
+      <div className="col-span-10 row-span-1 md:h-full  md:block">
         <Footer />
       </div>
       <Toaster />
