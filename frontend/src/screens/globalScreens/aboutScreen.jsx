@@ -1,8 +1,7 @@
 import aboutUs from "../../assets/screenAssets/aboutUs.jpg";
-import Footer from "../../components/footer";
 function AboutPage() {
   return (
-    <div className="h-full w-full  flex md:flex-row  flex-col gap-4  overflow-y-scroll">
+    <div className="h-screen md:overflow-auto overflow-y-scroll w-full  flex md:flex-row  flex-col gap-4  ">
       <div>
         <img className="p-6" src={aboutUs} alt="about Us" />
       </div>
@@ -27,9 +26,6 @@ function AboutPage() {
           possimus numquam quae officia veritatis. Obcaecati recusandae quod sit
           ab natus repellendus earum!
         </p>
-      </div>
-      <div className="md:hidden">
-        <Footer />
       </div>
     </div>
   );

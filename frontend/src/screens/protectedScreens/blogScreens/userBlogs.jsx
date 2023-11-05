@@ -14,7 +14,7 @@ function UserBlogs() {
     }
   }, [data, dispatch]);
   return (
-    <div className="flex justify-evenly gap-6 flex-wrap my-20 overflow-y-scroll">
+    <div className="flex justify-evenly gap-6 flex-wrap my-4 md:my-10">
       {isFetching ? (
         <CardSkeleton times={5} />
       ) : (

@@ -30,7 +30,7 @@ function ContentScreen() {
           );
         })}
       </div>
-      <div className="md:col-span-5 md:h-full h-screen md:row-span-6 grow bg-white ">
+      <div className="md:col-span-5  md:row-span-6 grow bg-white ">
         <Outlet />
       </div>
     </div>

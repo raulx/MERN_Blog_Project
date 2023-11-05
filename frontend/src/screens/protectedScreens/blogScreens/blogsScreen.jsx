@@ -37,7 +37,7 @@ function BlogScreen() {
   }, [dispatch]);
   return (
     <div className="w-full h-full flex flex-col px-4 ">
-      <div className="flex md:justify-center justify-between md:items-center md:relative fixed z-10  md:rounded-xl text-green-800 md:w-full w-custom  bg-green-100">
+      <div className="flex md:justify-center justify-between md:items-center relative  z-10  md:rounded-xl text-green-800 md:w-full w-custom  bg-green-100">
         <ul className="p-4 gap-6 flex">
           {allBlogScreens.map((screen) => {
             return (
@@ -66,7 +66,7 @@ function BlogScreen() {
         </div>
       </div>
       <div
-        className="overflow-y-scroll relative grow md:mt-0 "
+        className="overflow-y-scroll relative grow md:mt-0 h-[48rem]"
         ref={containerRef}
       >
         {allBlogScreens.map((screen) => {

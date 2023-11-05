@@ -70,7 +70,7 @@ function BlogsIndex() {
           })}
         </div>
       ) : null}
-      <div className="flex justify-between items-center mt-16 md:mt-4">
+      <div className="flex justify-between items-center mt-6 md:mt-4">
         <h1 className="text-2xl text-gray-400 font-extrabold uppercase">
           Results
         </h1>

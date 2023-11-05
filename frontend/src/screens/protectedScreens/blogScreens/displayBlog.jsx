@@ -17,7 +17,7 @@ function DisplayBlog() {
   const { data: blogData } = useBlogDataQuery(blogId);
 
   return (
-    <div>
+    <div className="h-screen overflow-y-scroll">
       <div
         className={`col-span-1  text-lg flex md:hidden absolute z-20 top-24 left-0 w-full h-full  row-span-6 gap-2 sidebar rounded shadow-sm flex-col md:translate-x-0 items-center border bg-white md:py-6 transition-all duration-200 md:px-4 overflow-y-scroll ${
           phoneNav ? "translate-x-0" : "-translate-x-full"
@@ -46,7 +46,7 @@ function DisplayBlog() {
             <div>
               <div className="flex flex-wrap gap-4">
                 <img
-                  className=" rounded-lg"
+                  className=" rounded-lg max-h-96"
                   src={blogData.data.image.remote_url}
                 />
                 <div className="grow p-4">

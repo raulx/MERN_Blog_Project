@@ -29,12 +29,12 @@ function HomePage() {
     }
   }, [auth, dispatch, fetchUserData]);
   return (
-    <div className="md:grid grid-cols-10 md:h-screen gap-4 grid-rows-8  flex flex-col  justify-between overflow-hidden">
+    <div className="md:grid grid-cols-10 min-h-screen gap-4 grid-rows-8  flex flex-col  justify-between ">
       <div className="md:col-span-10 md:row-span-1 h-36 md:h-full">
         <Navbar phoneNav={phoneNav} handlePhoneNav={setPhoneNav} />
       </div>
 
-      <div className="col-span-10 grow row-span-6  h-screen md:h-full overflow-y-scroll ">
+      <div className="col-span-10 grow row-span-6 max-h-screen ">
         <Outlet />
       </div>
       <div className="col-span-10 row-span-1 md:h-full  md:block">
