@@ -168,6 +168,9 @@ body{
     .custom_width{
         width:46.5rem
     }
+    html{
+        font-size: 75%;
+    }
 }
 
 @media(max-width:512px){
