@@ -77,7 +77,7 @@ function Navbar({ phoneNav, handlePhoneNav }) {
         <div className="flex gap-4  mr-10 p-4">
           {auth ? (
             <>
-              <Avatar alt={userData.name} src={userData.profilePic} />
+              <Avatar alt={userData.name} src={userData.profile_pic} />
               <Link
                 to={"/profile"}
                 className={`flex justify-center items-center ${

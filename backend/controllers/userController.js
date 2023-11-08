@@ -17,4 +17,12 @@ const getAllUser = asyncHandler(async (req, res) => {
   res.json({ status: 200, data: allUsers });
 });
 
-export { getUser, getAllUser };
+const addFakerUser = asyncHandler(async (req, res) => {
+  const { email, password, profile_pic, name } = req.body;
+  const newUser = { email, password, profile_pic, name };
+
+  const user = await User.create(newUser);
+  res.status(200).json({ message: "data added successfully", data: user });
+});
+
+export { getUser, getAllUser, addFakerUser };

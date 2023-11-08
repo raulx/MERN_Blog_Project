@@ -20,6 +20,7 @@
     "@mui/material": "^5.14.12",
     "@reduxjs/toolkit": "^1.9.6",
     "baseui": "^13.0.0",
+    "classnames": "^2.3.2",
     "nanoid": "^5.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

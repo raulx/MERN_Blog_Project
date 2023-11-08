@@ -13,7 +13,6 @@ function CreateBlog() {
   const [postImage] = usePostImageMutation();
   const [postBlog, postBlogResults] = usePostBlogMutation();
   const navigate = useNavigate();
-  const { id } = JSON.parse(localStorage.getItem("user"));
   const [image, setImage] = useState({
     localUrl: "",
     remoteUrl: "",
@@ -39,9 +38,7 @@ function CreateBlog() {
         const data = {
           title: blogData.title,
           content: blogData.content,
-          likes: 0,
           category: blogData.category,
-          creator_id: id,
           public_id: imagePublicId,
           remote_url: remoteImageUrl,
         };
@@ -150,7 +147,7 @@ function CreateBlog() {
             </div>
           </div>
           <div className="mt-20 flex flex-col gap-4">
-            <label className=" font-extrabold text-3xl">Content:</label>
+            <label className="font-extrabold text-3xl">Content:</label>
             <textarea
               rows={20}
               className=" border-2 p-4"

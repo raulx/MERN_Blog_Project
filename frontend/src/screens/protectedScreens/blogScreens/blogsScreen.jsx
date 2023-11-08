@@ -66,7 +66,7 @@ function BlogScreen() {
         </div>
       </div>
       <div
-        className="overflow-y-scroll relative grow md:mt-0 h-[48rem]"
+        className="overflow-y-scroll relative grow md:mt-0 h-[16rem]"
         ref={containerRef}
       >
         {allBlogScreens.map((screen) => {

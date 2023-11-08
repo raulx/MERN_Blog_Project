@@ -20,7 +20,7 @@ function BlogsIndex() {
 
   const [filterNav, setFilterNav] = useState({
     isOpen: false,
-    currentCategory: "All",
+    currentCategory: "all",
   });
 
   useEffect(() => {
@@ -34,7 +34,7 @@ function BlogsIndex() {
 
   let blogData = blogs;
 
-  if (filterNav.currentCategory != "All") {
+  if (filterNav.currentCategory != "all") {
     blogData = blogData.filter((blog) => {
       return blog.category === filterNav.currentCategory;
     });
@@ -56,8 +56,8 @@ function BlogsIndex() {
           {blogCategories.map((d) => {
             return (
               <p
-                className={`text-xl capitalize w-full h-full cursor-pointer py-2 px-4 rounded-xl  ${
-                  d.category === filterNav.currentCategory.toLowerCase()
+                className={`text-xl  w-full h-full cursor-pointer py-2 px-4 rounded-xl  ${
+                  d.category === filterNav.currentCategory
                     ? "bg-slate-600 text-white"
                     : "hover:bg-slate-500 hover:text-white"
                 }`}
@@ -98,11 +98,11 @@ function BlogsIndex() {
         </div>
       </div>
 
-      <div className="flex flex-wrap w-full justify-evenly gap-4 mt-4">
+      <div className="flex flex-wrap w-full justify-evenly gap-4  gap-y-16 mt-4">
         {blogData.map((blog, index) => {
           return <Card key={index} cardData={blog} />;
         })}
-        {filterNav.currentCategory === "All" ? (
+        {filterNav.currentCategory === "all" ? (
           <>{isFetching ? <CardSkeleton times={pageSize} /> : null}</>
         ) : null}
       </div>

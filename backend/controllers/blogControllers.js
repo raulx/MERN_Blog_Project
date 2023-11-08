@@ -3,15 +3,21 @@ import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 
 const addBlog = asyncHandler(async (req, res) => {
-  const { title, content, likes, category, public_id, remote_url } = req.body;
+  const { title, content, category, public_id, remote_url } = req.body;
   const creator_id = req.token.userId;
+  const user = await User.findById(creator_id);
   const newBlog = {
     title,
     content,
-    likes,
+    likes: 0,
+    views: 0,
     category,
     image: { public_id, remote_url },
-    creator_id,
+    created_by: {
+      id: creator_id,
+      profile_pic: user.profile_pic,
+      name: user.name,
+    },
   };
 
   const newBlogCreated = await Blog.create(newBlog);
@@ -40,7 +46,7 @@ const getBlogData = asyncHandler(async (req, res) => {
   const { blogId } = req.query;
   const blog = await Blog.findById(blogId);
   if (blog) {
-    blog.likes += 1;
+    blog.views += 1;
     blog.save();
     res.json({ status: res.statusCode, data: blog });
   } else {
