@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useGetBlogsQuery } from "../../../store";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { addBlog, setPrevData } from "../../../store";
 import Card from "../../../components/card";
 import CardSkeleton from "../../../components/cardSkeleton";
@@ -17,6 +17,7 @@ function BlogsIndex() {
     pageSize: pageSize,
   });
   const dispatch = useDispatch();
+  const dropDowm = useRef();
 
   const [filterNav, setFilterNav] = useState({
     isOpen: false,
@@ -32,6 +33,21 @@ function BlogsIndex() {
     }
   }, [data, dispatch, prevData]);
 
+  useEffect(() => {
+    const handler = (event) => {
+      if (!dropDowm.current.contains(event.target)) {
+        setFilterNav((prevValue) => {
+          return { ...prevValue, isOpen: false };
+        });
+      }
+    };
+    document.addEventListener("click", handler, true);
+
+    return () => {
+      document.removeEventListener("click", handler, true);
+    };
+  }, [filterNav.isOpen]);
+
   let blogData = blogs;
 
   if (filterNav.currentCategory != "all") {
@@ -40,7 +56,7 @@ function BlogsIndex() {
     });
   }
   const handleClick = (e) => {
-    const categoryChoosen = e.target.innerText;
+    const categoryChoosen = e.target.innerText.toLowerCase();
     setFilterNav((prevValue) => {
       return {
         ...prevValue,
@@ -52,11 +68,14 @@ function BlogsIndex() {
   return (
     <>
       {filterNav.isOpen ? (
-        <div className="border shadow-xl p-2 bg-slate-100 rounded-lg flex flex-col gap-2 absolute z-10 md:right-20 right-4 w-80 md:top-16 top-28 md:w-96">
+        <div
+          ref={dropDowm}
+          className="border shadow-xl p-2 bg-slate-100 rounded-lg flex flex-col gap-2 absolute z-10 md:right-20 right-4 w-80 md:top-16 top-28 md:w-96"
+        >
           {blogCategories.map((d) => {
             return (
               <p
-                className={`text-xl  w-full h-full cursor-pointer py-2 px-4 rounded-xl  ${
+                className={`text-xl  w-full h-full cursor-pointer py-2 capitalize px-4 rounded-xl  ${
                   d.category === filterNav.currentCategory
                     ? "bg-slate-600 text-white"
                     : "hover:bg-slate-500 hover:text-white"

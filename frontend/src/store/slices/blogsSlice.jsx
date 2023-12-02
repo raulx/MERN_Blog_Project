@@ -11,10 +11,15 @@ const blogsSlice = createSlice({
     addPage(state) {
       state.currentPage += 1;
     },
+    removeBlog(state, action) {
+      state.blogs = state.blogs.filter((blog) => {
+        return blog._id != action.payload;
+      });
+    },
     setPrevData(state, action) {
       state.prevData = action.payload;
     },
   },
 });
-export const { addBlog, addPage, setPrevData } = blogsSlice.actions;
+export const { addBlog, addPage, setPrevData, removeBlog } = blogsSlice.actions;
 export default blogsSlice.reducer;

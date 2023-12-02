@@ -1,21 +1,43 @@
 import { useSearchParams } from "react-router-dom";
-import { useGetAuthorQuery } from "../../../store";
+import { useAddCommentMutation, useGetAuthorQuery } from "../../../store";
 import { useBlogDataQuery } from "../../../store";
 import { FaEye } from "react-icons/fa";
 import Avatar from "@mui/material//Avatar";
 import { Spinner } from "baseui/spinner";
 import { contentTypeLinks } from "../../../utils/variables";
 import { Link } from "react-router-dom";
+import { TextField, Button } from "@mui/material";
 import UseMyContext from "../../../hooks/useMyContext";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 function DisplayBlog() {
   const [searchParams] = useSearchParams();
   const { phoneNav, setPhoneNav } = UseMyContext();
+  const [comment, setComment] = useState("");
   const blogId = searchParams.get("blogId");
   const authorId = searchParams.get("authorId");
   const { data: authorData } = useGetAuthorQuery(authorId);
   const { data: blogData } = useBlogDataQuery(blogId);
+  const { userData } = useSelector((state) => {
+    return state.user;
+  });
+  const [addComment] = useAddCommentMutation();
 
+  const handleAddComment = async () => {
+    const data = {
+      blogId,
+      userId: userData._id,
+      profile_pic: userData.profile_pic,
+      comment,
+    };
+    try {
+      const res = await addComment(data);
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div className="h-screen overflow-y-scroll">
       <div
@@ -56,7 +78,7 @@ function DisplayBlog() {
                   <div className="mt-2">
                     <div className="flex gap-4  items-center ml-4">
                       <FaEye />
-                      {blogData.data.likes}
+                      {blogData.data.views}
                     </div>
                     <div className="mt-4">{blogData.data.date}</div>
                   </div>
@@ -64,7 +86,7 @@ function DisplayBlog() {
                   <div className="flex gap-4 items-center mt-4">
                     <Avatar
                       alt={authorData.data.name}
-                      src={authorData.data.profilePic}
+                      src={authorData.data.profile_pic}
                     />
                     <p className="font-bold  text-lg">{authorData.data.name}</p>
                   </div>
@@ -72,6 +94,9 @@ function DisplayBlog() {
               </div>
               <div className="text-lg my-10">{blogData.data.content}</div>
               <div>
+                <p className="text-2xl capitalize font-bold border-b-2">
+                  Comments
+                </p>
                 {blogData.data.comments.map((comment) => {
                   return (
                     <div className="flex gap-4" key={comment.id}>
@@ -80,6 +105,28 @@ function DisplayBlog() {
                     </div>
                   );
                 })}
+                <div className="my-4">
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    multiline
+                    rows={6}
+                    fullWidth
+                    value={comment}
+                    onChange={(e) => {
+                      setComment(e.target.value);
+                    }}
+                  />
+                </div>
+
+                <div className="my-4">
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleAddComment}
+                  >
+                    Add Reply
+                  </Button>
+                </div>
               </div>
             </div>
           ) : (

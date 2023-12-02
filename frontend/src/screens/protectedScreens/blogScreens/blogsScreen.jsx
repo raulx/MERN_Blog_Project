@@ -1,6 +1,5 @@
 import BlogsIndex from "./allBlogs";
 import UserBlogs from "./userBlogs";
-import TrendingBlogs from "./trendingBlogs";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import CreateBlog from "./createBlog";
@@ -9,13 +8,12 @@ import { useDispatch } from "react-redux";
 import { addPage } from "../../../store";
 
 const allBlogScreens = [
-  { name: "all", element: <BlogsIndex /> },
-  { name: "trending", element: <TrendingBlogs /> },
+  { name: "explore", element: <BlogsIndex /> },
   { name: "your blogs", element: <UserBlogs /> },
 ];
 
 function BlogScreen() {
-  const [currentScreen, setCurrentScreen] = useState("all");
+  const [currentScreen, setCurrentScreen] = useState("explore");
   const containerRef = useRef();
   const dispatch = useDispatch();
 
@@ -66,7 +64,7 @@ function BlogScreen() {
         </div>
       </div>
       <div
-        className="overflow-y-scroll relative grow md:mt-0 h-[16rem]"
+        className="overflow-y-scroll relative grow md:mt-0 h-[42rem]"
         ref={containerRef}
       >
         {allBlogScreens.map((screen) => {

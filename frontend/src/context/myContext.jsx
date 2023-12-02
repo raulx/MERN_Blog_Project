@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 
 const myContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 function MyContext({ children }) {
   const [phoneNav, setPhoneNav] = useState(false);
 
@@ -12,5 +13,6 @@ function MyContext({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default myContext;
 export { MyContext };

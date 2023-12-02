@@ -1,5 +1,5 @@
 import express from "express";
-
+import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
@@ -21,6 +21,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/user", userRouter);
 app.use("/api/blogs", blogRouter);
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();

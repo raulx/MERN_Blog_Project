@@ -21,7 +21,7 @@ function CreateBlog() {
   const [blogData, setBlogData] = useState({
     title: "",
     content: "",
-    category: "science & technology",
+    category: "",
   });
 
   const handleSubmit = async (e) => {
@@ -29,7 +29,9 @@ function CreateBlog() {
     const formData = new FormData();
     formData.append("file", image.file);
     formData.append("upload_preset", presetKey);
-    if (image.file) {
+    if (blogData.category === "") {
+      toast.error("Choose a category !");
+    } else if (image.file) {
       try {
         const res = await postImage(formData);
         const remoteImageUrl = res.data.secure_url;
@@ -86,7 +88,7 @@ function CreateBlog() {
         />
       </div>
       <div className="flex justify-end px-4 uppercase gap-6 py-2 w-full items-center">
-        <h1 className="text-xl text-gray-700 ">
+        <h1 className="md:text-xl text-gray-700">
           {image.file ? <>Change Image :</> : <>Select an image:</>}
         </h1>
         <input
@@ -98,9 +100,9 @@ function CreateBlog() {
       </div>
       <div>
         <form onSubmit={handleSubmit} className="flex flex-col ">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col">
             <div>
-              <label className=" font-extrabold text-3xl">Title:</label>
+              <label className="font-extrabold text-3xl">Title:</label>
               <input
                 type="text"
                 required
@@ -132,25 +134,27 @@ function CreateBlog() {
                   }}
                 >
                   {blogCategories.map((d) => {
-                    return (
-                      <MenuItem
-                        key={d.id}
-                        value={d.category}
-                        className="uppercase"
-                      >
-                        {d.category}
-                      </MenuItem>
-                    );
+                    if (d.category != "all") {
+                      return (
+                        <MenuItem
+                          key={d.id}
+                          value={d.category}
+                          className="uppercase"
+                        >
+                          {d.category}
+                        </MenuItem>
+                      );
+                    }
                   })}
                 </Select>
               </FormControl>
             </div>
           </div>
-          <div className="mt-20 flex flex-col gap-4">
+          <div className="mt-8 flex flex-col gap-4">
             <label className="font-extrabold text-3xl">Content:</label>
             <textarea
               rows={20}
-              className=" border-2 p-4"
+              className="border-2 p-4"
               value={blogData.content}
               onChange={(e) => {
                 setBlogData((prevValue) => {

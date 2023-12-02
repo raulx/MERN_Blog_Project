@@ -20,7 +20,7 @@ function UserBlogs() {
       ) : (
         <>
           {data.data.map((d) => {
-            return <Card cardData={d} key={d.id} />;
+            return <Card cardData={d} key={d._id} />;
           })}
         </>
       )}

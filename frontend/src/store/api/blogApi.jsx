@@ -46,10 +46,34 @@ const blogApi = createApi({
         },
       }),
       usersBlogs: builder.query({
+        providesTags: () => {
+          return [{ type: "getUserBlogs" }];
+        },
         query: () => {
           return {
             url: `/blogs/getUserBlogs`,
             method: "GET",
+          };
+        },
+      }),
+      deleteBlog: builder.mutation({
+        invalidatesTags: () => {
+          return [{ type: "getUserBlogs" }];
+        },
+        query: (blogId) => {
+          return {
+            url: `/blogs/deleteBlog`,
+            method: "DELETE",
+            body: { blogId },
+          };
+        },
+      }),
+      addComment: builder.mutation({
+        query: (data) => {
+          return {
+            url: `/blogs/addComment`,
+            method: "POST",
+            body: { ...data },
           };
         },
       }),
@@ -70,8 +94,9 @@ export const {
   useUsersBlogsQuery,
   useBlogDataQuery,
   usePostBlogMutation,
-
+  useDeleteBlogMutation,
   useGetAuthorQuery,
   useLazyGetAuthorQuery,
+  useAddCommentMutation,
 } = blogApi;
 export default blogApi;

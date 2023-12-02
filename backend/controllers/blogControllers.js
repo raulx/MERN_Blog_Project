@@ -1,6 +1,7 @@
 import Blog from "../models/blogModel.js";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
+import { v2 as cloudinary } from "cloudinary";
 
 const addBlog = asyncHandler(async (req, res) => {
   const { title, content, category, public_id, remote_url } = req.body;
@@ -56,8 +57,33 @@ const getBlogData = asyncHandler(async (req, res) => {
 });
 const getUserBlogs = asyncHandler(async (req, res) => {
   const { userId } = req.token;
-  const userBlogs = await Blog.find({ creator_id: userId });
+  const userBlogs = await Blog.find({ "created_by.id": userId });
   res.json({ status: req.status, data: userBlogs });
 });
 
-export { addBlog, getBlogs, getBlogData, getAuthorData, getUserBlogs };
+const deleteBlog = asyncHandler(async (req, res) => {
+  const { blogId } = req.body;
+  const user = await Blog.findById(blogId);
+  await cloudinary.uploader.destroy(user.image.public_id);
+  await Blog.findByIdAndDelete(blogId);
+  res.json({ status: res.statusCode, message: "deleted blog successfully." });
+});
+
+const addComment = asyncHandler(async (req, res) => {
+  const { blogId, comment, userId, profile_pic } = req.body;
+
+  const blog = await Blog.findById(blogId);
+  if (blog) {
+    res.json(blog);
+  }
+});
+
+export {
+  addBlog,
+  getBlogs,
+  getBlogData,
+  getAuthorData,
+  getUserBlogs,
+  deleteBlog,
+  addComment,
+};

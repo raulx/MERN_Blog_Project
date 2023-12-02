@@ -26,7 +26,7 @@ const registerUser = asyncHandler(async (req, res) => {
         name,
         email,
         password,
-        profilePic: "https://api.dicebear.com/7.x/lorelei/svg",
+        profile_pic: "https://api.dicebear.com/7.x/lorelei/svg",
       };
       const createdUser = await User.create(newUser);
       generateToken(res, createdUser._id);
