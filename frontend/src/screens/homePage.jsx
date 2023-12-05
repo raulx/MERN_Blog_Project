@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLazyGetUserQuery } from "../store";
 import { setUserData } from "../store";
 import { Toaster } from "react-hot-toast";
-
+import { loggedOut } from "../store";
+import { useNavigate } from "react-router-dom";
 import UseMyContext from "../hooks/useMyContext";
 
 function HomePage() {
@@ -14,7 +15,7 @@ function HomePage() {
   const { auth } = useSelector((state) => {
     return state.auth;
   });
-
+  const navigate = useNavigate();
   const [fetchUserData] = useLazyGetUserQuery();
 
   const dispatch = useDispatch();
@@ -23,11 +24,17 @@ function HomePage() {
     if (auth) {
       const getUser = async () => {
         const res = await fetchUserData();
-        dispatch(setUserData(res.data.data));
+        if (res.status === "fulfilled") {
+          dispatch(setUserData(res.data.data));
+        } else {
+          dispatch(loggedOut());
+          window.location.reload();
+        }
       };
       getUser();
     }
-  }, [auth, dispatch, fetchUserData]);
+  }, [auth, dispatch, fetchUserData, navigate]);
+
   return (
     <div className="md:grid grid-cols-10 min-h-screen gap-4 grid-rows-8  flex flex-col  justify-between ">
       <div className="md:col-span-10 md:row-span-1 h-36 md:h-full">

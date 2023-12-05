@@ -4,6 +4,7 @@ import UseMyContext from "../../hooks/useMyContext";
 
 function ContentScreen() {
   const { phoneNav, setPhoneNav } = UseMyContext();
+
   const location = useLocation();
 
   return (

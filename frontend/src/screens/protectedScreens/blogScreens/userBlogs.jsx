@@ -4,15 +4,21 @@ import CardSkeleton from "../../../components/cardSkeleton";
 import { setUserBlogs } from "../../../store";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 function UserBlogs() {
-  const { data, isFetching } = useUsersBlogsQuery();
+  const { data, isFetching, isError } = useUsersBlogsQuery();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data) {
       dispatch(setUserBlogs(data.data));
+    } else if (isError) {
+      navigate("/notfound");
     }
-  }, [data, dispatch]);
+  }, [data, dispatch, isError, navigate]);
+
   return (
     <div className="flex justify-evenly gap-6 flex-wrap my-4 md:my-10">
       {isFetching ? (
