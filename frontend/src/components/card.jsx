@@ -8,6 +8,7 @@ import { useDeleteBlogMutation } from "../store";
 import { removeBlog } from "../store";
 import { useDispatch } from "react-redux";
 import { FaSync, FaTrash } from "react-icons/fa";
+import { filterDate } from "../utils/functions";
 
 function Card({ cardData }) {
   const category = cardData.category;
@@ -31,31 +32,6 @@ function Card({ cardData }) {
       "bg-purple-600": category === "health",
     }
   );
-
-  const filterDate = (date) => {
-    const newDate = new Date(date).getTime();
-    const currentTime = new Date().getTime();
-    const hoursAgo = ((currentTime - newDate) / 3600000).toFixed();
-    let filteredDate;
-
-    if (hoursAgo < 1) {
-      filteredDate = "Just Now";
-    } else if (10 < hoursAgo && hoursAgo < 24) {
-      filteredDate = `yesterday`;
-    } else if (hoursAgo > 24 && hoursAgo < 720) {
-      const daysAgo = (hoursAgo / 24).toFixed();
-      filteredDate = `${daysAgo}d ago`;
-    } else if (hoursAgo > 720 && hoursAgo < 8640) {
-      const monthsAgo = (hoursAgo / 24 / 30).toFixed();
-      filteredDate = `${monthsAgo}months ago`;
-    } else if (hoursAgo > 8640) {
-      const yearsAgo = (hoursAgo / 24 / 30 / 12).toFixed();
-      filteredDate = `${yearsAgo}years ago`;
-    } else {
-      filteredDate = `${hoursAgo}h ago`;
-    }
-    return filteredDate;
-  };
 
   const handleDelete = async () => {
     try {

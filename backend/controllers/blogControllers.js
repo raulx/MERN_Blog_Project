@@ -73,8 +73,16 @@ const addComment = asyncHandler(async (req, res) => {
   const { blogId, comment, userId, profile_pic } = req.body;
 
   const blog = await Blog.findById(blogId);
-  if (blog) {
-    res.json(blog);
+  const user = await User.findById(userId);
+  if (blog && user) {
+    let newComment = {
+      creator_id: userId,
+      profile_pic: user.profile_pic,
+      comment: comment,
+    };
+    await blog.comments.push(newComment);
+    blog.save();
+    res.status(200).json({ blog, status: 200 });
   }
 });
 

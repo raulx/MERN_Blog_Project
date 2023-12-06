@@ -38,6 +38,9 @@ const blogApi = createApi({
         },
       }),
       blogData: builder.query({
+        providesTags: () => {
+          return [{ type: "getBlogData" }];
+        },
         query: (id) => {
           return {
             url: `/blogs/getBlogData?blogId=${id}`,
@@ -69,6 +72,9 @@ const blogApi = createApi({
         },
       }),
       addComment: builder.mutation({
+        invalidatesTags: () => {
+          return [{ type: "getBlogData" }];
+        },
         query: (data) => {
           return {
             url: `/blogs/addComment`,
