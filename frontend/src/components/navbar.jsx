@@ -1,33 +1,20 @@
 /* eslint-disable react/prop-types */
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { pages } from "../utils/variables";
-import { useDispatch, useSelector } from "react-redux";
-import { loggedOut, setUserData } from "../store";
+import { useSelector } from "react-redux";
+
 import { useState } from "react";
-import { useLogOutMutation } from "../store";
-import Avatar from "@mui/material/Avatar";
+
+import AccountMenu from "./accountMenu";
 
 function Navbar({ phoneNav, handlePhoneNav }) {
   const auth = useSelector((state) => state.auth.auth);
   const userData = useSelector((state) => state.user.userData);
-  const [logOut] = useLogOutMutation();
 
   const [currentPage, setCurrentPage] = useState("home");
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const location = useLocation();
 
-  const handleLogout = async () => {
-    try {
-      await logOut().unwrap();
-      dispatch(loggedOut());
-      dispatch(setUserData({ userData: "", blogs: [] }));
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const location = useLocation();
 
   return (
     <div className="flex flex-col justify-between md:h-full">
@@ -74,10 +61,10 @@ function Navbar({ phoneNav, handlePhoneNav }) {
             })}
           </ul>
         </div>
-        <div className="flex gap-4  mr-10 p-4">
+        <div className="flex gap-4  mr-10 ">
           {auth ? (
             <>
-              <Avatar alt={userData.name} src={userData.profile_pic} />
+              {/* <Avatar alt={userData.name} src={userData.profile_pic} />
               <Link
                 to={"/profile"}
                 className={`flex justify-center items-center ${
@@ -87,10 +74,11 @@ function Navbar({ phoneNav, handlePhoneNav }) {
                 }`}
               >
                 {userData.name}
-              </Link>
-              <button onClick={handleLogout} className="uppercase">
-                Logout
-              </button>
+              </Link> */}
+              <p className="flex justify-center items-center">
+                {userData.name}
+              </p>
+              <AccountMenu avatarLink={userData.profile_pic} />
             </>
           ) : (
             <>
