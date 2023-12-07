@@ -43,6 +43,7 @@ const getAuthorData = asyncHandler(async (req, res) => {
     throw new Error("data not found");
   }
 });
+
 const getBlogData = asyncHandler(async (req, res) => {
   const { blogId } = req.query;
   const blog = await Blog.findById(blogId);
@@ -55,6 +56,7 @@ const getBlogData = asyncHandler(async (req, res) => {
     throw new Error("data not found");
   }
 });
+
 const getUserBlogs = asyncHandler(async (req, res) => {
   const { userId } = req.token;
   const userBlogs = await Blog.find({ "created_by.id": userId });
@@ -70,14 +72,14 @@ const deleteBlog = asyncHandler(async (req, res) => {
 });
 
 const addComment = asyncHandler(async (req, res) => {
-  const { blogId, comment, userId, profile_pic } = req.body;
-
+  const { blogId, comment, userId } = req.body;
   const blog = await Blog.findById(blogId);
   const user = await User.findById(userId);
   if (blog && user) {
     let newComment = {
       creator_id: userId,
       profile_pic: user.profile_pic,
+      creator_name: user.name,
       comment: comment,
     };
     await blog.comments.push(newComment);

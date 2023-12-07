@@ -72,9 +72,6 @@ const blogApi = createApi({
         },
       }),
       addComment: builder.mutation({
-        invalidatesTags: () => {
-          return [{ type: "getBlogData" }];
-        },
         query: (data) => {
           return {
             url: `/blogs/addComment`,
@@ -103,6 +100,7 @@ export const {
   useDeleteBlogMutation,
   useGetAuthorQuery,
   useLazyGetAuthorQuery,
+  useLazyBlogDataQuery,
   useAddCommentMutation,
 } = blogApi;
 export default blogApi;

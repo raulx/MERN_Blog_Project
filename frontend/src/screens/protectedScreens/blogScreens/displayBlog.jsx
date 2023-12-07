@@ -1,7 +1,10 @@
 import { useSearchParams } from "react-router-dom";
-import { useAddCommentMutation, useGetAuthorQuery } from "../../../store";
-import { useBlogDataQuery } from "../../../store";
-import { FaEye } from "react-icons/fa";
+import {
+  useAddCommentMutation,
+  useGetAuthorQuery,
+  useLazyBlogDataQuery,
+} from "../../../store";
+import { FaEye, FaTrash } from "react-icons/fa";
 import Avatar from "@mui/material//Avatar";
 import { Spinner } from "baseui/spinner";
 import { contentTypeLinks } from "../../../utils/variables";
@@ -9,7 +12,7 @@ import { Link } from "react-router-dom";
 import { TextField, Button, Box } from "@mui/material";
 import UseMyContext from "../../../hooks/useMyContext";
 import { FaSpinner } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { filterDate } from "../../../utils/functions";
 
@@ -20,12 +23,29 @@ function DisplayBlog() {
   const blogId = searchParams.get("blogId");
   const authorId = searchParams.get("authorId");
   const { data: authorData } = useGetAuthorQuery(authorId);
-  const { data: blogData } = useBlogDataQuery(blogId);
+  const [blogData, setBlogData] = useState({ isLoading: true, data: null });
+  const [fetchBlogData] = useLazyBlogDataQuery();
   const { userData } = useSelector((state) => {
     return state.user;
   });
   const [isAddingComment, setIsAddingComment] = useState(false);
   const [addComment] = useAddCommentMutation();
+
+  useEffect(() => {
+    const getBlogData = async () => {
+      try {
+        const res = await fetchBlogData(blogId);
+        if (res.status === "fulfilled") {
+          setBlogData((prevValue) => {
+            return { ...prevValue, isLoading: false, data: res.data.data };
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getBlogData();
+  }, [blogId, fetchBlogData]);
 
   const handleAddComment = async (e) => {
     e.preventDefault();
@@ -34,15 +54,26 @@ function DisplayBlog() {
       userId: userData._id,
       comment,
     };
+
     try {
       setIsAddingComment(true);
       const res = await addComment(data);
       if (res.data) {
         setIsAddingComment(false);
+        setBlogData((prevValue) => {
+          return {
+            ...prevValue,
+            data: {
+              ...prevValue.data,
+              comments: res.data.blog.comments,
+            },
+          };
+        });
       }
     } catch (err) {
       console.error(err);
     }
+    setComment("");
   };
   return (
     <div className="h-screen overflow-y-scroll">
@@ -70,7 +101,7 @@ function DisplayBlog() {
       </div>
       <div className="w-11/12 mx-auto">
         <>
-          {blogData && authorData ? (
+          {blogData.data && authorData ? (
             <div>
               <div className="flex flex-wrap gap-4">
                 <img
@@ -100,19 +131,40 @@ function DisplayBlog() {
               </div>
               <div className="text-lg my-10">{blogData.data.content}</div>
               <div>
-                <p className="text-2xl capitalize font-bold border-b-2 mb-10">
-                  Comments
+                <p className="text-2xl capitalize font-bold border-b-2 mb-16">
+                  {blogData.data.comments.length} Comments
                 </p>
                 {blogData.data.comments
                   .slice()
                   .reverse()
                   .map((comment) => {
                     return (
-                      <div className="flex gap-4" key={comment._id}>
-                        <Avatar src={comment.profile_pic} />
-                        <p>
-                          {comment.comment} {filterDate(comment.created_at)}
-                        </p>
+                      <div
+                        className="flex gap-4 mb-8 py-4 border border-gray-400 relative rounded-2xl"
+                        key={comment._id}
+                      >
+                        <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2">
+                          <Avatar
+                            src={comment.profile_pic}
+                            sx={{ width: 48, height: 48 }}
+                            className="border border-gray-400"
+                          />
+                        </div>
+                        <div className="ml-8 w-full">
+                          <div className="flex justify-start items-center">
+                            <h1 className="text-xl font-bold text-blue-600">
+                              {comment.creator_name}
+                            </h1>
+                            <p className="ml-4">
+                              {filterDate(comment.created_at)}
+                            </p>
+                          </div>
+                          <hr className="my-2 border-t-2 " />
+                          <div className="flex flex-col">
+                            <p>{comment.comment}</p>
+                            <FaTrash />
+                          </div>
+                        </div>
                       </div>
                     );
                   })}
@@ -137,7 +189,6 @@ function DisplayBlog() {
                       sx={{ width: 120, height: 50 }}
                       type="submit"
                     >
-                      {" "}
                       <>
                         {isAddingComment ? (
                           <FaSpinner className="animate-spin text-2xl" />
