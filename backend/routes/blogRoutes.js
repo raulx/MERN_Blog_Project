@@ -6,6 +6,8 @@ import {
   getAuthorData,
   getUserBlogs,
   addComment,
+  removeComment,
+  editComment,
 } from "../controllers/blogControllers.js";
 import { getBlogs, getBlogData } from "../controllers/blogControllers.js";
 
@@ -17,5 +19,7 @@ router.route("/getAuthor").get(getAuthorData);
 router.route("/getUserBlogs").get(protect, getUserBlogs);
 router.route("/addComment").post(protect, addComment);
 router.route("/deleteBlog").delete(protect, deleteBlog);
+router.route("/removeComment").post(protect, removeComment);
+router.route("/editComment").post(protect, editComment);
 
 export default router;

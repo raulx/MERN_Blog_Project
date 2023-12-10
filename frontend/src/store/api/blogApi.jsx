@@ -80,6 +80,24 @@ const blogApi = createApi({
           };
         },
       }),
+      removeComment: builder.mutation({
+        query: (data) => {
+          return {
+            url: `/blogs/removeComment`,
+            method: "POST",
+            body: { ...data },
+          };
+        },
+      }),
+      editComment: builder.mutation({
+        query: (data) => {
+          return {
+            url: `/blogs/editComment`,
+            method: "POST",
+            body: { ...data },
+          };
+        },
+      }),
       getBlogs: builder.query({
         query: ({ page, pageSize }) => {
           return {
@@ -102,5 +120,7 @@ export const {
   useLazyGetAuthorQuery,
   useLazyBlogDataQuery,
   useAddCommentMutation,
+  useRemoveCommentMutation,
+  useEditCommentMutation,
 } = blogApi;
 export default blogApi;

@@ -1,10 +1,12 @@
 import { useSearchParams } from "react-router-dom";
 import {
   useAddCommentMutation,
+  useEditCommentMutation,
   useGetAuthorQuery,
   useLazyBlogDataQuery,
+  useRemoveCommentMutation,
 } from "../../../store";
-import { FaEye, FaTrash } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 import Avatar from "@mui/material//Avatar";
 import { Spinner } from "baseui/spinner";
 import { contentTypeLinks } from "../../../utils/variables";
@@ -20,6 +22,8 @@ function DisplayBlog() {
   const [searchParams] = useSearchParams();
   const { phoneNav, setPhoneNav } = UseMyContext();
   const [comment, setComment] = useState("");
+  const [commentText, setCommentText] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
   const blogId = searchParams.get("blogId");
   const authorId = searchParams.get("authorId");
   const { data: authorData } = useGetAuthorQuery(authorId);
@@ -28,8 +32,10 @@ function DisplayBlog() {
   const { userData } = useSelector((state) => {
     return state.user;
   });
-  const [isAddingComment, setIsAddingComment] = useState(false);
-  const [addComment] = useAddCommentMutation();
+  const [addComment, addingComment] = useAddCommentMutation();
+  const [removeComment, removingComment] = useRemoveCommentMutation();
+  const [editComment, editingComment] = useEditCommentMutation();
+  const [buttonClicked, setButtonClicked] = useState({ id: null });
 
   useEffect(() => {
     const getBlogData = async () => {
@@ -56,16 +62,14 @@ function DisplayBlog() {
     };
 
     try {
-      setIsAddingComment(true);
-      const res = await addComment(data);
-      if (res.data) {
-        setIsAddingComment(false);
+      const newComment = await addComment(data);
+      if (newComment.data) {
         setBlogData((prevValue) => {
           return {
             ...prevValue,
             data: {
               ...prevValue.data,
-              comments: res.data.blog.comments,
+              comments: newComment.data.blog.comments,
             },
           };
         });
@@ -74,6 +78,51 @@ function DisplayBlog() {
       console.error(err);
     }
     setComment("");
+  };
+
+  const handleDeleteComment = async (comment) => {
+    setButtonClicked((prevValue) => {
+      return { ...prevValue, id: comment._id };
+    });
+    const data = { blogId, commentId: comment._id };
+    try {
+      const res = await removeComment(data);
+      setBlogData((prevValue) => {
+        return {
+          ...prevValue,
+          data: { ...prevValue.data, comments: res.data.updated.comments },
+        };
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleEdit = (comment) => {
+    setButtonClicked((prevValue) => {
+      return { ...prevValue, id: comment._id };
+    });
+    setCommentText(comment.comment);
+    setIsEdit(true);
+  };
+
+  const handleSave = async (comment) => {
+    const data = { blogId, commentId: comment._id, newComment: commentText };
+
+    try {
+      const edittedComment = await editComment(data);
+      setBlogData((prevValue) => {
+        return {
+          ...prevValue,
+          data: {
+            ...prevValue.data,
+            comments: edittedComment.data.data.comments,
+          },
+        };
+      });
+      setIsEdit(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="h-screen overflow-y-scroll">
@@ -105,7 +154,7 @@ function DisplayBlog() {
             <div>
               <div className="flex flex-wrap gap-4">
                 <img
-                  className=" rounded-lg max-h-96"
+                  className="rounded-lg max-h-96"
                   src={blogData.data.image.remote_url}
                 />
                 <div className="grow p-4">
@@ -125,7 +174,7 @@ function DisplayBlog() {
                       alt={authorData.data.name}
                       src={authorData.data.profile_pic}
                     />
-                    <p className="font-bold  text-lg">{authorData.data.name}</p>
+                    <p className="font-bold text-lg">{authorData.data.name}</p>
                   </div>
                 </div>
               </div>
@@ -150,7 +199,7 @@ function DisplayBlog() {
                             className="border border-gray-400"
                           />
                         </div>
-                        <div className="ml-8 w-full">
+                        <div className="mx-8 w-full">
                           <div className="flex justify-start items-center">
                             <h1 className="text-xl font-bold text-blue-600">
                               {comment.creator_name}
@@ -161,8 +210,55 @@ function DisplayBlog() {
                           </div>
                           <hr className="my-2 border-t-2 " />
                           <div className="flex flex-col">
-                            <p>{comment.comment}</p>
-                            <FaTrash />
+                            {isEdit && comment._id === buttonClicked.id ? (
+                              <>
+                                <TextField
+                                  value={commentText}
+                                  multiline
+                                  onChange={(e) => {
+                                    setCommentText(e.target.value);
+                                  }}
+                                />
+                                <Button
+                                  onClick={() => {
+                                    handleSave(comment);
+                                  }}
+                                >
+                                  {editingComment.isLoading ? (
+                                    <FaSpinner className="animate-spin text-2xl" />
+                                  ) : (
+                                    <>Save</>
+                                  )}
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <p>{comment.comment}</p>
+                                {userData._id === comment.creator_id ? (
+                                  <div className="self-end mr-10 mt-2">
+                                    <Button
+                                      onClick={() => {
+                                        handleEdit(comment);
+                                      }}
+                                    >
+                                      Edit
+                                    </Button>
+                                    <Button
+                                      onClick={() => {
+                                        handleDeleteComment(comment);
+                                      }}
+                                    >
+                                      {removingComment.isLoading &&
+                                      comment._id === buttonClicked.id ? (
+                                        <FaSpinner className="animate-spin text-2xl" />
+                                      ) : (
+                                        <>Delete</>
+                                      )}
+                                    </Button>
+                                  </div>
+                                ) : null}
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -190,7 +286,7 @@ function DisplayBlog() {
                       type="submit"
                     >
                       <>
-                        {isAddingComment ? (
+                        {addingComment.isLoading ? (
                           <FaSpinner className="animate-spin text-2xl" />
                         ) : (
                           <>Add Reply</>

@@ -88,6 +88,25 @@ const addComment = asyncHandler(async (req, res) => {
   }
 });
 
+const removeComment = asyncHandler(async (req, res) => {
+  const { blogId, commentId } = req.body;
+  const updated = await Blog.findOneAndUpdate(
+    { _id: blogId },
+    { $pull: { comments: { _id: commentId } } },
+    { new: true }
+  );
+  res.json({ updated });
+});
+
+const editComment = asyncHandler(async (req, res) => {
+  const { commentId, blogId, newComment } = req.body;
+  const updatedComment = await Blog.findOneAndUpdate(
+    { "comments._id": commentId },
+    { $set: { "comments.$.comment": newComment } },
+    { new: true }
+  );
+  res.json({ data: updatedComment });
+});
 export {
   addBlog,
   getBlogs,
@@ -96,4 +115,6 @@ export {
   getUserBlogs,
   deleteBlog,
   addComment,
+  removeComment,
+  editComment,
 };
