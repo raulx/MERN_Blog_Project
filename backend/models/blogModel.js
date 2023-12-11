@@ -14,7 +14,9 @@ const blogSchema = mongoose.Schema(
         profile_pic: String,
         comment: String,
         creator_name: String,
-        replies: [],
+        replies: [
+          { reply: String, replied_at: { type: Date, default: Date.now } },
+        ],
         created_at: { type: Date, default: Date.now },
       },
     ],

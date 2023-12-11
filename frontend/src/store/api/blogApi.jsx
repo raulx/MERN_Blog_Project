@@ -98,6 +98,24 @@ const blogApi = createApi({
           };
         },
       }),
+      authorReply: builder.mutation({
+        query: (data) => {
+          return {
+            url: `/blogs/authorReply`,
+            method: "POST",
+            body: { ...data },
+          };
+        },
+      }),
+      replyDelete: builder.mutation({
+        query: (data) => {
+          return {
+            url: `/blogs/replyDelete`,
+            method: "POST",
+            body: { ...data },
+          };
+        },
+      }),
       getBlogs: builder.query({
         query: ({ page, pageSize }) => {
           return {
@@ -122,5 +140,7 @@ export const {
   useAddCommentMutation,
   useRemoveCommentMutation,
   useEditCommentMutation,
+  useAuthorReplyMutation,
+  useReplyDeleteMutation,
 } = blogApi;
 export default blogApi;

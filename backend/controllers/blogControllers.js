@@ -99,13 +99,38 @@ const removeComment = asyncHandler(async (req, res) => {
 });
 
 const editComment = asyncHandler(async (req, res) => {
-  const { commentId, blogId, newComment } = req.body;
+  const { commentId, newComment } = req.body;
   const updatedComment = await Blog.findOneAndUpdate(
     { "comments._id": commentId },
     { $set: { "comments.$.comment": newComment } },
     { new: true }
   );
   res.json({ data: updatedComment });
+});
+
+const authorReply = asyncHandler(async (req, res) => {
+  const { reply, commentId } = req.body;
+  const newReply = { reply };
+  const newblog = await Blog.findOneAndUpdate(
+    { "comments._id": commentId },
+    { $push: { "comments.$.replies": newReply } },
+    { new: true }
+  );
+  res.json({ newblog });
+});
+
+const replyDelete = asyncHandler(async (req, res) => {
+  const { commentId } = req.body;
+  const updatedBlog = await Blog.findOneAndUpdate(
+    { "comments._id": commentId },
+    {
+      $set: {
+        "comments.$.replies": [],
+      },
+    },
+    { new: true }
+  );
+  res.json({ updatedBlog });
 });
 export {
   addBlog,
@@ -117,4 +142,6 @@ export {
   addComment,
   removeComment,
   editComment,
+  authorReply,
+  replyDelete,
 };

@@ -8,6 +8,8 @@ import {
   addComment,
   removeComment,
   editComment,
+  authorReply,
+  replyDelete,
 } from "../controllers/blogControllers.js";
 import { getBlogs, getBlogData } from "../controllers/blogControllers.js";
 
@@ -21,5 +23,7 @@ router.route("/addComment").post(protect, addComment);
 router.route("/deleteBlog").delete(protect, deleteBlog);
 router.route("/removeComment").post(protect, removeComment);
 router.route("/editComment").post(protect, editComment);
+router.route("/authorReply").post(protect, authorReply);
+router.route("/replyDelete").post(protect, replyDelete);
 
 export default router;

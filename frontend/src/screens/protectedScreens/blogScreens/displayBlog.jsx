@@ -1,12 +1,14 @@
 import { useSearchParams } from "react-router-dom";
 import {
   useAddCommentMutation,
+  useAuthorReplyMutation,
   useEditCommentMutation,
   useGetAuthorQuery,
   useLazyBlogDataQuery,
   useRemoveCommentMutation,
+  useReplyDeleteMutation,
 } from "../../../store";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaTrash } from "react-icons/fa";
 import Avatar from "@mui/material//Avatar";
 import { Spinner } from "baseui/spinner";
 import { contentTypeLinks } from "../../../utils/variables";
@@ -24,11 +26,15 @@ function DisplayBlog() {
   const [comment, setComment] = useState("");
   const [commentText, setCommentText] = useState("");
   const [isEdit, setIsEdit] = useState(false);
+  const [isReply, setIsReply] = useState(false);
+  const [reply, setReply] = useState("");
   const blogId = searchParams.get("blogId");
   const authorId = searchParams.get("authorId");
   const { data: authorData } = useGetAuthorQuery(authorId);
   const [blogData, setBlogData] = useState({ isLoading: true, data: null });
   const [fetchBlogData] = useLazyBlogDataQuery();
+  const [authorReply] = useAuthorReplyMutation();
+  const [replyDelete] = useReplyDeleteMutation();
   const { userData } = useSelector((state) => {
     return state.user;
   });
@@ -84,6 +90,7 @@ function DisplayBlog() {
     setButtonClicked((prevValue) => {
       return { ...prevValue, id: comment._id };
     });
+    setIsEdit(false);
     const data = { blogId, commentId: comment._id };
     try {
       const res = await removeComment(data);
@@ -103,11 +110,50 @@ function DisplayBlog() {
     });
     setCommentText(comment.comment);
     setIsEdit(true);
+    setIsReply(false);
   };
 
-  const handleSave = async (comment) => {
+  const handleReplyDelete = async (comment) => {
+    const data = { commentId: comment._id };
+    try {
+      const replyDeleted = await replyDelete(data);
+      setBlogData((prevValue) => {
+        return {
+          ...prevValue,
+          data: {
+            ...prevValue.data,
+            comments: replyDeleted.data.updatedBlog.comments,
+          },
+        };
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleAuthorReply = async (e, comment) => {
+    e.preventDefault();
+    setIsEdit(false);
+    const data = { reply, blogId, commentId: comment._id };
+    try {
+      const newData = await authorReply(data);
+      setBlogData((prevValue) => {
+        return {
+          ...prevValue,
+          data: {
+            ...prevValue.data,
+            comments: newData.data.newblog.comments,
+          },
+        };
+      });
+      setIsReply(false);
+      setReply("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleSave = async (e, comment) => {
+    e.preventDefault();
     const data = { blogId, commentId: comment._id, newComment: commentText };
-
     try {
       const edittedComment = await editComment(data);
       setBlogData((prevValue) => {
@@ -124,6 +170,7 @@ function DisplayBlog() {
       console.log(error);
     }
   };
+
   return (
     <div className="h-screen overflow-y-scroll">
       <div
@@ -200,37 +247,73 @@ function DisplayBlog() {
                           />
                         </div>
                         <div className="mx-8 w-full">
-                          <div className="flex justify-start items-center">
+                          <div className="flex relative justify-start items-center">
                             <h1 className="text-xl font-bold text-blue-600">
                               {comment.creator_name}
                             </h1>
                             <p className="ml-4">
                               {filterDate(comment.created_at)}
                             </p>
+                            {userData._id === blogData.data.created_by.id ? (
+                              <div className="absolute right-10">
+                                {comment.replies.length === 0 ? (
+                                  <>
+                                    <Button
+                                      onClick={() => {
+                                        setButtonClicked((prevValue) => {
+                                          return {
+                                            ...prevValue,
+                                            id: comment._id,
+                                          };
+                                        });
+                                        setIsEdit(false);
+                                        setIsReply(true);
+                                      }}
+                                    >
+                                      Reply
+                                    </Button>
+                                  </>
+                                ) : (
+                                  <div>replied</div>
+                                )}
+                              </div>
+                            ) : null}
                           </div>
                           <hr className="my-2 border-t-2 " />
                           <div className="flex flex-col">
                             {isEdit && comment._id === buttonClicked.id ? (
-                              <>
+                              <Box
+                                component="form"
+                                onSubmit={(e) => {
+                                  handleSave(e, comment);
+                                }}
+                              >
                                 <TextField
                                   value={commentText}
+                                  className="w-full"
                                   multiline
+                                  required
                                   onChange={(e) => {
                                     setCommentText(e.target.value);
                                   }}
                                 />
-                                <Button
-                                  onClick={() => {
-                                    handleSave(comment);
-                                  }}
-                                >
-                                  {editingComment.isLoading ? (
-                                    <FaSpinner className="animate-spin text-2xl" />
-                                  ) : (
-                                    <>Save</>
-                                  )}
-                                </Button>
-                              </>
+                                <div>
+                                  <Button type="submit">
+                                    {editingComment.isLoading ? (
+                                      <FaSpinner className="animate-spin text-2xl" />
+                                    ) : (
+                                      <>Save</>
+                                    )}
+                                  </Button>
+                                  <Button
+                                    onClick={() => {
+                                      handleEdit(false);
+                                    }}
+                                  >
+                                    exit
+                                  </Button>
+                                </div>
+                              </Box>
                             ) : (
                               <>
                                 <p>{comment.comment}</p>
@@ -259,7 +342,43 @@ function DisplayBlog() {
                                 ) : null}
                               </>
                             )}
+                            <div className="flex items-center">
+                              {comment.replies.map((d) => {
+                                return (
+                                  <div key={d._id}>
+                                    <p>{d.reply}</p>
+                                    {userData._id ===
+                                    blogData.data.created_by.id ? (
+                                      <FaTrash
+                                        onClick={() =>
+                                          handleReplyDelete(comment)
+                                        }
+                                      />
+                                    ) : null}
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
+                          {isReply && comment._id === buttonClicked.id ? (
+                            <Box
+                              className="flex flex-col"
+                              component="form"
+                              onSubmit={(e) => {
+                                handleAuthorReply(e, comment);
+                              }}
+                            >
+                              <TextField
+                                multiline
+                                value={reply}
+                                required
+                                onChange={(e) => {
+                                  setReply(e.target.value);
+                                }}
+                              />
+                              <Button type="submit">Reply</Button>
+                            </Box>
+                          ) : null}
                         </div>
                       </div>
                     );
