@@ -8,7 +8,7 @@ import {
   useRemoveCommentMutation,
   useReplyDeleteMutation,
 } from "../../../store";
-import { FaEye, FaTrash } from "react-icons/fa";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import Avatar from "@mui/material//Avatar";
 import { Spinner } from "baseui/spinner";
 import { contentTypeLinks } from "../../../utils/variables";
@@ -19,6 +19,10 @@ import { FaSpinner } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { filterDate } from "../../../utils/functions";
+import { LuDelete } from "react-icons/lu";
+import { ImSpinner10 } from "react-icons/im";
+import { IoSend } from "react-icons/io5";
+import { FcApproval } from "react-icons/fc";
 
 function DisplayBlog() {
   const [searchParams] = useSearchParams();
@@ -27,14 +31,15 @@ function DisplayBlog() {
   const [commentText, setCommentText] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [isReply, setIsReply] = useState(false);
+  const [showReply, setShowReply] = useState(false);
   const [reply, setReply] = useState("");
   const blogId = searchParams.get("blogId");
   const authorId = searchParams.get("authorId");
   const { data: authorData } = useGetAuthorQuery(authorId);
   const [blogData, setBlogData] = useState({ isLoading: true, data: null });
   const [fetchBlogData] = useLazyBlogDataQuery();
-  const [authorReply] = useAuthorReplyMutation();
-  const [replyDelete] = useReplyDeleteMutation();
+  const [authorReply, authorReplying] = useAuthorReplyMutation();
+  const [replyDelete, deletingReply] = useReplyDeleteMutation();
   const { userData } = useSelector((state) => {
     return state.user;
   });
@@ -115,6 +120,9 @@ function DisplayBlog() {
 
   const handleReplyDelete = async (comment) => {
     const data = { commentId: comment._id };
+    setButtonClicked((prevValue) => {
+      return { ...prevValue, id: comment._id };
+    });
     try {
       const replyDeleted = await replyDelete(data);
       setBlogData((prevValue) => {
@@ -267,14 +275,16 @@ function DisplayBlog() {
                                           };
                                         });
                                         setIsEdit(false);
-                                        setIsReply(true);
+                                        setIsReply(!isReply);
                                       }}
                                     >
                                       Reply
                                     </Button>
                                   </>
                                 ) : (
-                                  <div>replied</div>
+                                  <div className="flex gap-2 items-center font-extrabold text-green-400">
+                                    Replied <FcApproval />
+                                  </div>
                                 )}
                               </div>
                             ) : null}
@@ -321,10 +331,28 @@ function DisplayBlog() {
                                   <div className="self-end mr-10 mt-2">
                                     <Button
                                       onClick={() => {
+                                        setButtonClicked((prevValue) => {
+                                          return {
+                                            ...prevValue,
+                                            id: comment._id,
+                                          };
+                                        });
+                                        setShowReply(!showReply);
+                                      }}
+                                    >
+                                      {showReply &&
+                                      buttonClicked.id === comment._id ? (
+                                        <>Hide Reply</>
+                                      ) : (
+                                        <>Show Reply</>
+                                      )}
+                                    </Button>
+                                    <Button
+                                      onClick={() => {
                                         handleEdit(comment);
                                       }}
                                     >
-                                      Edit
+                                      <FaEdit />
                                     </Button>
                                     <Button
                                       onClick={() => {
@@ -333,9 +361,9 @@ function DisplayBlog() {
                                     >
                                       {removingComment.isLoading &&
                                       comment._id === buttonClicked.id ? (
-                                        <FaSpinner className="animate-spin text-2xl" />
+                                        <ImSpinner10 className="animate-spin text-2xl" />
                                       ) : (
-                                        <>Delete</>
+                                        <FaTrash />
                                       )}
                                     </Button>
                                   </div>
@@ -343,40 +371,79 @@ function DisplayBlog() {
                               </>
                             )}
                             <div className="flex items-center">
-                              {comment.replies.map((d) => {
-                                return (
-                                  <div key={d._id}>
-                                    <p>{d.reply}</p>
-                                    {userData._id ===
-                                    blogData.data.created_by.id ? (
-                                      <FaTrash
-                                        onClick={() =>
-                                          handleReplyDelete(comment)
-                                        }
-                                      />
-                                    ) : null}
-                                  </div>
-                                );
-                              })}
+                              {showReply && buttonClicked.id === comment._id ? (
+                                <>
+                                  {comment.replies.map((d) => {
+                                    return (
+                                      <div
+                                        key={d._id}
+                                        className="ml-36 mt-2 border-2 rounded-xl flex  p-4 bg-gray-200 relative w-2/3"
+                                      >
+                                        <div className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 bg-gray-100">
+                                          <Avatar
+                                            src={authorData.data.profile_pic}
+                                          />
+                                        </div>
+                                        <div className="flex flex-col gap-4">
+                                          <h1 className="font-bold text-xl">
+                                            {authorData.data.name}
+                                          </h1>
+                                          <span className="bg-green-400 text-white text-center rounded-3xl w-16">
+                                            Author
+                                          </span>
+                                          <p className="mb-2">{d.reply}</p>
+                                        </div>
+                                        {userData._id ===
+                                        blogData.data.created_by.id ? (
+                                          <div className="font-extrabold text-xl absolute right-4 top-2 flex gap-4">
+                                            {deletingReply.isLoading &&
+                                            buttonClicked.id === comment._id ? (
+                                              <ImSpinner10 className="animate-spin" />
+                                            ) : (
+                                              <LuDelete
+                                                className="cursor-pointer"
+                                                onClick={() =>
+                                                  handleReplyDelete(comment)
+                                                }
+                                              />
+                                            )}
+                                          </div>
+                                        ) : null}
+                                      </div>
+                                    );
+                                  })}
+                                </>
+                              ) : null}
                             </div>
                           </div>
                           {isReply && comment._id === buttonClicked.id ? (
                             <Box
-                              className="flex flex-col"
+                              className="flex ml-24"
                               component="form"
                               onSubmit={(e) => {
                                 handleAuthorReply(e, comment);
                               }}
                             >
+                              <Avatar
+                                src={authorData.data.profile_pic}
+                                className="mr-4 border-2 rounded-lg"
+                              />
                               <TextField
                                 multiline
                                 value={reply}
+                                className="w-4/5"
                                 required
                                 onChange={(e) => {
                                   setReply(e.target.value);
                                 }}
                               />
-                              <Button type="submit">Reply</Button>
+                              <Button type="submit">
+                                {authorReplying.isLoading ? (
+                                  <ImSpinner10 className="animate-spin text-2xl" />
+                                ) : (
+                                  <IoSend className="text-2xl" />
+                                )}
+                              </Button>
                             </Box>
                           ) : null}
                         </div>
