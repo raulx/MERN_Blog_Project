@@ -1,11 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { usePostImageMutation, usePostBlogMutation } from "../../../store";
-import { Spinner } from "baseui/spinner";
-import { FormControl, Select, MenuItem, InputLabel } from "@mui/material";
-import { blogCategories } from "../../../utils/variables";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { FaSpinner } from "react-icons/fa";
 
 const presetKey = import.meta.env.VITE_CLOUDINARY_PRESET;
 
@@ -21,7 +19,8 @@ function CreateBlog() {
   const [blogData, setBlogData] = useState({
     title: "",
     content: "",
-    category: "",
+    //default category to politics change it after integrating radix-ui
+    category: "politics",
   });
 
   const handleSubmit = async (e) => {
@@ -117,38 +116,6 @@ function CreateBlog() {
                 }}
               />
             </div>
-            <div className="mr-10 font-extrabold">
-              <FormControl variant="standard" sx={{ minWidth: 150, m: 1 }}>
-                <InputLabel id="choose-category" className="uppercase text-2xl">
-                  Choose Category
-                </InputLabel>
-                <Select
-                  labelId="choose-category"
-                  label="choose category"
-                  value={blogData.category}
-                  className="uppercase"
-                  onChange={(e) => {
-                    setBlogData((d) => {
-                      return { ...d, category: e.target.value };
-                    });
-                  }}
-                >
-                  {blogCategories.map((d) => {
-                    if (d.category != "all") {
-                      return (
-                        <MenuItem
-                          key={d.id}
-                          value={d.category}
-                          className="uppercase"
-                        >
-                          {d.category}
-                        </MenuItem>
-                      );
-                    }
-                  })}
-                </Select>
-              </FormControl>
-            </div>
           </div>
           <div className="mt-8 flex flex-col gap-4">
             <label className="font-extrabold text-3xl">Content:</label>
@@ -167,7 +134,11 @@ function CreateBlog() {
             type="submit"
             className="bg-blue-700 p-4 flex justify-center items-center text-white text-xl mt-10 w-28 uppercase rounded-lg"
           >
-            {postBlogResults.isLoading ? <Spinner /> : "Post"}
+            {postBlogResults.isLoading ? (
+              <FaSpinner className="animate-spin" />
+            ) : (
+              "Post"
+            )}
           </button>
         </form>
       </div>

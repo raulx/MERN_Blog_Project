@@ -1,6 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import { Theme } from "@radix-ui/themes";
+
 const App = lazy(() => import("../App"));
 const NotFound = lazy(() => import("../screens/globalScreens/notFoundScreen"));
 const ContactPage = lazy(() =>
@@ -49,7 +51,9 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <Suspense>
-        <App />
+        <Theme>
+          <App />
+        </Theme>
       </Suspense>
     ),
     children: [

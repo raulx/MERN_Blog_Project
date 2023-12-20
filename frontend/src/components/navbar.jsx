@@ -64,9 +64,6 @@ function Navbar({ phoneNav, handlePhoneNav }) {
         <div className="flex gap-4  mr-10 ">
           {auth ? (
             <>
-              <p className="flex justify-center items-center">
-                {userData.name}
-              </p>
               <AccountMenu avatarLink={userData.profile_pic} />
             </>
           ) : (

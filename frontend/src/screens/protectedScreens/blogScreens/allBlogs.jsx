@@ -33,20 +33,20 @@ function BlogsIndex() {
     }
   }, [data, dispatch, prevData]);
 
-  useEffect(() => {
-    const handler = (event) => {
-      if (!dropDowm.current.contains(event.target)) {
-        setFilterNav((prevValue) => {
-          return { ...prevValue, isOpen: false };
-        });
-      }
-    };
-    document.addEventListener("click", handler, true);
+  // useEffect(() => {
+  //   const handler = (event) => {
+  //     if (!dropDowm.current.contains(event.target)) {
+  //       setFilterNav((prevValue) => {
+  //         return { ...prevValue, isOpen: false };
+  //       });
+  //     }
+  //   };
+  //   document.addEventListener("click", handler, true);
 
-    return () => {
-      document.removeEventListener("click", handler, true);
-    };
-  }, [filterNav.isOpen]);
+  //   return () => {
+  //     document.removeEventListener("click", handler, true);
+  //   };
+  // }, [filterNav.isOpen]);
 
   let blogData = blogs;
 

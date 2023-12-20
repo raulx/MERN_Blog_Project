@@ -2,7 +2,6 @@
 import { Link } from "react-router-dom";
 import { FaTag, FaEye } from "react-icons/fa";
 import classNames from "classnames";
-import Avatar from "@mui/material/Avatar";
 import { useSelector } from "react-redux";
 import { useDeleteBlogMutation } from "../store";
 import { removeBlog } from "../store";
@@ -78,10 +77,10 @@ function Card({ cardData }) {
 
           <div className="flex justify-between">
             <div className="flex gap-4 mt-6">
-              <Avatar
+              <img
                 alt="creator-image"
                 src={cardData.created_by.profile_pic}
-                className="border-2 "
+                className="border-2 w-16 h-12 "
               />
               <div>
                 <div className="capitalize font-extrabold">

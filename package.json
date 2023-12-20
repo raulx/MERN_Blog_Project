@@ -13,9 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.14.19",
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.0",
     "cookie-parser": "^1.4.6",

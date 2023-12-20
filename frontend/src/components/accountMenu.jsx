@@ -1,122 +1,50 @@
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import IconButton from "@mui/material/IconButton";
-import { Link } from "@mui/material";
-import Tooltip from "@mui/material/Tooltip";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
+/* eslint-disable react/prop-types */
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Avatar } from "@radix-ui/themes";
+import { MdArrowRight, MdArrowDropDown } from "react-icons/md";
+import { ImProfile } from "react-icons/im";
+import { BiLogOut } from "react-icons/bi";
 import { useState } from "react";
-import { useLogOutMutation } from "../store";
-import { useDispatch } from "react-redux";
-import { loggedOut, setUserData } from "../store";
-import { useNavigate } from "react-router-dom";
 
-// eslint-disable-next-line react/prop-types
-function AccountMenu({ avatarLink }) {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [logOut] = useLogOutMutation();
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logOut().unwrap();
-      dispatch(loggedOut());
-      dispatch(setUserData({ userData: "", blogs: [] }));
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-    }
-  };
+function AccounMenu({ avatarLink }) {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <div>
-      <>
-        <Box
-          sx={{ display: "flex", alignItems: "center", textAlign: "center" }}
-        >
-          <Tooltip title="Account settings">
-            <IconButton
-              onClick={handleClick}
-              size="small"
-              sx={{ ml: 2 }}
-              aria-controls={open ? "account-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-            >
-              <Avatar sx={{ width: 48, height: 48 }} src={avatarLink}>
-                M
-              </Avatar>
-            </IconButton>
-          </Tooltip>
-        </Box>
-        <Menu
-          anchorEl={anchorEl}
-          id="account-menu"
-          open={open}
-          onClose={handleClose}
-          onClick={handleClose}
-          PaperProps={{
-            elevation: 0,
-            sx: {
-              overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: 1.5,
-              "& .MuiAvatar-root": {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
-              },
-              "&:before": {
-                content: '""',
-                display: "block",
-                position: "absolute",
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: "background.paper",
-                transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0,
-              },
-            },
-          }}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        >
-          <MenuItem onClick={handleClose}>
-            <Avatar src={avatarLink} />{" "}
-            <Link href="/profile" underline="none" color="inherit">
-              Profile
-            </Link>
-          </MenuItem>
+    <>
+      <DropdownMenu.Root onOpenChange={() => setIsOpen(!isOpen)}>
+        <DropdownMenu.Trigger className="select-none outline-none  flex justify-center items-center gap-2 transition-all duration-150">
+          <Avatar size="4" radius="full" src={avatarLink} />
+          {isOpen ? (
+            <MdArrowDropDown className="text-2xl" />
+          ) : (
+            <MdArrowRight className="text-2xl" />
+          )}
+        </DropdownMenu.Trigger>
 
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Settings fontSize="small" />
-            </ListItemIcon>
-            Settings
-          </MenuItem>
-          <MenuItem onClick={handleLogout}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
-        </Menu>
-      </>
-    </div>
+        <DropdownMenu.Portal>
+          <DropdownMenu.Content
+            sideOffset={10}
+            className="py-2 px-4 text-lg border-2 border-gray-300 bg-white rounded-lg  animate-slideDownAndFade"
+          >
+            <DropdownMenu.Arrow className="fill-white" />
+            <DropdownMenu.Item className="p-2 my-4 cursor-pointer select-none outline-none flex gap-4 items-center">
+              <ImProfile />
+              <span>Profile</span>
+            </DropdownMenu.Item>
+
+            <DropdownMenu.Item
+              onSelect={() => {
+                console.log("hello world");
+              }}
+              className="p-2 my-4 rounded-md select-none outline-none flex gap-4 items-center cursor-pointer"
+            >
+              <BiLogOut />
+              <span>Logout</span>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Root>
+    </>
   );
 }
 
-export default AccountMenu;
+export default AccounMenu;

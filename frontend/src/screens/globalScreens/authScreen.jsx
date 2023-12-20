@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Spinner } from "baseui/spinner";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loggedIn } from "../../store";
 import { useLogInMutation } from "../../store";
 import { useRegisterUserMutation } from "../../store";
 import toast, { Toaster } from "react-hot-toast";
+import { FaSpinner } from "react-icons/fa";
 
 function AuthScreen() {
   const [authType, setAuthType] = useState({ login: true, register: false });
@@ -73,7 +73,7 @@ function AuthScreen() {
     <>
       {logging.isLoading || registering.isLoading ? (
         <div className="h-screen w-full flex justify-center items-center">
-          <Spinner $size="120px" $borderWidth="10px" />
+          <FaSpinner className="animate-spin text-5xl" />
         </div>
       ) : (
         <>
