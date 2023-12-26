@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import { FaTag, FaEye } from "react-icons/fa";
+import { Avatar } from "@radix-ui/themes";
 import classNames from "classnames";
 import { useSelector } from "react-redux";
 import { useDeleteBlogMutation } from "../store";
@@ -77,10 +78,11 @@ function Card({ cardData }) {
 
           <div className="flex justify-between">
             <div className="flex gap-4 mt-6">
-              <img
-                alt="creator-image"
+              <Avatar
                 src={cardData.created_by.profile_pic}
-                className="border-2 w-16 h-12 "
+                size="4"
+                radius="full"
+                fallback="A"
               />
               <div>
                 <div className="capitalize font-extrabold">
@@ -99,7 +101,6 @@ function Card({ cardData }) {
                     onClick={handleDelete}
                     disabled={results.isLoading}
                   >
-                    {" "}
                     {results.isLoading ? (
                       <FaSync className="animate-spin" />
                     ) : (

@@ -8,7 +8,6 @@ import { FaEye } from "react-icons/fa";
 import Comment from "../../../components/blogComment";
 import { contentTypeLinks } from "../../../utils/variables";
 import { Link } from "react-router-dom";
-import { TextField, Button, Box } from "@mui/material";
 import UseMyContext from "../../../hooks/useMyContext";
 import { FaSpinner } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -152,26 +151,23 @@ function DisplayBlog() {
                       />
                     );
                   })}
-                <Box component="form" onSubmit={(e) => handleAddComment(e)}>
+                <form onSubmit={(e) => handleAddComment(e)}>
                   <div className="my-4">
-                    <TextField
-                      id="outlined-multiline-flexible"
-                      multiline
-                      fullWidth
+                    <input
+                      type="text"
                       required
                       value={comment}
                       onChange={(e) => {
                         setComment(e.target.value);
                       }}
+                      className="border-2 h-12 w-2/3 outline-none select-none px-4"
                     />
                   </div>
 
                   <div className="my-6">
-                    <Button
-                      variant="contained"
-                      size="large"
-                      sx={{ width: 120, height: 50 }}
+                    <button
                       type="submit"
+                      className="py-2 px-4 bg-blue-500 text-white"
                     >
                       <>
                         {addingComment.isLoading ? (
@@ -180,9 +176,9 @@ function DisplayBlog() {
                           <>Add Reply</>
                         )}
                       </>
-                    </Button>
+                    </button>
                   </div>
-                </Box>
+                </form>
               </div>
             </div>
           ) : (
