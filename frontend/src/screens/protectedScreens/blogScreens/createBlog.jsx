@@ -3,7 +3,9 @@ import { useState } from "react";
 import { usePostImageMutation, usePostBlogMutation } from "../../../store";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import { FaSpinner } from "react-icons/fa";
+import { blogCategories } from "../../../utils/variables";
 
 const presetKey = import.meta.env.VITE_CLOUDINARY_PRESET;
 
@@ -16,11 +18,12 @@ function CreateBlog() {
     remoteUrl: "",
     file: null,
   });
+  const [isOpen, setIsOpen] = useState(false);
+
   const [blogData, setBlogData] = useState({
     title: "",
     content: "",
-    //default category to politics change it after integrating radix-ui
-    category: "politics",
+    category: "",
   });
 
   const handleSubmit = async (e) => {
@@ -39,10 +42,11 @@ function CreateBlog() {
         const data = {
           title: blogData.title,
           content: blogData.content,
-          category: blogData.category,
+          category: blogData.category.toLocaleLowerCase(),
           public_id: imagePublicId,
           remote_url: remoteImageUrl,
         };
+
         await postBlog(data);
         navigate("/");
       } catch (err) {
@@ -74,6 +78,13 @@ function CreateBlog() {
     }
   };
 
+  const handleSelect = (e) => {
+    const selected = e.target.innerText;
+    setBlogData((prevValue) => {
+      return { ...prevValue, category: selected };
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4 mt-6 px-4">
       <div className="w-full h-96">
@@ -97,10 +108,10 @@ function CreateBlog() {
           }}
         />
       </div>
-      <div>
-        <form onSubmit={handleSubmit} className="flex flex-col ">
+      <div className="mt-10">
+        <form onSubmit={handleSubmit} className="flex flex-col relative">
           <div className="flex flex-col">
-            <div>
+            <div className="flex items-center gap-4">
               <label className="font-extrabold text-3xl">Title:</label>
               <input
                 type="text"
@@ -115,9 +126,40 @@ function CreateBlog() {
                   });
                 }}
               />
+              <div
+                className="py-4 px-2 border-2 rounded gap-4 flex flex-col w-64 absolute top-0 right-10 z-10 bg-slate-50"
+                onClick={() => {
+                  setIsOpen(!isOpen);
+                }}
+              >
+                <div className="flex gap-4 justify-between items-center mx-2 cursor-pointer">
+                  {blogData.category ? (
+                    blogData.category
+                  ) : (
+                    <>select a category</>
+                  )}
+                  {isOpen ? <FaChevronDown /> : <FaChevronRight />}
+                </div>
+                {isOpen ? (
+                  <div className="flex flex-col mt-4 border-2 ">
+                    {blogCategories.map((item) => {
+                      return (
+                        <div key={item.id}>
+                          <div
+                            onClick={(e) => handleSelect(e)}
+                            className="p-2 border-1 uppercase hover:bg-slate-100 cursor-pointer"
+                          >
+                            {item.category}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
-          <div className="mt-8 flex flex-col gap-4">
+          <div className="mt-16 flex flex-col gap-4">
             <label className="font-extrabold text-3xl">Content:</label>
             <textarea
               rows={20}
