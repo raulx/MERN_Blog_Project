@@ -1,15 +1,13 @@
-import BlogsIndex from "./allBlogs";
-import UserBlogs from "./userBlogs";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import CreateBlog from "./createBlog";
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { addPage } from "../../../store";
+import { Link, Outlet } from "react-router-dom";
 
 const allBlogScreens = [
-  { name: "explore", element: <BlogsIndex /> },
-  { name: "your blogs", element: <UserBlogs /> },
+  { name: "explore", url: "/content" },
+  { name: "your blogs", url: "/content/blog/me" },
 ];
 
 function BlogScreen() {
@@ -39,11 +37,12 @@ function BlogScreen() {
         <ul className="p-4 gap-6 flex">
           {allBlogScreens.map((screen) => {
             return (
-              <li
+              <Link
                 key={screen.name}
                 onClick={() => {
                   setCurrentScreen(screen.name);
                 }}
+                to={screen.url}
                 className={`uppercase border-b font-bold rounded sm:text-xl text-xs cursor-pointer ${
                   screen.name === currentScreen
                     ? " border-b-lime-800"
@@ -51,32 +50,24 @@ function BlogScreen() {
                 }`}
               >
                 {screen.name}
-              </li>
+              </Link>
             );
           })}
         </ul>
-        <div
+        <Link
           className="flex items-center md:text-xl text-xs md:gap-4 gap-2 uppercase rounded-lg justify-center py-2 md:px-6 px-4 bg-blue-600 text-white absolute top-1/2 cursor-pointer -translate-y-1/2 md:right-16 right-2 hover:bg-blue-700 transition-all duration-200"
           onClick={() => setCurrentScreen("create")}
+          to={"/content/blog/create"}
         >
           <FaPlus />
           create blog
-        </div>
+        </Link>
       </div>
       <div
         className="overflow-y-scroll relative grow md:mt-0 h-[42rem]"
         ref={containerRef}
       >
-        {allBlogScreens.map((screen) => {
-          const newScreen =
-            screen.name === currentScreen ? (
-              <div key={screen.name}>{screen.element}</div>
-            ) : null;
-          return newScreen;
-        })}
-        {currentScreen === "create" ? (
-          <CreateBlog ChangeScreen={setCurrentScreen} />
-        ) : null}
+        <Outlet />
       </div>
     </div>
   );

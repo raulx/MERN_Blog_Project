@@ -1,11 +1,16 @@
 import { contentTypeLinks } from "../../utils/variables";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
+import { useState } from "react";
 import UseMyContext from "../../hooks/useMyContext";
 
 function ContentScreen() {
   const { phoneNav, setPhoneNav } = UseMyContext();
+  const [currentScreen, setCurrentScreen] = useState("blogs"); //default is set to blogs
 
-  const location = useLocation();
+  const handleClick = (value) => {
+    setCurrentScreen(value);
+    setPhoneNav(false);
+  };
 
   return (
     <div className="h-full w-full md:grid grid-cols-6 grid-rows-6 flex flex-col justify-between">
@@ -19,12 +24,10 @@ function ContentScreen() {
             <Link
               key={link.type}
               className={`w-full hover:bg-green-400 hover:text-white uppercase py-4 rounded transition-all duration-200 text-center  ${
-                location.pathname === link.url
-                  ? "bg-green-500 text-white"
-                  : null
+                currentScreen === link.type ? "bg-green-500 text-white" : null
               }`}
               to={link.url}
-              onClick={() => setPhoneNav(false)}
+              onClick={() => handleClick(link.type)}
             >
               {link.type}
             </Link>

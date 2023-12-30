@@ -1,7 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import { Theme } from "@radix-ui/themes";
+const BlogsIndex = lazy(() =>
+  import("../screens/protectedScreens/blogScreens/allBlogs")
+);
+const UserBlogs = lazy(() =>
+  import("../screens/protectedScreens/blogScreens/userBlogs")
+);
+const CreateBlog = lazy(() =>
+  import("../screens/protectedScreens/blogScreens/createBlog")
+);
 
 const App = lazy(() => import("../App"));
 const NotFound = lazy(() => import("../screens/globalScreens/notFoundScreen"));
@@ -51,9 +59,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <Suspense>
-        <Theme>
-          <App />
-        </Theme>
+        <App />
       </Suspense>
     ),
     children: [
@@ -71,8 +77,12 @@ const router = createBrowserRouter([
                 element: <ContentScreen />,
                 children: [
                   {
-                    index: true,
                     element: <BlogsScreen />,
+                    children: [
+                      { index: true, element: <BlogsIndex /> },
+                      { path: "/content/blog/me", element: <UserBlogs /> },
+                      { path: "/content/blog/create", element: <CreateBlog /> },
+                    ],
                   },
                   { path: "/content/news", element: <NewsScreen /> },
                   { path: "/content/memes", element: <MemeScreen /> },
