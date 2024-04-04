@@ -25,6 +25,21 @@ function BlogsIndex() {
   });
 
   useEffect(() => {
+    const handler = (event) => {
+      if (filterNav.isOpen && !dropDowm.current.contains(event.target)) {
+        setFilterNav((prevValue) => {
+          return { ...prevValue, isOpen: false };
+        });
+      }
+    };
+    document.addEventListener("click", handler, true);
+
+    return () => {
+      document.removeEventListener("click", handler, true);
+    };
+  }, [filterNav.isOpen]);
+
+  useEffect(() => {
     if (data) {
       if (!(JSON.stringify(prevData) === JSON.stringify(data.data))) {
         dispatch(addBlog(data.data));
@@ -93,7 +108,10 @@ function BlogsIndex() {
             <FaFilter className="text-2xl" />
           </div>
 
-          <div className="h-full border-2 md:w-72 w-60 rounded py-2 px-4 md:text-lg text-base uppercase flex items-center justify-between">
+          <div
+            ref={dropDowm}
+            className="h-full border-2 md:w-72 w-60 rounded py-2 px-4 md:text-lg text-base uppercase flex items-center justify-between"
+          >
             <p>{filterNav.currentCategory}</p>
             <div>
               {filterNav.isOpen ? <FaChevronDown /> : <FaChevronLeft />}

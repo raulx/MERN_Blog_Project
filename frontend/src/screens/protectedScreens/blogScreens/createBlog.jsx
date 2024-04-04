@@ -11,7 +11,8 @@ const presetKey = import.meta.env.VITE_CLOUDINARY_PRESET;
 
 function CreateBlog() {
   const [postImage] = usePostImageMutation();
-  const [postBlog, postBlogResults] = usePostBlogMutation();
+  const [postBlog] = usePostBlogMutation();
+  const [isUploading, setIsUploading] = useState(false);
   const navigate = useNavigate();
   const [image, setImage] = useState({
     localUrl: "",
@@ -35,6 +36,7 @@ function CreateBlog() {
       toast.error("Choose a category !");
     } else if (image.file) {
       try {
+        setIsUploading(true);
         const res = await postImage(formData);
         const remoteImageUrl = res.data.secure_url;
         const imagePublicId = res.data.public_id;
@@ -48,8 +50,12 @@ function CreateBlog() {
         };
 
         await postBlog(data);
+        setIsUploading(false);
+        toast.success("blog posted successfully.");
         navigate("/");
       } catch (err) {
+        toast.error("Upload Falied.");
+        setIsUploading(false);
         console.log(`Error:${err}`);
       }
     } else {
@@ -87,9 +93,8 @@ function CreateBlog() {
 
   return (
     <div className="flex flex-col gap-4 mt-6 px-4">
-      <div className="w-full h-96">
+      <div className="w-full h-full">
         <img
-          className="w-full h-full"
           src={
             image.localUrl
               ? image.localUrl
@@ -97,12 +102,13 @@ function CreateBlog() {
           }
         />
       </div>
-      <div className="flex justify-end px-4 uppercase gap-6 py-2 w-full items-center">
+      <div className="flex mt-12 px-4 uppercase gap-6 py-2 w-full items-center">
         <h1 className="md:text-xl text-gray-700">
           {image.file ? <>Change Image :</> : <>Select an image:</>}
         </h1>
         <input
           type="file"
+          accept="image/*"
           onChange={(e) => {
             handleImageChange(e);
           }}
@@ -118,7 +124,7 @@ function CreateBlog() {
                 required
                 placeholder="Add Title"
                 id="title"
-                className="w-96 p-4 border-2"
+                className="w-96 p-4 border-2 outline-none"
                 value={blogData.title}
                 onChange={(e) => {
                   setBlogData((prevValue) => {
@@ -127,7 +133,7 @@ function CreateBlog() {
                 }}
               />
               <div
-                className="py-4 px-2 border-2 rounded gap-4 flex flex-col w-64 absolute top-0 right-10 z-10 bg-slate-50"
+                className="py-4 px-2 border-2 rounded gap-4 flex flex-col w-64 absolute top-0 right-1/3 z-10 bg-slate-50"
                 onClick={() => {
                   setIsOpen(!isOpen);
                 }}
@@ -162,8 +168,8 @@ function CreateBlog() {
           <div className="mt-16 flex flex-col gap-4">
             <label className="font-extrabold text-3xl">Content:</label>
             <textarea
-              rows={20}
-              className="border-2 p-4"
+              rows={8}
+              className="border-2 p-4 outline-none"
               value={blogData.content}
               onChange={(e) => {
                 setBlogData((prevValue) => {
@@ -176,11 +182,7 @@ function CreateBlog() {
             type="submit"
             className="bg-blue-700 p-4 flex justify-center items-center text-white text-xl mt-10 w-28 uppercase rounded-lg"
           >
-            {postBlogResults.isLoading ? (
-              <FaSpinner className="animate-spin" />
-            ) : (
-              "Post"
-            )}
+            {isUploading ? <FaSpinner className="animate-spin" /> : "Post"}
           </button>
         </form>
       </div>

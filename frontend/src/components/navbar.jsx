@@ -18,13 +18,13 @@ function Navbar({ phoneNav, handlePhoneNav }) {
 
   return (
     <div className="flex flex-col justify-between md:h-full">
-      <nav className="flex md:p-6 p-2 navbar relative justify-between items-center   text-green-100 bg-green-950 uppercase h-full w-full">
+      <nav className="flex md:p-6 p-2 navbar relative justify-between items-center  text-green-100 bg-green-950 uppercase h-full w-full">
         <div className="text-5xl flex gap-2 justify-center items-center">
           <div
             onClick={() => {
               handlePhoneNav((p) => !p);
             }}
-            className="cursor-pointer  md:hidden text-4xl"
+            className="cursor-pointer md:hidden text-4xl"
           >
             {phoneNav != null && phoneNav != undefined && auth ? (
               phoneNav ? (
