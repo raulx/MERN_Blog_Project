@@ -11,6 +11,7 @@ const authApi = createApi({
       return fetch(...args);
     },
   }),
+
   endpoints(builder) {
     return {
       registerUser: builder.mutation({

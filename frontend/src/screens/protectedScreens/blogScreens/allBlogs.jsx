@@ -41,7 +41,7 @@ function BlogsIndex() {
 
   useEffect(() => {
     if (data) {
-      if (!(JSON.stringify(prevData) === JSON.stringify(data.data))) {
+      if (JSON.stringify(prevData) != JSON.stringify(data.data)) {
         dispatch(addBlog(data.data));
         dispatch(setPrevData(data.data));
       }
@@ -55,6 +55,7 @@ function BlogsIndex() {
       return blog.category === filterNav.currentCategory;
     });
   }
+
   const handleClick = (e) => {
     const categoryChoosen = e.target.innerText.toLowerCase();
     setFilterNav((prevValue) => {
@@ -65,6 +66,7 @@ function BlogsIndex() {
       };
     });
   };
+
   return (
     <>
       {filterNav.isOpen ? (
@@ -89,6 +91,7 @@ function BlogsIndex() {
           })}
         </div>
       ) : null}
+
       <div className="flex justify-between items-center mt-6 md:mt-4">
         <h1 className="text-2xl text-gray-400 font-extrabold uppercase">
           Results

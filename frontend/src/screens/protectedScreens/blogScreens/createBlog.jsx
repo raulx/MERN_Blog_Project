@@ -14,6 +14,7 @@ function CreateBlog() {
   const [postBlog] = usePostBlogMutation();
   const [isUploading, setIsUploading] = useState(false);
   const navigate = useNavigate();
+
   const [image, setImage] = useState({
     localUrl: "",
     remoteUrl: "",
@@ -62,6 +63,7 @@ function CreateBlog() {
       toast.error("Image not selected !");
     }
   };
+
   const handleImageChange = (e) => {
     const choosenFile = e.target.files[0];
     if (choosenFile) {

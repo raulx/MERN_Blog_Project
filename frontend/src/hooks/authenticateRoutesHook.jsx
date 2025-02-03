@@ -1,4 +1,5 @@
 import { Outlet, Navigate, useLocation } from "react-router-dom";
+
 function ProtectedRoute() {
   const auth = localStorage.getItem("user");
   const location = useLocation();

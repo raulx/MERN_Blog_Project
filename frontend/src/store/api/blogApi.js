@@ -11,6 +11,7 @@ export const pause = (duration) => {
 
 const blogApi = createApi({
   reducerPath: "blog",
+
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     fetchFn: async (...args) => {
@@ -18,6 +19,7 @@ const blogApi = createApi({
       return fetch(...args);
     },
   }),
+
   endpoints(builder) {
     return {
       getAuthor: builder.query({
@@ -28,6 +30,7 @@ const blogApi = createApi({
           };
         },
       }),
+
       postBlog: builder.mutation({
         query: (data) => {
           return {
@@ -37,6 +40,7 @@ const blogApi = createApi({
           };
         },
       }),
+
       blogData: builder.query({
         providesTags: () => {
           return [{ type: "getBlogData" }];
@@ -48,6 +52,7 @@ const blogApi = createApi({
           };
         },
       }),
+
       usersBlogs: builder.query({
         providesTags: () => {
           return [{ type: "getUserBlogs" }];
@@ -59,6 +64,7 @@ const blogApi = createApi({
           };
         },
       }),
+
       deleteBlog: builder.mutation({
         invalidatesTags: () => {
           return [{ type: "getUserBlogs" }];
@@ -71,6 +77,7 @@ const blogApi = createApi({
           };
         },
       }),
+
       addComment: builder.mutation({
         query: (data) => {
           return {
@@ -80,6 +87,7 @@ const blogApi = createApi({
           };
         },
       }),
+
       removeComment: builder.mutation({
         query: (data) => {
           return {
@@ -89,6 +97,7 @@ const blogApi = createApi({
           };
         },
       }),
+
       editComment: builder.mutation({
         query: (data) => {
           return {
@@ -98,6 +107,7 @@ const blogApi = createApi({
           };
         },
       }),
+
       authorReply: builder.mutation({
         query: (data) => {
           return {
@@ -107,6 +117,7 @@ const blogApi = createApi({
           };
         },
       }),
+
       replyDelete: builder.mutation({
         query: (data) => {
           return {
@@ -116,6 +127,7 @@ const blogApi = createApi({
           };
         },
       }),
+
       getBlogs: builder.query({
         query: ({ page, pageSize }) => {
           return {
@@ -143,4 +155,5 @@ export const {
   useAuthorReplyMutation,
   useReplyDeleteMutation,
 } = blogApi;
+
 export default blogApi;

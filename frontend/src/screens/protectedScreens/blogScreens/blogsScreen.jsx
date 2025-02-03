@@ -31,6 +31,7 @@ function BlogScreen() {
       container.removeEventListener("scroll", handleScroll);
     };
   }, [dispatch]);
+
   return (
     <div className="w-full h-full flex flex-col px-4 ">
       <div className="flex md:justify-center justify-between md:items-center relative  z-10  md:rounded-xl text-green-800 md:w-full w-custom  bg-green-100">

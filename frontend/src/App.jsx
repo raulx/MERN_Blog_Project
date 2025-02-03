@@ -4,11 +4,11 @@ import { Theme } from "@radix-ui/themes";
 
 function App() {
   return (
-    <div>
+    <>
       <Theme>
         <Outlet />
       </Theme>
-    </div>
+    </>
   );
 }
 

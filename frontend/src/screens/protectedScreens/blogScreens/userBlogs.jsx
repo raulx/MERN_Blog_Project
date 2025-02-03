@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function UserBlogs() {
-  const { data, isFetching, isError } = useUsersBlogsQuery();
+  const { data, isLoading, isError } = useUsersBlogsQuery();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,17 +19,25 @@ function UserBlogs() {
     }
   }, [data, dispatch, isError, navigate]);
 
+  let content;
+
+  if (data) {
+    content = (
+      <>
+        {data.data.map((d) => {
+          return <Card cardData={d} key={d._id} />;
+        })}
+      </>
+    );
+  } else if (isError) {
+    content = <div>Error occured</div>;
+  } else if (isLoading) {
+    content = <CardSkeleton times={5} />;
+  }
+
   return (
     <div className="flex justify-evenly gap-6 flex-wrap my-4 md:my-10">
-      {isFetching ? (
-        <CardSkeleton times={5} />
-      ) : (
-        <>
-          {data.data.map((d) => {
-            return <Card cardData={d} key={d._id} />;
-          })}
-        </>
-      )}
+      {content}
     </div>
   );
 }
