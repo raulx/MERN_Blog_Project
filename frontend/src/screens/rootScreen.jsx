@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/navbar";
-import Footer from "../components/footer";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLazyGetUserQuery } from "../store";
@@ -13,6 +12,7 @@ function RootScreen() {
   const { auth } = useSelector((state) => {
     return state.auth;
   });
+
   const navigate = useNavigate();
   const [fetchUserData] = useLazyGetUserQuery();
 
@@ -37,11 +37,10 @@ function RootScreen() {
     <>
       <Navbar />
 
-      <main>
+      <main className="pt-16">
+        {/* Adjusted padding of main section based on navbar height because navbar is fixed on top */}
         <Outlet />
       </main>
-
-      <Footer />
 
       <Toaster />
     </>

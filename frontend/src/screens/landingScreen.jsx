@@ -16,7 +16,7 @@ function LandingScreen() {
   }, [auth, navigate]);
 
   return (
-    <div className=" min-h-screen flex justify-center items-center h-full w-full">
+    <div className="bg-green-200">
       <div className="text-center capitalize flex flex-col max-w-2xl h-96 gap-6 justify-center">
         <h1 className="font-bold text-lime-600 text-5xl ">
           Welcome to Entertainment point

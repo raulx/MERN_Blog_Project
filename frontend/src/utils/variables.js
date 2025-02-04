@@ -22,12 +22,6 @@ const blogCategories = [
   },
 ];
 
-const pages = [
-  { name: "home", url: "/content" },
-  { name: "about", url: "/about" },
-  { name: "contact", url: "/contact" },
-];
-
 const contentTypeLinks = [
   { type: "blogs", url: "/content" },
   { type: "news", url: "/content/news" },
@@ -38,4 +32,4 @@ const contentTypeLinks = [
   { type: "shopping", url: "/content/shopping" },
 ];
 
-export { blogCategories, pages, contentTypeLinks, BASE_URL };
+export { blogCategories, contentTypeLinks, BASE_URL };

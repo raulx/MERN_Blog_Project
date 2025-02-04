@@ -1,9 +1,15 @@
 /* eslint-disable react/prop-types */
 import { Link, useLocation } from "react-router-dom";
-import { pages } from "../utils/variables";
 import { useSelector } from "react-redux";
-
 import AccountMenu from "./accountMenu";
+import Logo from "./Logo";
+import { FaHome, FaInfoCircle } from "react-icons/fa";
+import { MdContacts } from "react-icons/md";
+
+const pages = [
+  { name: "about", url: "/about", icon: <FaInfoCircle /> },
+  { name: "contact", url: "/contact", icon: <MdContacts /> },
+];
 
 function Navbar() {
   const auth = useSelector((state) => state.auth.auth);
@@ -15,67 +21,55 @@ function Navbar() {
     .join("/");
 
   return (
-    <div className="flex flex-col justify-between md:h-full">
-      {/* navlinks for desktop screens  */}
-      <nav className="flex md:p-6 p-2 navbar relative justify-between items-center text-white bg-green-950 uppercase h-full w-full">
-        <div className="text-5xl flex gap-2 justify-center items-center">
-          <h1 className="text-3xl tracking-widest">
-            <span className="text-5xl font-semibold text-orange-400">B</span>lo
-            <span className="text-4xl text-orange-300">g</span>
-          </h1>
-        </div>
-        <div className="md:block hidden">
-          <ul className="flex gap-4 text-xl ">
-            {pages.map((page) => {
-              return (
-                <Link
-                  to={page.url}
-                  key={page.name}
-                  className={`rounded-xl transition-all duration-200 font-bold py-2 px-6 ${
-                    currentLocation === page.url
-                      ? " border-b border-lime-300"
-                      : "hover:text-green-300"
-                  }`}
-                >
-                  {page.name}
-                </Link>
-              );
-            })}
-          </ul>
-        </div>
-        <div className="flex gap-4  mr-10 ">
-          {auth ? (
-            <>
-              <AccountMenu avatarLink={userData.profile_pic} />
-            </>
-          ) : (
-            <>
-              <Link to={"/auth"}>Login/Register</Link>
-            </>
-          )}
-        </div>
-      </nav>
+    <nav className="bg-neutral-dark w-screen flex justify-between items-center sm:px-8 px-4 fixed h-20 overflow-hidden">
+      <Logo size={"md"} />
 
-      {/* navlinks for mobile screen  */}
-      <nav className="md:hidden bg-green-950  py-2 px-6 rounded-xl font-bold  flex justify-center items-center my-2 md:w-2/3 w-4/5 mx-auto ">
-        <ul className="flex gap-10 text-xl text-green-100 capitalize">
-          {pages.map((page) => {
-            return (
-              <li
-                key={page.name}
-                className={`border-2  border-l-0 border-t-0 border-r-0 ${
-                  currentLocation === page.url
-                    ? "border-b-lime-400"
-                    : "border-b-0"
-                } `}
+      <ul className="flex sm:gap-16 gap-8 sm:grow-0 grow justify-end items-center">
+        <li className="text-white text-3xl">
+          <Link
+            to={"/"}
+            className={`rounded-xl transition-all duration-200 font-bold py-2 px-6 ${
+              currentLocation === "/" && " border-b text-lime-100"
+            }`}
+          >
+            <FaHome />
+          </Link>
+        </li>
+        {pages.map((page) => {
+          return (
+            <li key={page.name} className="text-white text-3xl">
+              <Link
+                to={page.url}
+                className={`rounded-xl transition-all duration-200 font-bold py-2 px-6 ${
+                  currentLocation === page.url && "border-b text-lime-300"
+                }`}
               >
-                <Link to={page.url}>{page.name}</Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-    </div>
+                {page.icon}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div className="flex gap-4  mr-10">
+        {auth ? (
+          <>
+            <AccountMenu avatarLink={userData.profile_pic} />
+          </>
+        ) : (
+          <>
+            <div className="justify-center items-center gap-4 sm:flex hidden">
+              <button className="bg-primary-color text-white rounded-3xl py-2 px-12 text-xl font-semibold tracking-wide">
+                <Link to={"/auth"}>Login</Link>
+              </button>
+              <button className="bg-white rounded-3xl py-2 px-12 text-xl font-semibold tracking-wide">
+                <Link to={"/auth"}>SignUp</Link>
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </nav>
   );
 }
 

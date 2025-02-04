@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+
   theme: {
     extend: {
       screens: {
@@ -10,6 +11,18 @@ export default {
         md: "976px",
         xl: "1440px",
       },
+
+      colors: {
+        ["primary-color"]: "#DE3163",
+        ["neutral-dark"]: "#000000",
+        ["secondary-color"]: "#E4F6AB",
+        ["neutral-light"]: "#FFFFFF",
+      },
+
+      fontFamily: {
+        orbitron: ["Orbitron", "serif"],
+      },
+
       keyframes: {
         slideDownAndFade: {
           from: { opacity: 0, transform: "translateY(-2px)" },
@@ -28,6 +41,7 @@ export default {
           to: { opacity: 1, transform: "translateX(0)" },
         },
       },
+
       animation: {
         slideDownAndFade:
           "slideDownAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
@@ -37,6 +51,7 @@ export default {
         slideRightAndFade:
           "slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
       },
+
       gridTemplateRows: {
         8: "repeat(8, minmax(0, 1fr))",
         10: "repeat(10,minmax(0,1fr))",
@@ -44,5 +59,6 @@ export default {
       },
     },
   },
+
   plugins: [],
 };
