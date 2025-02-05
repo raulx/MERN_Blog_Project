@@ -29,7 +29,7 @@ function Navbar() {
           <Link
             to={"/"}
             className={`rounded-xl transition-all duration-200 font-bold py-2 px-6 ${
-              currentLocation === "/" && " border-b text-lime-100"
+              currentLocation === "/" && " border-b text-lime-300"
             }`}
           >
             <FaHome />

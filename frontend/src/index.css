@@ -2,36 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
-    --gray-dark:#868686;
-    --extra-light-green:#F0FDF4;
-    --light-green:#DCFCE7;
+:root {
+  --gray-dark: #868686;
+  --extra-light-green: #f0fdf4;
+  --light-green: #dcfce7;
 }
 
-html{
-    font-size: 90%;
+html {
+  font-size: 90%;
+  box-sizing: border-box;
 }
 
-body{
-    background-color:var(--extra-light-green);
-    font-family: 'Lato',sans-serif;
-    
+body {
+  background-color: var(--extra-light-green);
+  font-family: "Lato", sans-serif;
 }
-/* .homeScreen{
-    height: 1100px;
-} */
-
-
 
 /* class for authScreen */
 
+.custom-height {
+  height: calc(
+    100vh - 5rem
+  ); /*substracting 5 rem because main section on rootscreen has padding-top of 5rem and do not want the screen to overflow when height is set to 100vh*/
+}
 
-
-.custom_width{
-    width: 44rem   
-}  
-.w-custom{
-    width:95%;
+.custom_width {
+  width: 44rem;
+}
+.w-custom {
+  width: 95%;
 }
 
 /* responsive media queries*/
@@ -39,262 +38,254 @@ body{
 /* width responsive  */
 
 /* desktop screens  */
-@media(max-width:2048px){
-    .custom_width{
-        width: 65rem;
-    }
+@media (max-width: 2048px) {
+  .custom_width {
+    width: 65rem;
+  }
 }
-@media(max-width:1920px){
-    .custom_width{
-        width:61rem
-    }
+@media (max-width: 1920px) {
+  .custom_width {
+    width: 61rem;
+  }
 }
-@media(max-width:1728px){
-    .custom_width{
-        width: 54rem;
-    }
+@media (max-width: 1728px) {
+  .custom_width {
+    width: 54rem;
+  }
 }
-@media(max-width:1600px){
-    .custom_width{
-        width: 49.5rem;
-    }
+@media (max-width: 1600px) {
+  .custom_width {
+    width: 49.5rem;
+  }
 }
-@media(max-width:1536px){
-    .custom_width{
-        width: 47.25rem;
-    }
+@media (max-width: 1536px) {
+  .custom_width {
+    width: 47.25rem;
+  }
 }
-@media(max-width:1440px){
-    .custom_width{
-        width:44rem
-    }
+@media (max-width: 1440px) {
+  .custom_width {
+    width: 44rem;
+  }
 }
-@media(max-width:1366px){
-    .custom_width{
-        width:41.5rem
-    }
+@media (max-width: 1366px) {
+  .custom_width {
+    width: 41.5rem;
+  }
 }
-@media(max-width:1280px){
-   
-    .custom_width{
-        width:38.5rem
-    }
+@media (max-width: 1280px) {
+  .custom_width {
+    width: 38.5rem;
+  }
 }
-@media(max-width:1024px){
-    .auth_box{
-        width: 35%;
-    }
-    .custom_width{
-        width:43.9rem
-    }
+@media (max-width: 1024px) {
+  .auth_box {
+    width: 35%;
+  }
+  .custom_width {
+    width: 43.9rem;
+  }
 }
-@media(max-width:962px){
-    .custom_width{
-        width: 41rem;
-    }
-    .homeScreen{
-        height: 100vh;
-    }
+@media (max-width: 962px) {
+  .custom_width {
+    width: 41rem;
+  }
+  .homeScreen {
+    height: 100vh;
+  }
 }
 /* table screens  */
 
-@media(max-width:834px){
-    .auth_box{
-        width: 70%;
-    }
-    .custom_width{
-        width: 75rem;
-    }
+@media (max-width: 834px) {
+  .auth_box {
+    width: 70%;
+  }
+  .custom_width {
+    width: 75rem;
+  }
 }
-@media(max-width:820px){
-    .auth_box{
-        width: 70%;
-    }
-    .custom_width{
-        width: 73.5rem;
-    }
-}
-
-
-
-
-@media(max-width:810px){
-    .auth_box{
-        width: 65%;
-    }
-    .custom_width{
-        width: 67.5rem;
-    }
+@media (max-width: 820px) {
+  .auth_box {
+    width: 70%;
+  }
+  .custom_width {
+    width: 73.5rem;
+  }
 }
 
-@media(max-width:800px){
-    .auth_box{
-        width: 60%;
-    }
-    .custom_width{
-        width: 60.5rem;
-    }
+@media (max-width: 810px) {
+  .auth_box {
+    width: 65%;
+  }
+  .custom_width {
+    width: 67.5rem;
+  }
 }
 
-@media(max-width:768px){
-    .auth_box{
-        width: 58%;
-    }
-    .custom_width{
-        width: 56rem;
-    }
-    
-}
-@media(max-width:720px){
-    .custom_width{
-        width:52rem
-    }
-}
-@media (max-width:712px) {
-    .custom_width{
-        width: 51.5rem;
-    } 
-}
-@media(max-width:601px){
-    .custom_width{
-        width: 42.5rem;
-    }
+@media (max-width: 800px) {
+  .auth_box {
+    width: 60%;
+  }
+  .custom_width {
+    width: 60.5rem;
+  }
 }
 
+@media (max-width: 768px) {
+  .auth_box {
+    width: 58%;
+  }
+  .custom_width {
+    width: 56rem;
+  }
+}
+@media (max-width: 720px) {
+  .custom_width {
+    width: 52rem;
+  }
+}
+@media (max-width: 712px) {
+  .custom_width {
+    width: 51.5rem;
+  }
+}
+@media (max-width: 601px) {
+  .custom_width {
+    width: 42.5rem;
+  }
+}
 
 /* mobile screens */
 
-@media(max-width:540px){
-    .custom_width{
-        width:46.5rem
-    }
-    html{
-        font-size: 75%;
-    }
+@media (max-width: 540px) {
+  .custom_width {
+    width: 46.5rem;
+  }
+  html {
+    font-size: 75%;
+  }
 }
 
-@media(max-width:512px){
-    .custom_width{
-        width: 44rem;
-    }
+@media (max-width: 512px) {
+  .custom_width {
+    width: 44rem;
+  }
 }
-@media(max-width:428px){
-    .auth_box{
-        width: 80%;
-    }
-    .custom_width{
-        width: 51rem;
-    }
-}
-
-@media(max-width:414px){
-    .auth_box{
-        width: 90%;
-    }
-    .custom_width{
-        width: 56rem;
-    }
-}
-@media(max-width:412px){
-    .auth_box{
-        width: 90%;
-    }
-    .custom_width{
-        width: 56rem;
-    }
-}
-@media(max-width:393px){
-    .auth_box{
-        width: 90%;
-    }
-    .custom_width{
-        width: 53rem;
-    }
-}
-@media(max-width:390px){
-    .auth_box{
-        width: 90%;
-    }
-    .custom_width{
-        width: 52.5rem;
-    }
-
-}
-@media(max-width:375px){
-    .custom_width{
-        width:50.5rem
-    }
-}
-@media(max-width:360px){
-    .auth_box{
-        width: 90%;
-    }
-    .custom_width{
-        width: 48rem;
-    }
-}
-@media(max-width:280px){
-    
-    .auth_box{
-        font-size: 60%;
-
-        width: 95%;
-    }
-    .custom_width{
-        width: 38.5rem;
-    }
+@media (max-width: 428px) {
+  .auth_box {
+    width: 80%;
+  }
+  .custom_width {
+    width: 51rem;
+  }
 }
 
+@media (max-width: 414px) {
+  .auth_box {
+    width: 90%;
+  }
+  .custom_width {
+    width: 56rem;
+  }
+}
+@media (max-width: 412px) {
+  .auth_box {
+    width: 90%;
+  }
+  .custom_width {
+    width: 56rem;
+  }
+}
+@media (max-width: 393px) {
+  .auth_box {
+    width: 90%;
+  }
+  .custom_width {
+    width: 53rem;
+  }
+}
+@media (max-width: 390px) {
+  .auth_box {
+    width: 90%;
+  }
+  .custom_width {
+    width: 52.5rem;
+  }
+}
+@media (max-width: 375px) {
+  .custom_width {
+    width: 50.5rem;
+  }
+}
+@media (max-width: 360px) {
+  .auth_box {
+    width: 90%;
+  }
+  .custom_width {
+    width: 48rem;
+  }
+}
+@media (max-width: 280px) {
+  .auth_box {
+    font-size: 60%;
+
+    width: 95%;
+  }
+  .custom_width {
+    width: 38.5rem;
+  }
+}
 
 /* height responsive  */
-@media(max-height:1280px){
-    .auth_box{
-        height: 40%;
-    }
+@media (max-height: 1280px) {
+  .auth_box {
+    height: 40%;
+  }
 }
 
-@media(max-height:1138px){
-    .auth_box{
-        height: 48%;
-}}
-@media(max-height:1024px){
-    .auth_box{
-        height: 52%;
-    }
+@media (max-height: 1138px) {
+  .auth_box {
+    height: 48%;
+  }
 }
-@media(max-height:900px){
-    .auth_box{
-        height: 58.5%;
-    }
+@media (max-height: 1024px) {
+  .auth_box {
+    height: 52%;
+  }
 }
-@media(max-height:768px){
-    .auth_box{
-        height: 62.5%;
-    }
+@media (max-height: 900px) {
+  .auth_box {
+    height: 58.5%;
+  }
 }
-@media(max-height:720px){
-    .auth_box{
-        height: 70%;
-    }
+@media (max-height: 768px) {
+  .auth_box {
+    height: 62.5%;
+  }
 }
-@media(max-height:640px){
-    .auth_box{
-        height:75%
-    }
+@media (max-height: 720px) {
+  .auth_box {
+    height: 70%;
+  }
 }
-@media(max-height:540px){
-    .auth_box{
-        height: 85%;
-    }
+@media (max-height: 640px) {
+  .auth_box {
+    height: 75%;
+  }
 }
-@media(max-height:280px){
-    html{
-        font-size: 40%;
-    }
-    .auth_box{
-        width: 30%;
-    }
-    .custom_width{
-        width: 55.5rem;
-    }
+@media (max-height: 540px) {
+  .auth_box {
+    height: 85%;
+  }
+}
+@media (max-height: 280px) {
+  html {
+    font-size: 40%;
+  }
+  .auth_box {
+    width: 30%;
+  }
+  .custom_width {
+    width: 55.5rem;
+  }
 }

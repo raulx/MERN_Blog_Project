@@ -37,7 +37,7 @@ function RootScreen() {
     <>
       <Navbar />
 
-      <main className="pt-16">
+      <main className="pt-20">
         {/* Adjusted padding of main section based on navbar height because navbar is fixed on top */}
         <Outlet />
       </main>

@@ -10,43 +10,35 @@ import { MyContext } from "./context/myContext";
 
 // page imports
 const BlogsIndex = lazy(() =>
-  import("../src/screens/protectedScreens/blogScreens/allBlogs.jsx")
+  import("../src/screens/protected/blogScreens/allBlogs.jsx")
 );
 const UserBlogs = lazy(() =>
-  import("../src/screens/protectedScreens/blogScreens/userBlogs")
+  import("../src/screens/protected/blogScreens/userBlogs")
 );
 const CreateBlog = lazy(() =>
-  import("../src/screens/protectedScreens/blogScreens/createBlog")
+  import("../src/screens/protected/blogScreens/createBlog")
 );
 const App = lazy(() => import("../src/App"));
-const NotFound = lazy(() =>
-  import("../src/screens/globalScreens/notFoundScreen")
-);
-const ContactPage = lazy(() =>
-  import("../src/screens/globalScreens/contactScreen")
-);
-const AboutPage = lazy(() =>
-  import("../src/screens/globalScreens/aboutScreen")
-);
+const NotFound = lazy(() => import("../src/screens/open/notFoundScreen"));
+const ContactPage = lazy(() => import("../src/screens/open/contactScreen"));
+const AboutPage = lazy(() => import("../src/screens/open/aboutScreen"));
 const ProtectedRoutes = lazy(() =>
   import("../src/hooks/authenticateRoutesHook")
 );
 const BlogsScreen = lazy(() =>
-  import("../src/screens/protectedScreens/blogScreens/blogsScreen")
+  import("../src/screens/protected/blogScreens/blogsScreen")
 );
-const AuthScreen = lazy(() =>
-  import("../src/screens/globalScreens/authScreen")
-);
+const AuthScreen = lazy(() => import("../src/screens/open/authScreen"));
 const LandingScreen = lazy(() => import("../src/screens/landingScreen"));
 const ProfileScreen = lazy(() =>
-  import("../src/screens/protectedScreens/userProfileScreens/profileScreen")
+  import("../src/screens/protected/userProfileScreens/profileScreen")
 );
 const DisplayBlog = lazy(() =>
-  import("../src/screens/protectedScreens/blogScreens/displayBlog")
+  import("../src/screens/protected/blogScreens/displayBlog")
 );
 const RootScreen = lazy(() => import("../src/screens/rootScreen"));
 const ContentScreen = lazy(() =>
-  import("../src/screens/protectedScreens/contentScreen")
+  import("../src/screens/protected/contentScreen")
 );
 
 // router
