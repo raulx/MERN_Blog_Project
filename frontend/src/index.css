@@ -279,9 +279,6 @@ body {
   }
 }
 @media (max-height: 280px) {
-  html {
-    font-size: 40%;
-  }
   .auth_box {
     width: 30%;
   }

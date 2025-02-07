@@ -9,9 +9,10 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { MyContext } from "./context/myContext";
 
 // page imports
-const BlogsIndex = lazy(() =>
-  import("../src/screens/protected/blogScreens/allBlogs.jsx")
-);
+// const BlogsIndex = lazy(() =>
+//   import("../src/screens/protected/blogScreens/allBlogs.jsx")
+// );
+
 const UserBlogs = lazy(() =>
   import("../src/screens/protected/blogScreens/userBlogs")
 );
@@ -19,14 +20,14 @@ const CreateBlog = lazy(() =>
   import("../src/screens/protected/blogScreens/createBlog")
 );
 const App = lazy(() => import("../src/App"));
+const AllBlogs = lazy(() =>
+  import("../src/screens/protected/blogScreens/allBlogs.jsx")
+);
 const NotFound = lazy(() => import("../src/screens/open/notFoundScreen"));
 const ContactPage = lazy(() => import("../src/screens/open/contactScreen"));
 const AboutPage = lazy(() => import("../src/screens/open/aboutScreen"));
 const ProtectedRoutes = lazy(() =>
   import("../src/hooks/authenticateRoutesHook")
-);
-const BlogsScreen = lazy(() =>
-  import("../src/screens/protected/blogScreens/blogsScreen")
 );
 const AuthScreen = lazy(() => import("../src/screens/open/authScreen"));
 const LandingScreen = lazy(() => import("../src/screens/landingScreen"));
@@ -64,14 +65,9 @@ const router = createBrowserRouter([
                 path: "/content",
                 element: <ContentScreen />,
                 children: [
-                  {
-                    element: <BlogsScreen />,
-                    children: [
-                      { index: true, element: <BlogsIndex /> },
-                      { path: "/content/blog/me", element: <UserBlogs /> },
-                      { path: "/content/blog/create", element: <CreateBlog /> },
-                    ],
-                  },
+                  { index: true, element: <AllBlogs /> },
+                  { path: "/content/blog/me", element: <UserBlogs /> },
+                  { path: "/content/blog/create", element: <CreateBlog /> },
                 ],
               },
             ],

@@ -29,7 +29,9 @@ function Navbar() {
           <Link
             to={"/"}
             className={`rounded-xl transition-all duration-200 font-bold py-2 px-6 ${
-              currentLocation === "/" && " border-b text-lime-300"
+              currentLocation === "/" || currentLocation === "/content"
+                ? " border-b text-lime-300"
+                : null
             }`}
           >
             <FaHome />
@@ -50,6 +52,18 @@ function Navbar() {
           );
         })}
       </ul>
+
+      {auth && (
+        <div className="flex justify-center items-center">
+          <input
+            placeholder="Search Blogs"
+            className="py-2 px-6 rounded-full rounded-r-none w-[400px]"
+          />
+          <button className="flex justify-center items-center bg-primary-color border-1 border-primary-color py-2 px-4 rounded-r-full text-white">
+            Go
+          </button>
+        </div>
+      )}
 
       <div className="flex gap-4  mr-10">
         {auth ? (
