@@ -26,10 +26,19 @@ const addBlog = asyncHandler(async (req, res) => {
 });
 
 const getBlogs = asyncHandler(async (req, res) => {
-  const { page, limit } = req.query;
-  const data = await Blog.find()
-    .skip(page * limit)
-    .limit(limit);
+  const { page, limit, category } = req.query;
+  let data;
+
+  if (category === "all" || category === "") {
+    data = await Blog.find()
+      .skip((page - 1) * limit)
+      .limit(limit);
+  } else {
+    data = await Blog.find({ category })
+      .skip((page - 1) * limit)
+      .limit(limit);
+  }
+
   res.status(200).json({ status: 200, data });
 });
 

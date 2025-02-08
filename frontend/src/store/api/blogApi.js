@@ -129,9 +129,9 @@ const blogApi = createApi({
       }),
 
       getBlogs: builder.query({
-        query: ({ page, pageSize }) => {
+        query: ({ page, pageSize, category }) => {
           return {
-            url: `/blogs/getblogs?page=${page}&limit=${pageSize}`,
+            url: `/blogs/getblogs?page=${page}&limit=${pageSize}&category=${category}`,
             method: "GET",
           };
         },
@@ -142,6 +142,7 @@ const blogApi = createApi({
 
 export const {
   useGetBlogsQuery,
+  useLazyGetBlogsQuery,
   useUsersBlogsQuery,
   useBlogDataQuery,
   usePostBlogMutation,
