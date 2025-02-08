@@ -1,7 +1,7 @@
-import { useUsersBlogsQuery } from "../../../store";
-import Card from "../../../components/card";
-import CardSkeleton from "../../../components/cardSkeleton";
-import { setUserBlogs } from "../../../store";
+import { useUsersBlogsQuery } from "../../store";
+import Card from "../../components/card";
+import CardSkeleton from "../../components/cardSkeleton";
+import { setUserBlogs } from "../../store";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +32,7 @@ function UserBlogs() {
   } else if (isError) {
     content = <div>Error occured</div>;
   } else if (isLoading) {
-    content = <CardSkeleton times={5} />;
+    content = <CardSkeleton times={8} />;
   }
 
   return (

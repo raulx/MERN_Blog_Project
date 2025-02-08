@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { BsFillRocketFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 function LandingScreen() {
   const { auth } = useSelector((state) => {
@@ -22,19 +23,21 @@ function LandingScreen() {
         <span className="text-white">Little things do make a difference</span>
         <span className="span-2">Little things do make a difference</span>
       </h1>
-      <h2 className="absolute top-[30%] left-1/2 w-1/2 text-center -translate-x-1/2 text-3xl font-Poppins right-in font-semibold">
+      <h2 className="absolute top-[30%] left-1/2 sm:w-1/2 w-full text-center -translate-x-1/2 text-3xl font-Poppins right-in font-semibold">
         &quot;Explore Learn. Grow - Your Hub for Insightful Reads&quot;
       </h2>
 
-      <p className="w-1/2 text-center text-xl text-gray-500 absolute top-[40%] left-1/2 -translate-x-1/2 font-Poppins left-in font-semibold">
+      <p className="sm:w-1/2 w-full text-center text-xl text-gray-500 absolute top-[40%] left-1/2 -translate-x-1/2 font-Poppins left-in font-semibold">
         Stay ahead with expert insights, deep divers, and engaging stories
         across technology, finance and beyond. Discover contents that inspires
         and informs.
       </p>
 
-      <button className="absolute top-[60%] left-1/2 -translate-x-1/2 bottom-up flex justify-center items-center gap-2 tracking-wider bg-white text-primary-color py-4 px-6 rounded-xl border border-primary-color text-xl shadow-lg font-Poppins">
-        <BsFillRocketFill className="text-3xl" /> Start Reading
-      </button>
+      <Link to="/auth">
+        <button className="absolute top-[60%] left-1/2 -translate-x-1/2 bottom-up flex justify-center items-center gap-2 tracking-wider bg-white text-primary-color py-4 px-6 rounded-xl border border-primary-color text-xl shadow-lg font-Poppins">
+          <BsFillRocketFill className="text-3xl" /> Start Reading
+        </button>
+      </Link>
     </div>
   );
 }

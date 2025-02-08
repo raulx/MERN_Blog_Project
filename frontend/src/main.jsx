@@ -9,20 +9,10 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { MyContext } from "./context/myContext";
 
 // page imports
-// const BlogsIndex = lazy(() =>
-//   import("../src/screens/protected/blogScreens/allBlogs.jsx")
-// );
-
-const UserBlogs = lazy(() =>
-  import("../src/screens/protected/blogScreens/userBlogs")
-);
-const CreateBlog = lazy(() =>
-  import("../src/screens/protected/blogScreens/createBlog")
-);
+const UserBlogs = lazy(() => import("../src/screens/protected/userBlogs"));
+const CreateBlog = lazy(() => import("../src/screens/protected/createBlog"));
 const App = lazy(() => import("../src/App"));
-const AllBlogs = lazy(() =>
-  import("../src/screens/protected/blogScreens/allBlogs.jsx")
-);
+const AllBlogs = lazy(() => import("../src/screens/protected/allBlogs.jsx"));
 const NotFound = lazy(() => import("../src/screens/open/notFoundScreen"));
 const ContactPage = lazy(() => import("../src/screens/open/contactScreen"));
 const AboutPage = lazy(() => import("../src/screens/open/aboutScreen"));
@@ -32,15 +22,11 @@ const ProtectedRoutes = lazy(() =>
 const AuthScreen = lazy(() => import("../src/screens/open/authScreen"));
 const LandingScreen = lazy(() => import("../src/screens/landingScreen"));
 const ProfileScreen = lazy(() =>
-  import("../src/screens/protected/userProfileScreens/profileScreen")
+  import("../src/screens/protected/profileScreen")
 );
-const DisplayBlog = lazy(() =>
-  import("../src/screens/protected/blogScreens/displayBlog")
-);
+const ViewBlog = lazy(() => import("./screens/protected/viewBlog.jsx"));
 const RootScreen = lazy(() => import("../src/screens/rootScreen"));
-const ContentScreen = lazy(() =>
-  import("../src/screens/protected/contentScreen")
-);
+const Home = lazy(() => import("../src/screens/protected/home"));
 
 // router
 const router = createBrowserRouter([
@@ -63,7 +49,7 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "/content",
-                element: <ContentScreen />,
+                element: <Home />,
                 children: [
                   { index: true, element: <AllBlogs /> },
                   { path: "/content/blog/me", element: <UserBlogs /> },
@@ -72,7 +58,7 @@ const router = createBrowserRouter([
               },
             ],
           },
-          { path: "/blog", element: <DisplayBlog /> },
+          { path: "/blog", element: <ViewBlog /> },
 
           { path: "/about", element: <AboutPage /> },
           { path: "/contact", element: <ContactPage /> },

@@ -1,5 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
-import { useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 
 const allBlogScreens = [
@@ -7,25 +6,21 @@ const allBlogScreens = [
   { name: "your blogs", url: "/content/blog/me" },
 ];
 
-function ContentScreen() {
-  const [currentScreen, setCurrentScreen] = useState("explore");
+function Home() {
+  const location = useLocation().pathname;
 
   return (
     <>
+      {/* Sub navlinks  */}
       <nav className="flex sm:justify-center justify-between items-center sm:px-0 px-2 text-green-800 bg-secondary-color fixed w-screen overflow-hidden py-4">
         <ul className="gap-6 flex self-center">
           {allBlogScreens.map((screen) => {
             return (
               <Link
                 key={screen.name}
-                onClick={() => {
-                  setCurrentScreen(screen.name);
-                }}
                 to={screen.url}
                 className={`uppercase border-b font-semibold tracking-widest rounded text-xl cursor-pointer ${
-                  screen.name === currentScreen
-                    ? "border-b-lime-800"
-                    : " border-b-0"
+                  location === screen.url ? "border-b-lime-800" : " border-b-0"
                 }`}
               >
                 {screen.name}
@@ -36,7 +31,6 @@ function ContentScreen() {
         <div className="sm:absolute sm:top-1/2 sm:right-10 sm:-translate-y-1/2">
           <Link
             className="flex items-center text-xl  gap-4  uppercase rounded-lg justify-center py-2 px-6 bg-blue-600 text-white  cursor-pointer"
-            onClick={() => setCurrentScreen("create")}
             to={"/content/blog/create"}
           >
             <FaPlus />
@@ -51,4 +45,4 @@ function ContentScreen() {
   );
 }
 
-export default ContentScreen;
+export default Home;

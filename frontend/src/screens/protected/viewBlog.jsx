@@ -3,17 +3,17 @@ import {
   useAddCommentMutation,
   useGetAuthorQuery,
   useLazyBlogDataQuery,
-} from "../../../store";
+} from "../../store";
 import { FaEye } from "react-icons/fa";
-import Comment from "../../../components/blogComment";
-import { contentTypeLinks } from "../../../utils/variables";
+import Comment from "../../components/blogComment";
+import { contentTypeLinks } from "../../utils/variables";
 import { Link } from "react-router-dom";
-import UseMyContext from "../../../hooks/useMyContext";
+import UseMyContext from "../../hooks/useMyContext";
 import { FaSpinner } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-function DisplayBlog() {
+function ViewBlog() {
   const [searchParams] = useSearchParams();
   const { phoneNav, setPhoneNav } = UseMyContext();
   const [comment, setComment] = useState("");
@@ -192,4 +192,4 @@ function DisplayBlog() {
   );
 }
 
-export default DisplayBlog;
+export default ViewBlog;

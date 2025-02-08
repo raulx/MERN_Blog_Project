@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useGetUserQuery } from "../../../store";
+import { useGetUserQuery } from "../../store";
 
 function ProfileScreen() {
   const { id } = JSON.parse(localStorage.getItem("user"));

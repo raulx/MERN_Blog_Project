@@ -1,7 +1,7 @@
-import { blogCategories } from "../../../utils/variables";
-import { useLazyGetBlogsQuery } from "../../../store";
-import Card from "../../../components/card";
-import CardSkeleton from "../../../components/cardSkeleton";
+import { blogCategories } from "../../utils/variables";
+import { useLazyGetBlogsQuery } from "../../store";
+import Card from "../../components/card";
+import CardSkeleton from "../../components/cardSkeleton";
 import { useEffect, useState, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { FaFilter, FaChevronDown, FaChevronLeft } from "react-icons/fa";
@@ -18,9 +18,11 @@ function AllBlogs() {
 
   const category = searchParams.get("category") || "all";
 
+  const encodedCategory = encodeURIComponent(category);
+
   const [blogs, setBlogs] = useState([]);
 
-  const [getBlogs, { isLoading }] = useLazyGetBlogsQuery();
+  const [getBlogs, { isLoading, isFetching }] = useLazyGetBlogsQuery();
   const [isOpen, setIsOpen] = useState(false);
 
   const pageLength = 12;
@@ -30,7 +32,7 @@ function AllBlogs() {
       const res = await getBlogs({
         page: nextPage,
         pageSize: pageLength,
-        category: category,
+        category: encodedCategory,
       });
       if (res.data) {
         setBlogs((prevValue) => [...prevValue, ...res.data.data]);
@@ -50,7 +52,7 @@ function AllBlogs() {
         const res = await getBlogs({
           page: 1,
           pageSize: pageLength,
-          category: category,
+          category: encodedCategory,
         });
         if (res.data) {
           setBlogs(() => [...res.data.data]);
@@ -64,6 +66,7 @@ function AllBlogs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
 
+  // eventlistener for dropdown component
   useEffect(() => {
     const handler = (event) => {
       if (isOpen && !dropDowm.current.contains(event.target)) {
@@ -80,6 +83,7 @@ function AllBlogs() {
 
   const handleCategoryChange = async (category) => {
     const params = new URLSearchParams(searchParams);
+    console.log(params);
     if (category === "all") {
       params.delete("category");
     } else {
@@ -89,7 +93,7 @@ function AllBlogs() {
 
     setIsOpen(!isOpen);
 
-    setHasMore(true);
+    setHasMore(true); // reset infinite-scroll-component
     setNextPage(2); // reset nextpage from start
   };
 
@@ -148,9 +152,9 @@ function AllBlogs() {
         </div>
       </div>
 
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <div className="flex flex-wrap gap-8 justify-between p-4">
-          <CardSkeleton times={pageLength} />
+          <CardSkeleton times={pageLength * (nextPage - 1)} />
         </div>
       ) : (
         <InfiniteScroll

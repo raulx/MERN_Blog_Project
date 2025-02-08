@@ -27,6 +27,7 @@ const addBlog = asyncHandler(async (req, res) => {
 
 const getBlogs = asyncHandler(async (req, res) => {
   const { page, limit, category } = req.query;
+
   let data;
 
   if (category === "all" || category === "") {

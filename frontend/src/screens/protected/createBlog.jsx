@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { usePostImageMutation, usePostBlogMutation } from "../../../store";
+import { usePostImageMutation, usePostBlogMutation } from "../../store";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import { FaSpinner } from "react-icons/fa";
-import { blogCategories } from "../../../utils/variables";
+import { blogCategories } from "../../utils/variables";
 
 const presetKey = import.meta.env.VITE_CLOUDINARY_PRESET;
 
