@@ -5,6 +5,8 @@ import connectDB from "./config/db.js";
 import connectCloudinary from "./config/cloudinary.js";
 import userRouter from "./routes/userRoute.js";
 import blogRouter from "./routes/blogRoutes.js";
+import authRouter from "./routes/authRoutes.js";
+
 import path from "path";
 
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
@@ -22,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/user", userRouter);
 app.use("/api/blogs", blogRouter);
+app.use("/api/auth", authRouter);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();

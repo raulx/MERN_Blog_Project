@@ -11,18 +11,20 @@ const getUser = asyncHandler(async (req, res) => {
     throw new Error("User not Found !");
   }
 });
+
+export { getUser };
+
 //FOR DEV ONLY
-const getAllUser = asyncHandler(async (req, res) => {
+// COMMENT THESE ROUTES IN PRODUCTION
+export const getAllUser = asyncHandler(async (req, res) => {
   const allUsers = await User.find();
   res.json({ status: 200, data: allUsers });
 });
 
-const addFakerUser = asyncHandler(async (req, res) => {
+export const addFakerUser = asyncHandler(async (req, res) => {
   const { email, password, profile_pic, name } = req.body;
   const newUser = { email, password, profile_pic, name };
 
   const user = await User.create(newUser);
   res.status(200).json({ message: "data added successfully", data: user });
 });
-
-export { getUser, getAllUser, addFakerUser };

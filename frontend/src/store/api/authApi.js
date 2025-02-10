@@ -5,7 +5,7 @@ import { BASE_URL } from "../../utils/variables";
 const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
+    baseUrl: `${BASE_URL}/auth`,
     fetchFn: async (...args) => {
       await pause(2000);
       return fetch(...args);
@@ -17,7 +17,7 @@ const authApi = createApi({
       registerUser: builder.mutation({
         query: ({ name, email, password }) => {
           return {
-            url: "/user/register",
+            url: "/register",
             method: "POST",
             body: { name, email, password },
           };
@@ -26,7 +26,7 @@ const authApi = createApi({
       logOut: builder.mutation({
         query: () => {
           return {
-            url: "/user/logout",
+            url: "/logout",
             method: "POST",
           };
         },
@@ -34,7 +34,7 @@ const authApi = createApi({
       logIn: builder.mutation({
         query: (data) => {
           return {
-            url: `/user/login`,
+            url: `/login`,
             method: "POST",
             body: { email: data.email, password: data.password },
           };

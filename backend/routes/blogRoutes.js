@@ -1,5 +1,5 @@
-import express from "express";
 import protect from "../middleware/authMiddleware.js";
+import { Router } from "express";
 import {
   addBlog,
   deleteBlog,
@@ -10,10 +10,12 @@ import {
   editComment,
   authorReply,
   replyDelete,
+  addFakeBlogs,
 } from "../controllers/blogControllers.js";
 import { getBlogs, getBlogData } from "../controllers/blogControllers.js";
 
-const router = express.Router();
+const router = Router();
+
 router.route("/create").post(protect, addBlog);
 router.route("/getblogs").get(getBlogs);
 router.route("/getBlogData").get(getBlogData);
@@ -25,5 +27,9 @@ router.route("/removeComment").post(protect, removeComment);
 router.route("/editComment").post(protect, editComment);
 router.route("/authorReply").post(protect, authorReply);
 router.route("/replyDelete").post(protect, replyDelete);
+
+// fake data generation routes, must be commented in production
+
+router.route("/addFakeBlogs").post(protect, addFakeBlogs);
 
 export default router;

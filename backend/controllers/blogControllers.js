@@ -2,11 +2,13 @@ import Blog from "../models/blogModel.js";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import { v2 as cloudinary } from "cloudinary";
+import { faker } from "@faker-js/faker";
 
 const addBlog = asyncHandler(async (req, res) => {
   const { title, content, category, public_id, remote_url } = req.body;
   const creator_id = req.token.userId;
   const user = await User.findById(creator_id);
+
   const newBlog = {
     title,
     content,
@@ -14,11 +16,7 @@ const addBlog = asyncHandler(async (req, res) => {
     views: 0,
     category,
     image: { public_id, remote_url },
-    created_by: {
-      id: creator_id,
-      profile_pic: user.profile_pic,
-      name: user.name,
-    },
+    created_by: user._id,
   };
 
   const newBlogCreated = await Blog.create(newBlog);
@@ -27,17 +25,57 @@ const addBlog = asyncHandler(async (req, res) => {
 
 const getBlogs = asyncHandler(async (req, res) => {
   const { page, limit, category } = req.query;
-
   let data;
 
-  if (category === "all" || category === "") {
-    data = await Blog.find()
-      .skip((page - 1) * limit)
-      .limit(limit);
+  if (category === "all" || !category) {
+    data = await Blog.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "created_by",
+          foreignField: "_id",
+          as: "created_by",
+          pipeline: [{ $project: { name: 1, _id: 1, profile_pic: 1 } }],
+        },
+      },
+      {
+        $addFields: {
+          created_by: {
+            $first: "$created_by",
+          },
+        },
+      },
+
+      { $skip: (Number(page) - 1) * Number(limit) },
+      { $limit: Number(limit) },
+    ]);
   } else {
-    data = await Blog.find({ category })
-      .skip((page - 1) * limit)
-      .limit(limit);
+    data = await Blog.aggregate([
+      {
+        $match: {
+          category: category,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "created_by",
+          foreignField: "_id",
+          as: "created_by",
+          pipeline: [{ $project: { name: 1, _id: 1, profile_pic: 1 } }],
+        },
+      },
+      {
+        $addFields: {
+          created_by: {
+            $first: "$created_by",
+          },
+        },
+      },
+
+      { $skip: (Number(page) - 1) * Number(limit) },
+      { $limit: Number(limit) },
+    ]);
   }
 
   res.status(200).json({ status: 200, data });
@@ -126,6 +164,7 @@ const authorReply = asyncHandler(async (req, res) => {
     { $push: { "comments.$.replies": newReply } },
     { new: true }
   );
+
   res.json({ newblog });
 });
 
@@ -142,6 +181,7 @@ const replyDelete = asyncHandler(async (req, res) => {
   );
   res.json({ updatedBlog });
 });
+
 export {
   addBlog,
   getBlogs,
@@ -155,3 +195,45 @@ export {
   authorReply,
   replyDelete,
 };
+
+// fake data generation controllers must be commented in production
+
+export const addFakeBlogs = asyncHandler(async (req, res) => {
+  const amount = Number(req.body.amount);
+
+  const user = req.user;
+
+  const categories = [
+    "politics",
+    "sports",
+    "music",
+    "travel",
+    "finance & bussiness",
+    "fashion & lifestyle",
+    "food",
+    "health",
+    "science & technology",
+  ];
+
+  let totalCreated = 0;
+
+  for (let i = 0; i < amount; i++) {
+    const newBlog = {
+      title: faker.lorem.sentence({ min: 5, max: 10 }),
+      content: faker.lorem.paragraph({ min: 15, max: 75 }),
+
+      category: categories[Math.floor(Math.random() * categories.length)],
+
+      image: {
+        public_id: faker.lorem.word(),
+        remote_url: faker.image.urlLoremFlickr({ height: 400, width: 400 }),
+      },
+      created_by: user._id,
+    };
+
+    const createdBlog = await Blog.create(newBlog);
+    if (createdBlog) totalCreated += 1;
+  }
+
+  res.json({ status: 200, totalCreated });
+});
