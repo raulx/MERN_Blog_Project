@@ -57,9 +57,9 @@ const blogApi = createApi({
         providesTags: () => {
           return [{ type: "getUserBlogs" }];
         },
-        query: () => {
+        query: (pageNumber) => {
           return {
-            url: `/blogs/getUserBlogs`,
+            url: `/blogs/getUserBlogs?pageNumber=${pageNumber}`,
             method: "GET",
           };
         },
@@ -144,6 +144,7 @@ export const {
   useGetBlogsQuery,
   useLazyGetBlogsQuery,
   useUsersBlogsQuery,
+  useLazyUsersBlogsQuery,
   useBlogDataQuery,
   usePostBlogMutation,
   useDeleteBlogMutation,

@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 import generateToken from "../utils/generateToken.js";
+import { faker } from "@faker-js/faker";
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -26,7 +27,7 @@ const registerUser = asyncHandler(async (req, res) => {
         name,
         email,
         password,
-        profile_pic: "https://api.dicebear.com/7.x/lorelei/svg",
+        profile_pic: faker.image.avatar(),
       };
       const createdUser = await User.create(newUser);
       generateToken(res, createdUser._id);

@@ -2,6 +2,7 @@ import Blog from "../models/blogModel.js";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import { v2 as cloudinary } from "cloudinary";
+import mongoose from "mongoose";
 import { faker } from "@faker-js/faker";
 
 const addBlog = asyncHandler(async (req, res) => {
@@ -107,7 +108,35 @@ const getBlogData = asyncHandler(async (req, res) => {
 
 const getUserBlogs = asyncHandler(async (req, res) => {
   const { userId } = req.token;
-  const userBlogs = await Blog.find({ "created_by.id": userId });
+  const { pageNumber } = req.query;
+
+  if (!pageNumber)
+    res.json({ status: 401, message: "pagenumber is required !" });
+
+  const userBlogs = await Blog.aggregate([
+    {
+      $match: {
+        created_by: mongoose.Types.ObjectId.createFromHexString(userId),
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "created_by",
+        foreignField: "_id",
+        as: "created_by",
+        pipeline: [{ $project: { name: 1, profile_pic: 1, _id: 1 } }],
+      },
+    },
+    {
+      $addFields: {
+        created_by: { $first: "$created_by" },
+      },
+    },
+    { $skip: Number(pageNumber - 1) * 10 },
+    { $limit: 10 },
+  ]);
+
   res.json({ status: req.status, data: userBlogs });
 });
 

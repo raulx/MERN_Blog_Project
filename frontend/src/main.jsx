@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import "@radix-ui/themes/styles.css";
 import "./index.css";
@@ -76,11 +76,9 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <MyContext>
-        <RouterProvider router={router} />
-      </MyContext>
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <MyContext>
+      <RouterProvider router={router} />
+    </MyContext>
+  </Provider>
 );

@@ -39,6 +39,7 @@ const blogSchema = new Schema(
   },
   { timestamps: true }
 );
+blogSchema.index({ created_by: 1 });
 
 const Blog = mongoose.model("Blog", blogSchema);
 

@@ -4,7 +4,12 @@ import Card from "../../components/card";
 import CardSkeleton from "../../components/cardSkeleton";
 import { useEffect, useState, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { FaFilter, FaChevronDown, FaChevronLeft } from "react-icons/fa";
+import {
+  FaFilter,
+  FaChevronDown,
+  FaChevronLeft,
+  FaSpinner,
+} from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
 
 function AllBlogs() {
@@ -83,7 +88,6 @@ function AllBlogs() {
 
   const handleCategoryChange = async (category) => {
     const params = new URLSearchParams(searchParams);
-    console.log(params);
     if (category === "all") {
       params.delete("category");
     } else {
@@ -152,7 +156,7 @@ function AllBlogs() {
         </div>
       </div>
 
-      {isLoading || isFetching ? (
+      {isLoading ? (
         <div className="flex flex-wrap gap-8 justify-between p-4">
           <CardSkeleton times={pageLength * (nextPage - 1)} />
         </div>
@@ -172,6 +176,12 @@ function AllBlogs() {
             return <Card key={index} cardData={blog} />;
           })}
         </InfiniteScroll>
+      )}
+
+      {isFetching && (
+        <div className="mx-auto py-2 text-center">
+          <FaSpinner className="animate-spin" />
+        </div>
       )}
     </div>
   );

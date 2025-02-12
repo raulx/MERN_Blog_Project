@@ -1,44 +1,65 @@
-import { useUsersBlogsQuery } from "../../store";
+import { useLazyUsersBlogsQuery } from "../../store";
 import Card from "../../components/card";
 import CardSkeleton from "../../components/cardSkeleton";
-import { setUserBlogs } from "../../store";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { FaSpinner } from "react-icons/fa";
 
 function UserBlogs() {
-  const { data, isLoading, isError } = useUsersBlogsQuery();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [getUserBlogs, { isFetching, isLoading }] = useLazyUsersBlogsQuery();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [data, setData] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    if (data) {
-      dispatch(setUserBlogs(data.data));
-    } else if (isError) {
-      navigate("/notfound");
-    }
-  }, [data, dispatch, isError, navigate]);
+    const fetchUserBlogs = async () => {
+      try {
+        const res = await getUserBlogs(pageNumber);
+        if (res.data) {
+          setData((prevValue) => {
+            return [...prevValue, ...res.data.data];
+          });
+        }
+        if (res.data.data.length === 0) setHasMore(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  let content;
-
-  if (data) {
-    content = (
-      <>
-        {data.data.map((d) => {
-          return <Card cardData={d} key={d._id} />;
-        })}
-      </>
-    );
-  } else if (isError) {
-    content = <div>Error occured</div>;
-  } else if (isLoading) {
-    content = <CardSkeleton times={8} />;
-  }
+    fetchUserBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber]);
 
   return (
-    <div className="flex justify-evenly gap-6 flex-wrap my-4 md:my-10">
-      {content}
-    </div>
+    <>
+      {isLoading ? (
+        <div className="sm:w-11/12 w-screen mx-auto flex flex-wrap gap-8 justify-between p-4">
+          <CardSkeleton times={10} />
+        </div>
+      ) : (
+        <InfiniteScroll
+          dataLength={data.length}
+          next={() => setPageNumber(pageNumber + 1)}
+          className="flex flex-wrap gap-8 justify-between sm:px-0 px-4 sm:w-11/12 w-screen mx-auto py-6"
+          hasMore={hasMore}
+          endMessage={
+            <p className="w-screen justify-center flex items-center">
+              You have seen it all !
+            </p>
+          }
+        >
+          {data.map((blog, index) => {
+            return <Card key={index} cardData={blog} />;
+          })}
+        </InfiniteScroll>
+      )}
+
+      {isFetching && (
+        <div className="sm:w-11/12 w-screen flex justify-center items-center py-2">
+          <FaSpinner className="animate-spin" />
+        </div>
+      )}
+    </>
   );
 }
 
