@@ -12,7 +12,7 @@ function Home() {
   return (
     <>
       {/* Sub navlinks  */}
-      <nav className="flex sm:justify-center justify-between items-center sm:px-0 px-2 text-green-800 bg-secondary-color fixed w-screen overflow-hidden py-4">
+      <nav className="flex sm:justify-center z-10 justify-between items-center sm:px-0 px-2 text-green-800 bg-secondary-color fixed w-screen overflow-hidden py-4">
         <ul className="gap-6 flex self-center">
           {allBlogScreens.map((screen) => {
             return (

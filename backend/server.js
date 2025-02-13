@@ -12,8 +12,11 @@ import path from "path";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
+
 connectDB();
+
 connectCloudinary();
+
 const app = express();
 
 const PORT = process.env.PORT || 4000;
@@ -21,7 +24,6 @@ const PORT = process.env.PORT || 4000;
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use("/api/user", userRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/auth", authRouter);
