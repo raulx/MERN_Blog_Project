@@ -66,6 +66,7 @@ function CreateBlog() {
 
   const handleImageChange = (e) => {
     const choosenFile = e.target.files[0];
+
     if (choosenFile) {
       const img = URL.createObjectURL(choosenFile);
       setImage((prevValue) => {
@@ -94,9 +95,10 @@ function CreateBlog() {
   };
 
   return (
-    <div className="flex flex-col gap-4 mt-6 px-4">
-      <div className="w-full h-full">
+    <div className="flex flex-col gap-4 py-4 sm:w-11/12 w-screen mx-auto">
+      <div className="sm:w-1/2 h-72 w-full mx-auto">
         <img
+          className="h-full w-full object-cover"
           src={
             image.localUrl
               ? image.localUrl
@@ -104,7 +106,8 @@ function CreateBlog() {
           }
         />
       </div>
-      <div className="flex mt-12 px-4 uppercase gap-6 py-2 w-full items-center">
+
+      <div className="flex gap-4 w-fit sm:mx-auto sm:flex-row flex-col sm:px-0 px-4">
         <h1 className="md:text-xl text-gray-700">
           {image.file ? <>Change Image :</> : <>Select an image:</>}
         </h1>
@@ -116,78 +119,75 @@ function CreateBlog() {
           }}
         />
       </div>
-      <div className="mt-10">
-        <form onSubmit={handleSubmit} className="flex flex-col relative">
-          <div className="flex flex-col">
-            <div className="flex items-center gap-4">
-              <label className="font-extrabold text-3xl">Title:</label>
-              <input
-                type="text"
-                required
-                placeholder="Add Title"
-                id="title"
-                className="w-96 p-4 border-2 outline-none"
-                value={blogData.title}
-                onChange={(e) => {
-                  setBlogData((prevValue) => {
-                    return { ...prevValue, title: e.target.value };
-                  });
-                }}
-              />
-              <div
-                className="py-4 px-2 border-2 rounded gap-4 flex flex-col w-64 absolute top-0 right-1/3 z-10 bg-slate-50"
-                onClick={() => {
-                  setIsOpen(!isOpen);
-                }}
-              >
-                <div className="flex gap-4 justify-between items-center mx-2 cursor-pointer">
-                  {blogData.category ? (
-                    blogData.category
-                  ) : (
-                    <>select a category</>
-                  )}
-                  {isOpen ? <FaChevronDown /> : <FaChevronRight />}
-                </div>
-                {isOpen ? (
-                  <div className="flex flex-col mt-4 border-2 ">
-                    {blogCategories.map((item) => {
-                      return (
-                        <div key={item.id}>
-                          <div
-                            onClick={(e) => handleSelect(e)}
-                            className="p-2 border-1 uppercase hover:bg-slate-100 cursor-pointer"
-                          >
-                            {item.category}
-                          </div>
-                        </div>
-                      );
-                    })}
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div className="flex items-center gap-4">
+          <label className="font-extrabold text-3xl">Title:</label>
+
+          <input
+            type="text"
+            required
+            placeholder="Add Title"
+            id="title"
+            className="w-96 p-4 border-2 outline-none"
+            value={blogData.title}
+            onChange={(e) => {
+              setBlogData((prevValue) => {
+                return { ...prevValue, title: e.target.value };
+              });
+            }}
+          />
+        </div>
+
+        <div
+          className="py-4 px-2 border-2 rounded gap-4 flex flex-col w-64 bg-slate-50"
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+        >
+          <div className="flex gap-4 justify-between items-center mx-2 cursor-pointer">
+            {blogData.category ? blogData.category : <>select a category</>}
+            {isOpen ? <FaChevronDown /> : <FaChevronRight />}
+          </div>
+          {isOpen ? (
+            <div className="flex flex-col mt-4 border-2 ">
+              {blogCategories.map((item) => {
+                return (
+                  <div key={item.id}>
+                    <div
+                      onClick={(e) => handleSelect(e)}
+                      className="p-2 border-1 uppercase hover:bg-slate-100 cursor-pointer"
+                    >
+                      {item.category}
+                    </div>
                   </div>
-                ) : null}
-              </div>
+                );
+              })}
             </div>
-          </div>
-          <div className="mt-16 flex flex-col gap-4">
-            <label className="font-extrabold text-3xl">Content:</label>
-            <textarea
-              rows={8}
-              className="border-2 p-4 outline-none"
-              value={blogData.content}
-              onChange={(e) => {
-                setBlogData((prevValue) => {
-                  return { ...prevValue, content: e.target.value };
-                });
-              }}
-            ></textarea>
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-700 p-4 flex justify-center items-center text-white text-xl mt-10 w-28 uppercase rounded-lg"
-          >
-            {isUploading ? <FaSpinner className="animate-spin" /> : "Post"}
-          </button>
-        </form>
-      </div>
+          ) : null}
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <label className="font-extrabold text-3xl">Content:</label>
+          <textarea
+            rows={8}
+            className="border-2 p-4 outline-none"
+            value={blogData.content}
+            onChange={(e) => {
+              setBlogData((prevValue) => {
+                return { ...prevValue, content: e.target.value };
+              });
+            }}
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          className="bg-blue-700 p-4 flex justify-center items-center text-white text-xl mt-10 w-28 uppercase rounded-lg"
+        >
+          {isUploading ? <FaSpinner className="animate-spin" /> : "Post"}
+        </button>
+      </form>
     </div>
   );
 }
