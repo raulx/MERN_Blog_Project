@@ -9,8 +9,9 @@ import { removeBlog } from "../store";
 import { useDispatch } from "react-redux";
 import { FaSync, FaTrash } from "react-icons/fa";
 import { filterDate } from "../utils/functions";
+import toast from "react-hot-toast";
 
-function Card({ cardData }) {
+function Card({ cardData, afterDelete }) {
   const category = cardData.category;
   const { userData } = useSelector((state) => {
     return state.user;
@@ -35,7 +36,12 @@ function Card({ cardData }) {
 
   const handleDelete = async () => {
     try {
-      await deleteBlog(cardData._id);
+      const res = await deleteBlog(cardData._id);
+
+      if (res.data.status === 200) {
+        toast.success("Successfully deleted the blog");
+        afterDelete();
+      }
     } catch (error) {
       console.log(error);
     }

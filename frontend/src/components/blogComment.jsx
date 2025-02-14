@@ -1,9 +1,6 @@
 /* eslint-disable react/prop-types */
 // eslint-disable-next-line react/prop-types
 import { filterDate } from "../utils/functions";
-// import { Avatar, Button, Box, TextField } from "@mui/material";
-// import { TextField, Button, Avatar } from "@radix-ui/themes";
-// import { Avatar } from "@mui/material";
 import { Avatar } from "@radix-ui/themes";
 import { useState } from "react";
 import { FcApproval } from "react-icons/fc";
@@ -38,7 +35,9 @@ function BlogComment({
 
   const handleDeleteComment = async (comment) => {
     setIsEdit(false);
+
     const data = { blogId, commentId: comment._id };
+
     try {
       const res = await removeComment(data);
 
@@ -47,6 +46,7 @@ function BlogComment({
       console.log(err);
     }
   };
+
   const handleEdit = (comment) => {
     setCommentText(comment.comment);
     setIsEdit(true);
@@ -64,6 +64,7 @@ function BlogComment({
       console.log(err);
     }
   };
+
   const handleAuthorReply = async (e, comment) => {
     e.preventDefault();
     setIsEdit(false);
@@ -107,7 +108,7 @@ function BlogComment({
             {commentData.creator_name}
           </h1>
           <p className="ml-4">{filterDate(commentData.created_at)}</p>
-          {userData._id === blogData.data.created_by.id ? (
+          {userData._id === blogData.data.created_by ? (
             <div className="absolute right-10">
               {commentData.replies.length === 0 ? (
                 <>
@@ -170,7 +171,7 @@ function BlogComment({
             <>
               <p>{commentData.comment}</p>
               {userData._id === commentData.creator_id ||
-              userData._id === blogData.data.created_by.id ? (
+              userData._id === blogData.data.created_by ? (
                 <div className="self-end mr-10 mt-2 flex gap-5">
                   {commentData.replies.length > 0 ? (
                     <button
@@ -231,7 +232,7 @@ function BlogComment({
                         </span>
                         <p className="mb-2">{d.reply}</p>
                       </div>
-                      {userData._id === blogData.data.created_by.id ? (
+                      {userData._id === blogData.data.created_by ? (
                         <div className="font-extrabold text-xl absolute right-4 top-2 flex gap-4">
                           {deletingReply.isLoading ? (
                             <ImSpinner10 className="animate-spin" />

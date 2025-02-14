@@ -173,7 +173,17 @@ function AllBlogs() {
           }
         >
           {blogs.map((blog, index) => {
-            return <Card key={index} cardData={blog} />;
+            return (
+              <Card
+                key={index}
+                cardData={blog}
+                afterDelete={() => {
+                  setBlogs((prevValue) => {
+                    return prevValue.filter((b) => b._id != blog._id);
+                  });
+                }}
+              />
+            );
           })}
         </InfiniteScroll>
       )}

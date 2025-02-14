@@ -8,7 +8,7 @@ import { FaSpinner } from "react-icons/fa";
 function UserBlogs() {
   const [getUserBlogs, { isFetching, isLoading }] = useLazyUsersBlogsQuery();
   const [pageNumber, setPageNumber] = useState(1);
-  const [data, setData] = useState([]);
+  const [userBlogs, setUserBlogs] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ function UserBlogs() {
       try {
         const res = await getUserBlogs(pageNumber);
         if (res.data) {
-          setData((prevValue) => {
+          setUserBlogs((prevValue) => {
             return [...prevValue, ...res.data.data];
           });
         }
@@ -38,7 +38,7 @@ function UserBlogs() {
         </div>
       ) : (
         <InfiniteScroll
-          dataLength={data.length}
+          dataLength={userBlogs.length}
           next={() => setPageNumber(pageNumber + 1)}
           className="flex flex-wrap gap-8 justify-between sm:px-0 px-4 sm:w-11/12 w-screen mx-auto py-6"
           hasMore={hasMore}
@@ -48,8 +48,18 @@ function UserBlogs() {
             </p>
           }
         >
-          {data.map((blog, index) => {
-            return <Card key={index} cardData={blog} />;
+          {userBlogs.map((blog, index) => {
+            return (
+              <Card
+                key={index}
+                cardData={blog}
+                afterDelete={() =>
+                  setUserBlogs((prevValue) =>
+                    prevValue.filter((b) => b._id != blog._id)
+                  )
+                }
+              />
+            );
           })}
         </InfiniteScroll>
       )}
