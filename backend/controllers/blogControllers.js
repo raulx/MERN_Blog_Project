@@ -4,11 +4,22 @@ import User from "../models/userModel.js";
 import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
 import { faker } from "@faker-js/faker";
+import { uploadOnCloudinary } from "../services/cloudinary.js";
 
 const addBlog = asyncHandler(async (req, res) => {
-  const { title, content, category, public_id, remote_url } = req.body;
-  const creator_id = req.token.userId;
-  const user = await User.findById(creator_id);
+  const { title, content, category } = req.body;
+  const photo = req.file?.path;
+  const user = req.user;
+
+  if (!title || !content || !category) {
+    return res.json({ status: 401, message: "all fields are required !" });
+  }
+  if (!photo) return res.json({ status: 401, message: "photo is required" });
+
+  const blogPhoto = await uploadOnCloudinary(photo);
+
+  if (!blogPhoto)
+    return res.json({ status: 500, message: "Error uploading photo" });
 
   const newBlog = {
     title,
@@ -16,12 +27,12 @@ const addBlog = asyncHandler(async (req, res) => {
     likes: 0,
     views: 0,
     category,
-    image: { public_id, remote_url },
+    image: { public_id: blogPhoto.public_id, remote_url: blogPhoto.secure_url },
     created_by: user._id,
   };
 
   const newBlogCreated = await Blog.create(newBlog);
-  res.json({ newBlogCreated });
+  return res.json({ newBlogCreated });
 });
 
 const getBlogs = asyncHandler(async (req, res) => {
@@ -142,9 +153,12 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 
 const deleteBlog = asyncHandler(async (req, res) => {
   const { blogId } = req.body;
-  const user = await Blog.findById(blogId);
-  await cloudinary.uploader.destroy(user.image.public_id);
+  const blog = await Blog.findById(blogId);
+  // first delete the blog photo from cloudinary
+  await cloudinary.uploader.destroy(blog.image.public_id);
+
   await Blog.findByIdAndDelete(blogId);
+
   res.json({ status: res.statusCode, message: "deleted blog successfully." });
 });
 

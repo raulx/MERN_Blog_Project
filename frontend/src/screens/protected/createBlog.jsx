@@ -1,28 +1,18 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { usePostImageMutation, usePostBlogMutation } from "../../store";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import { FaChevronDown, FaChevronRight } from "react-icons/fa";
-import { FaSpinner } from "react-icons/fa";
+import { FaChevronDown, FaChevronRight, FaSpinner } from "react-icons/fa";
 import { blogCategories } from "../../utils/variables";
-
-const presetKey = import.meta.env.VITE_CLOUDINARY_PRESET;
+import { usePostBlogMutation } from "../../store";
+import toast from "react-hot-toast";
 
 function CreateBlog() {
-  const [postImage] = usePostImageMutation();
-
-  const [postBlog] = usePostBlogMutation();
-
-  const [isUploading, setIsUploading] = useState(false);
-
-  const navigate = useNavigate();
-
   const [image, setImage] = useState({
     localUrl: "",
     remoteUrl: "",
     file: null,
   });
+
+  const [postBlog, { isLoading }] = usePostBlogMutation();
   const [isOpen, setIsOpen] = useState(false);
 
   const [blogData, setBlogData] = useState({
@@ -33,37 +23,36 @@ function CreateBlog() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      blogData.title === "" ||
+      blogData.content === "" ||
+      blogData.category === "" ||
+      image.file === null
+    ) {
+      return toast.error("all fields are required !");
+    }
+
     const formData = new FormData();
-    formData.append("file", image.file);
-    formData.append("upload_preset", presetKey);
-    if (blogData.category === "") {
-      toast.error("Choose a category !");
-    } else if (image.file) {
-      try {
-        setIsUploading(true);
-        const res = await postImage(formData);
-        const remoteImageUrl = res.data.secure_url;
-        const imagePublicId = res.data.public_id;
 
-        const data = {
-          title: blogData.title,
-          content: blogData.content,
-          category: blogData.category.toLocaleLowerCase(),
-          public_id: imagePublicId,
-          remote_url: remoteImageUrl,
-        };
+    formData.append("title", blogData.title);
+    formData.append("content", blogData.content);
+    formData.append("category", blogData.category);
+    formData.append("photo", image.file);
 
-        await postBlog(data);
-        setIsUploading(false);
-        toast.success("blog posted successfully.");
-        navigate("/");
-      } catch (err) {
-        toast.error("Upload Falied.");
-        setIsUploading(false);
-        console.log(`Error:${err}`);
+    try {
+      const res = await postBlog(formData);
+      if (res.data) {
+        toast.success("Blog created Successfully");
+        // reset form states
+        setBlogData({ title: "", content: "", category: "" });
+        setImage((prevValue) => {
+          return { ...prevValue, file: null };
+        });
       }
-    } else {
-      toast.error("Image not selected !");
+    } catch (error) {
+      toast.error("Error occured creating the blog.");
+      console.log(error);
     }
   };
 
@@ -90,10 +79,9 @@ function CreateBlog() {
     }
   };
 
-  const handleSelect = (e) => {
-    const selected = e.target.innerText;
+  const handleSelect = (category) => {
     setBlogData((prevValue) => {
-      return { ...prevValue, category: selected };
+      return { ...prevValue, category };
     });
   };
 
@@ -163,8 +151,8 @@ function CreateBlog() {
                     return (
                       <div key={item.id}>
                         <div
-                          onClick={(e) => handleSelect(e)}
-                          className="p-2 border-1 uppercase hover:bg-slate-100 cursor-pointer"
+                          onClick={() => handleSelect(item.category)}
+                          className="p-2 border-1  hover:bg-slate-100 cursor-pointer"
                         >
                           {item.category}
                         </div>
@@ -195,7 +183,7 @@ function CreateBlog() {
               type="submit"
               className="bg-blue-700 p-4 flex justify-center items-center sm:mx-auto text-white text-xl  w-28 uppercase rounded-lg"
             >
-              {isUploading ? <FaSpinner className="animate-spin" /> : "Post"}
+              {isLoading ? <FaSpinner className="animate-spin" /> : <>Post</>}
             </button>
           </div>
         </form>

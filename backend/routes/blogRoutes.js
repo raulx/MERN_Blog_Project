@@ -13,10 +13,11 @@ import {
   addFakeBlogs,
 } from "../controllers/blogControllers.js";
 import { getBlogs, getBlogData } from "../controllers/blogControllers.js";
+import upload from "../middleware/multerMiddleware.js";
 
 const router = Router();
 
-router.route("/create").post(protect, addBlog);
+router.route("/create").post(protect, upload.single("photo"), addBlog);
 router.route("/getblogs").get(getBlogs);
 router.route("/getBlogData").get(getBlogData);
 router.route("/getAuthor").get(getAuthorData);
