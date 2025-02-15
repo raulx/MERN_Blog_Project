@@ -3,7 +3,6 @@ import { Router } from "express";
 import {
   addBlog,
   deleteBlog,
-  getAuthorData,
   getUserBlogs,
   addComment,
   removeComment,
@@ -20,7 +19,6 @@ const router = Router();
 router.route("/create").post(protect, upload.single("photo"), addBlog);
 router.route("/getblogs").get(getBlogs);
 router.route("/getBlogData").get(getBlogData);
-router.route("/getAuthor").get(getAuthorData);
 router.route("/getUserBlogs").get(protect, getUserBlogs);
 router.route("/addComment").post(protect, addComment);
 router.route("/deleteBlog").delete(protect, deleteBlog);

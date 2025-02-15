@@ -22,15 +22,6 @@ const blogApi = createApi({
 
   endpoints(builder) {
     return {
-      getAuthor: builder.query({
-        query: (authorId) => {
-          return {
-            url: `/blogs/getAuthor?authorId=${authorId}`,
-            method: "GET",
-          };
-        },
-      }),
-
       postBlog: builder.mutation({
         query: (data) => {
           return {
@@ -148,8 +139,6 @@ export const {
   useBlogDataQuery,
   usePostBlogMutation,
   useDeleteBlogMutation,
-  useGetAuthorQuery,
-  useLazyGetAuthorQuery,
   useLazyBlogDataQuery,
   useAddCommentMutation,
   useRemoveCommentMutation,

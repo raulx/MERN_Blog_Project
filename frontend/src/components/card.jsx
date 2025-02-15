@@ -74,7 +74,7 @@ function Card({ cardData, afterDelete }) {
         <p className="w-full overflow-hidden px-2 sm:text-sm text-lg">
           {cardData.content.substring(0, 150)}...
           <Link
-            to={`/blog/?authorId=${cardData.created_by._id}&blogId=${cardData._id}`}
+            to={`/blog/?blogId=${cardData._id}`}
             className="text-blue-700 font-bold"
           >
             Read More

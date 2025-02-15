@@ -5,6 +5,8 @@ import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
 import { faker } from "@faker-js/faker";
 import { uploadOnCloudinary } from "../services/cloudinary.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const addBlog = asyncHandler(async (req, res) => {
   const { title, content, category } = req.body;
@@ -93,28 +95,46 @@ const getBlogs = asyncHandler(async (req, res) => {
   res.status(200).json({ status: 200, data });
 });
 
-const getAuthorData = asyncHandler(async (req, res) => {
-  const { authorId } = req.query;
-  const author = await User.findById(authorId).select("-password");
-  if (author) {
-    res.json({ status: res.statusCode, data: author });
-  } else {
-    res.status(404);
-    throw new Error("data not found");
-  }
-});
-
 const getBlogData = asyncHandler(async (req, res) => {
   const { blogId } = req.query;
-  const blog = await Blog.findById(blogId);
-  if (blog) {
-    blog.views += 1;
-    blog.save();
-    res.json({ status: res.statusCode, data: blog });
-  } else {
-    res.status(404);
-    throw new Error("data not found");
+
+  // first view incremented if blog found.
+  const blog = await Blog.findByIdAndUpdate(
+    blogId,
+    { $inc: { views: 1 } }, // Increment the views by 1
+    { new: true, runValidators: true }
+  );
+
+  if (!blog) {
+    throw new ApiError(404, "Blog not found");
   }
+
+  //  blog sent with author data.
+  const blogWithAuthor = await Blog.aggregate([
+    {
+      $match: {
+        _id: mongoose.Types.ObjectId.createFromHexString(blogId),
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users",
+        foreignField: "_id",
+        localField: "created_by",
+        as: "created_by",
+        pipeline: [{ $project: { name: 1, profile_pic: 1, _id: 1 } }],
+      },
+    },
+
+    {
+      $addFields: {
+        created_by: { $first: "$created_by" },
+      },
+    },
+  ]);
+
+  res.json(new ApiResponse(200, blogWithAuthor));
 });
 
 const getUserBlogs = asyncHandler(async (req, res) => {
@@ -229,7 +249,6 @@ export {
   addBlog,
   getBlogs,
   getBlogData,
-  getAuthorData,
   getUserBlogs,
   deleteBlog,
   addComment,

@@ -1,9 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import {
-  useAddCommentMutation,
-  useGetAuthorQuery,
-  useLazyBlogDataQuery,
-} from "../../store";
+import { useAddCommentMutation, useLazyBlogDataQuery } from "../../store";
 import { FaEye } from "react-icons/fa";
 import Comment from "../../components/blogComment";
 import { FaSpinner } from "react-icons/fa";
@@ -14,8 +10,6 @@ function ViewBlog() {
   const [searchParams] = useSearchParams();
   const [comment, setComment] = useState("");
   const blogId = searchParams.get("blogId");
-  const authorId = searchParams.get("authorId");
-  const { data: authorData } = useGetAuthorQuery(authorId);
   const [blogData, setBlogData] = useState({ isLoading: true, data: null });
   const [fetchBlogData] = useLazyBlogDataQuery();
 
@@ -80,7 +74,7 @@ function ViewBlog() {
 
   return (
     <>
-      {blogData.data && authorData ? (
+      {blogData.data ? (
         <div className="sm:w-2/3  w-full mx-auto bg-slate-100 p-4">
           <div className="w-full bg-black">
             <div className="sm:w-fit  sm:mx-auto">

@@ -1,3 +1,5 @@
+import { ApiResponse } from "../utils/ApiResponse.js";
+
 const notFound = (req, res, next) => {
   const error = new Error(`Not found ${req.originalUrl}`);
   res.status(404);
@@ -13,10 +15,7 @@ const errorHandler = (err, req, res, next) => {
     message = "Resource not Found";
   }
 
-  res.status(statusCode).json({
-    message: message,
-    status: statusCode,
-  });
+  res.status(statusCode).json(new ApiResponse(statusCode, {}, message));
 };
 
 export { notFound, errorHandler };
