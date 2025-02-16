@@ -23,20 +23,10 @@ const blogSchema = new Schema(
       ],
     },
     image: { public_id: String, remote_url: String },
-    comments: [
-      {
-        creator_id: String,
-        profile_pic: String,
-        comment: String,
-        creator_name: String,
-        replies: [
-          { reply: String, replied_at: { type: Date, default: Date.now } },
-        ],
-        created_at: { type: Date, default: Date.now },
-      },
-    ],
+
     created_by: { type: Schema.Types.ObjectId, ref: "User" },
   },
+
   { timestamps: true }
 );
 blogSchema.index({ created_by: 1 });

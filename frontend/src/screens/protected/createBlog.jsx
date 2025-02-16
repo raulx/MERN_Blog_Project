@@ -4,6 +4,7 @@ import { FaChevronDown, FaChevronRight, FaSpinner } from "react-icons/fa";
 import { blogCategories } from "../../utils/variables";
 import { usePostBlogMutation } from "../../store";
 import toast from "react-hot-toast";
+import { compressImage } from "../../utils/functions";
 
 function CreateBlog() {
   const [image, setImage] = useState({
@@ -38,7 +39,17 @@ function CreateBlog() {
     formData.append("title", blogData.title);
     formData.append("content", blogData.content);
     formData.append("category", blogData.category);
-    formData.append("photo", image.file);
+
+    // compress image
+
+    const compressedImage = await compressImage(image.file);
+
+    if (!compressedImage)
+      return toast.error("image error, select different image");
+
+    // compressed image added to form
+
+    formData.append("photo", compressedImage);
 
     try {
       const res = await postBlog(formData);
@@ -88,9 +99,9 @@ function CreateBlog() {
   return (
     <>
       <div className="flex flex-col gap-12 py-4 sm:w-11/12 w-screen mx-auto">
-        <div className="sm:w-1/2 h-72 w-full mx-auto">
+        <div className="sm:w-1/2 h-72 w-full mx-auto bg-black rounded-lg">
           <img
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain"
             src={
               image.localUrl
                 ? image.localUrl

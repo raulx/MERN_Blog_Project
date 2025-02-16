@@ -1,3 +1,22 @@
+import * as imageConversion from "image-conversion";
+
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    let compressedImage;
+
+    const compressWithQuality = async () => {
+      try {
+        compressedImage = await imageConversion.compressAccurately(file, 25);
+        resolve(compressedImage);
+      } catch (error) {
+        reject(error);
+      }
+    };
+
+    compressWithQuality();
+  });
+}
+
 const filterDate = (date) => {
   const newDate = new Date(date).getTime();
   const currentTime = new Date().getTime();
@@ -23,4 +42,4 @@ const filterDate = (date) => {
   return filteredDate;
 };
 
-export { filterDate };
+export { filterDate, compressImage };

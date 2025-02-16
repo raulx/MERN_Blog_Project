@@ -1,22 +1,23 @@
 import { useSearchParams } from "react-router-dom";
-import { useAddCommentMutation, useLazyBlogDataQuery } from "../../store";
+// import { useAddCommentMutation } from "../../store";
+import { useLazyBlogDataQuery } from "../../store";
 import { FaEye } from "react-icons/fa";
-import Comment from "../../components/blogComment";
+// import Comment from "../../components/blogComment";
 import { FaSpinner } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 function ViewBlog() {
   const [searchParams] = useSearchParams();
-  const [comment, setComment] = useState("");
+  // const [comment, setComment] = useState("");
   const blogId = searchParams.get("blogId");
   const [blogData, setBlogData] = useState({ isLoading: true, data: null });
   const [fetchBlogData] = useLazyBlogDataQuery();
 
-  const { userData } = useSelector((state) => {
-    return state.user;
-  });
-  const [addComment, addingComment] = useAddCommentMutation();
+  // const { userData } = useSelector((state) => {
+  //   return state.user;
+  // });
+  // const [addComment, addingComment] = useAddCommentMutation();
 
   useEffect(() => {
     const getBlogData = async () => {
@@ -34,52 +35,52 @@ function ViewBlog() {
     getBlogData();
   }, [blogId, fetchBlogData]);
 
-  const handleAddComment = async (e) => {
-    e.preventDefault();
+  // const handleAddComment = async (e) => {
+  //   e.preventDefault();
 
-    const data = {
-      blogId,
-      userId: userData._id,
-      comment,
-    };
+  //   const data = {
+  //     blogId,
+  //     userId: userData._id,
+  //     comment,
+  //   };
 
-    try {
-      const newComment = await addComment(data);
+  //   try {
+  //     const newComment = await addComment(data);
 
-      if (newComment.data) {
-        setBlogData((prevValue) => {
-          return {
-            ...prevValue,
-            data: {
-              ...prevValue.data,
-              comments: newComment.data.blog.comments,
-            },
-          };
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    setComment("");
-  };
+  //     if (newComment.data) {
+  //       setBlogData((prevValue) => {
+  //         return {
+  //           ...prevValue,
+  //           data: {
+  //             ...prevValue.data,
+  //             comments: newComment.data.blog.comments,
+  //           },
+  //         };
+  //       });
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   setComment("");
+  // };
 
-  const updateBlogComments = (newData) => {
-    setBlogData((prevValue) => {
-      return {
-        ...prevValue,
-        data: { ...prevValue.data, comments: newData },
-      };
-    });
-  };
+  // const updateBlogComments = (newData) => {
+  //   setBlogData((prevValue) => {
+  //     return {
+  //       ...prevValue,
+  //       data: { ...prevValue.data, comments: newData },
+  //     };
+  //   });
+  // };
 
   return (
     <>
       {blogData.data ? (
         <div className="sm:w-2/3  w-full mx-auto bg-slate-100 p-4">
           <div className="w-full bg-black">
-            <div className="sm:w-fit  sm:mx-auto">
+            <div className="sm:w-2/3 h-96 sm:mx-auto">
               <img
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-full object-contain rounded-lg"
                 src={blogData.data.image.remote_url}
               />
             </div>
@@ -104,7 +105,7 @@ function ViewBlog() {
 
           <div className="text-lg my-10">{blogData.data.content}</div>
 
-          <div>
+          {/* <div>
             <p className="text-2xl capitalize font-bold border-b-2 mb-16">
               {blogData.data.comments.length} Comments
             </p>
@@ -152,7 +153,7 @@ function ViewBlog() {
                 </button>
               </div>
             </form>
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="w-full h-[36rem] flex justify-center items-center">

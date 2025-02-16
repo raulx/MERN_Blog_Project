@@ -13,10 +13,9 @@ const addBlog = asyncHandler(async (req, res) => {
   const photo = req.file?.path;
   const user = req.user;
 
-  if (!title || !content || !category) {
-    return res.json({ status: 401, message: "all fields are required !" });
+  if (!title || !content || !category || !photo) {
+    throw new ApiError(401, "All fields are required !");
   }
-  if (!photo) return res.json({ status: 401, message: "photo is required" });
 
   const blogPhoto = await uploadOnCloudinary(photo);
 
@@ -34,7 +33,10 @@ const addBlog = asyncHandler(async (req, res) => {
   };
 
   const newBlogCreated = await Blog.create(newBlog);
-  return res.json({ newBlogCreated });
+
+  return res.json(
+    new ApiResponse(200, newBlogCreated, "Blog posted Successfully.")
+  );
 });
 
 const getBlogs = asyncHandler(async (req, res) => {
