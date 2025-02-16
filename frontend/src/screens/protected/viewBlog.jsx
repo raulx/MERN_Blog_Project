@@ -96,7 +96,9 @@ function ViewBlog() {
             </div>
 
             <div className="flex gap-4 items-center mt-4">
-              <p className="font-bold text-lg">{authorData.data.name}</p>
+              <p className="font-bold text-lg">
+                {blogData.data.created_by.name}
+              </p>
             </div>
           </div>
 
@@ -116,7 +118,7 @@ function ViewBlog() {
                     commentData={comment}
                     userData={userData}
                     blogData={blogData}
-                    authorData={authorData}
+                    authorData={blogData.data.created_by}
                     updateBlogComments={updateBlogComments}
                     blogId={blogId}
                   />

@@ -134,7 +134,7 @@ const getBlogData = asyncHandler(async (req, res) => {
     },
   ]);
 
-  res.json(new ApiResponse(200, blogWithAuthor));
+  res.json(new ApiResponse(200, blogWithAuthor[0]));
 });
 
 const getUserBlogs = asyncHandler(async (req, res) => {
