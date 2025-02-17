@@ -16,8 +16,8 @@ const errorHandler = (err, req, res, next) => {
     message = "Resource not Found";
   }
   if (err.name === "ValidationError") {
-    statusCode = 400;
-    message = "Schema Validation failed";
+    statusCode = 409;
+    message = "Validation failed";
   }
 
   res.status(statusCode).json(new ApiResponse(statusCode, {}, message));
