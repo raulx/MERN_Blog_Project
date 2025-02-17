@@ -2,9 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
-import userRouter from "./routes/userRoute.js";
-import blogRouter from "./routes/blogRoutes.js";
-import authRouter from "./routes/authRoutes.js";
+
 import { v2 as cloudinary } from "cloudinary";
 
 import path from "path";
@@ -28,8 +26,17 @@ const PORT = process.env.PORT || 4000;
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// routes imports
+import commentRouter from "./routes/commentRoutes.js";
+import userRouter from "./routes/userRoute.js";
+import blogRouter from "./routes/blogRoutes.js";
+import authRouter from "./routes/authRoutes.js";
+
+// routes declaration
 app.use("/api/user", userRouter);
 app.use("/api/blogs", blogRouter);
+app.use("/api/comment", commentRouter);
 app.use("/api/auth", authRouter);
 
 if (process.env.NODE_ENV === "production") {

@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const getUser = asyncHandler(async (req, res) => {
   const userId = req.token.userId;
@@ -26,5 +27,5 @@ export const addFakerUser = asyncHandler(async (req, res) => {
   const newUser = { email, password, profile_pic, name };
 
   const user = await User.create(newUser);
-  res.status(200).json({ message: "data added successfully", data: user });
+  res.json(new ApiResponse(200, user, "data added successfully"));
 });

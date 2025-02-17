@@ -1,6 +1,5 @@
 import Blog from "../models/blogModel.js";
 import asyncHandler from "express-async-handler";
-import User from "../models/userModel.js";
 import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
 import { faker } from "@faker-js/faker";
@@ -18,9 +17,6 @@ const addBlog = asyncHandler(async (req, res) => {
   }
 
   const blogPhoto = await uploadOnCloudinary(photo);
-
-  if (!blogPhoto)
-    return res.json({ status: 500, message: "Error uploading photo" });
 
   const newBlog = {
     title,
@@ -94,7 +90,7 @@ const getBlogs = asyncHandler(async (req, res) => {
     ]);
   }
 
-  res.status(200).json({ status: 200, data });
+  res.json(new ApiResponse(200, data, "blogs fetched successfully"));
 });
 
 const getBlogData = asyncHandler(async (req, res) => {
@@ -170,7 +166,7 @@ const getUserBlogs = asyncHandler(async (req, res) => {
     { $limit: 10 },
   ]);
 
-  res.json({ status: req.status, data: userBlogs });
+  res.json(new ApiResponse(200, userBlogs, "Userblogs fetched successfully !"));
 });
 
 const deleteBlog = asyncHandler(async (req, res) => {
@@ -181,87 +177,13 @@ const deleteBlog = asyncHandler(async (req, res) => {
 
   await Blog.findByIdAndDelete(blogId);
 
-  res.json({ status: res.statusCode, message: "deleted blog successfully." });
+  res.json(new ApiResponse(200, {}, "Blog deleted successfully"));
 });
 
-const addComment = asyncHandler(async (req, res) => {
-  const { blogId, comment, userId } = req.body;
-  const blog = await Blog.findById(blogId);
-  const user = await User.findById(userId);
-  if (blog && user) {
-    let newComment = {
-      creator_id: userId,
-      profile_pic: user.profile_pic,
-      creator_name: user.name,
-      comment: comment,
-    };
-    await blog.comments.push(newComment);
-    blog.save();
-    res.status(200).json({ blog, status: 200 });
-  }
-});
+export { addBlog, getBlogs, getBlogData, getUserBlogs, deleteBlog };
 
-const removeComment = asyncHandler(async (req, res) => {
-  const { blogId, commentId } = req.body;
-  const updated = await Blog.findOneAndUpdate(
-    { _id: blogId },
-    { $pull: { comments: { _id: commentId } } },
-    { new: true }
-  );
-  res.json({ updated });
-});
-
-const editComment = asyncHandler(async (req, res) => {
-  const { commentId, newComment } = req.body;
-  const updatedComment = await Blog.findOneAndUpdate(
-    { "comments._id": commentId },
-    { $set: { "comments.$.comment": newComment } },
-    { new: true }
-  );
-  res.json({ data: updatedComment });
-});
-
-const authorReply = asyncHandler(async (req, res) => {
-  const { reply, commentId } = req.body;
-  const newReply = { reply };
-  const newblog = await Blog.findOneAndUpdate(
-    { "comments._id": commentId },
-    { $push: { "comments.$.replies": newReply } },
-    { new: true }
-  );
-
-  res.json({ newblog });
-});
-
-const replyDelete = asyncHandler(async (req, res) => {
-  const { commentId } = req.body;
-  const updatedBlog = await Blog.findOneAndUpdate(
-    { "comments._id": commentId },
-    {
-      $set: {
-        "comments.$.replies": [],
-      },
-    },
-    { new: true }
-  );
-  res.json({ updatedBlog });
-});
-
-export {
-  addBlog,
-  getBlogs,
-  getBlogData,
-  getUserBlogs,
-  deleteBlog,
-  addComment,
-  removeComment,
-  editComment,
-  authorReply,
-  replyDelete,
-};
-
-// fake data generation controllers must be commented in production
-
+// FOR DEV ONLY
+// FAKE DATA GENERATION CONTROLLERS MUST BE COMMENTED IN PRODUCTION
 export const addFakeBlogs = asyncHandler(async (req, res) => {
   const amount = Number(req.body.amount);
 
@@ -299,5 +221,7 @@ export const addFakeBlogs = asyncHandler(async (req, res) => {
     if (createdBlog) totalCreated += 1;
   }
 
-  res.json({ status: 200, totalCreated });
+  res.json(
+    new ApiResponse(200, totalCreated, "fake blogs created successfully")
+  );
 });
