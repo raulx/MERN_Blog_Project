@@ -107,32 +107,242 @@ const getBlogData = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Blog not found");
   }
 
-  //  blog sent with author data.
-  const blogWithAuthor = await Blog.aggregate([
+  //  blog sent with creator and comment data.
+  // const blogData = await Blog.aggregate([
+  //   {
+  //     $match: {
+  //       _id: mongoose.Types.ObjectId.createFromHexString(blogId),
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "users",
+  //       localField: "created_by",
+  //       foreignField: "_id",
+  //       as: "created_by",
+  //       pipeline: [
+  //         {
+  //           $project: {
+  //             name: 1,
+  //             email: 1,
+  //             profile_pic: 1,
+  //           },
+  //         },
+  //       ],
+  //     },
+  //   },
+  //   {
+  //     $addFields: {
+  //       created_by: {
+  //         $first: "$created_by",
+  //       },
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "comments",
+  //       localField: "_id",
+  //       foreignField: "blogId",
+  //       as: "comments",
+  //       pipeline: [
+  //         {
+  //           $match: {
+  //             parentId: null,
+  //           },
+  //         },
+  //         {
+  //           $lookup: {
+  //             from: "comments",
+  //             localField: "_id",
+  //             foreignField: "parentId",
+  //             as: "replies",
+  //           },
+  //         },
+  //         {
+  //           $project: {
+  //             blogId: 1,
+  //             userId: 1,
+  //             commentText: 1,
+  //             createdAt: 1,
+  //             updatedAt: 1,
+  //             parentId: 1,
+  //             replies: {
+  //               $sortArray: {
+  //                 input: "$replies",
+  //                 sortBy: { createdAt: -1 },
+  //               },
+  //             },
+  //           },
+  //         },
+  //       ],
+  //     },
+  //   },
+  //   {
+  //     $project: {
+  //       title: 1,
+  //       content: 1,
+  //       created_by: 1,
+  //       views: 1,
+  //       likes: 1,
+  //       createdAt: 1,
+  //       updatedAt: 1,
+  //       category: 1,
+  //       image: 1,
+  //       comments: {
+  //         $sortArray: {
+  //           input: "$comments",
+  //           sortBy: { createdAt: -1 },
+  //         },
+  //       },
+  //     },
+  //   },
+  // ]);
+
+  const blogData = await Blog.aggregate([
     {
       $match: {
         _id: mongoose.Types.ObjectId.createFromHexString(blogId),
       },
     },
-
     {
       $lookup: {
         from: "users",
-        foreignField: "_id",
         localField: "created_by",
+        foreignField: "_id",
         as: "created_by",
-        pipeline: [{ $project: { name: 1, profile_pic: 1, _id: 1 } }],
+        pipeline: [
+          {
+            $project: {
+              name: 1,
+              email: 1,
+              profile_pic: 1,
+            },
+          },
+        ],
       },
     },
-
     {
       $addFields: {
-        created_by: { $first: "$created_by" },
+        created_by: {
+          $first: "$created_by",
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "blogId",
+        as: "comments",
+        pipeline: [
+          {
+            $match: {
+              parentId: null,
+            },
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "userId",
+              foreignField: "_id",
+              as: "postedBy",
+              pipeline: [
+                {
+                  $project: {
+                    name: 1,
+                    profile_pic: 1,
+                    email: 1,
+                  },
+                },
+              ],
+            },
+          },
+          {
+            $addFields: {
+              postedBy: { $first: "$postedBy" },
+            },
+          },
+          {
+            $lookup: {
+              from: "comments",
+              localField: "_id",
+              foreignField: "parentId",
+              as: "replies",
+              pipeline: [
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "replyPostedBy",
+                    pipeline: [
+                      {
+                        $project: {
+                          email: 1,
+                          profile_pic: 1,
+                          name: 1,
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  $addFields: {
+                    replyPostedBy: {
+                      $first: "$replyPostedBy",
+                    },
+                  },
+                },
+                {
+                  $project: {
+                    userId: 0,
+                    __v: 0,
+                  },
+                },
+              ],
+            },
+          },
+          {
+            $project: {
+              blogId: 1,
+              postedBy: 1,
+              commentText: 1,
+              createdAt: 1,
+              updatedAt: 1,
+              parentId: 1,
+              replies: {
+                $sortArray: {
+                  input: "$replies",
+                  sortBy: { createdAt: -1 },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        title: 1,
+        content: 1,
+        created_by: 1,
+        views: 1,
+        likes: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        category: 1,
+        image: 1,
+        comments: {
+          $sortArray: {
+            input: "$comments",
+            sortBy: { createdAt: -1 },
+          },
+        },
       },
     },
   ]);
 
-  res.json(new ApiResponse(200, blogWithAuthor[0]));
+  res.json(new ApiResponse(200, blogData[0]));
 });
 
 const getUserBlogs = asyncHandler(async (req, res) => {

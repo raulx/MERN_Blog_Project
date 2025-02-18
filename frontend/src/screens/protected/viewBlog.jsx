@@ -5,6 +5,7 @@ import { FaEye } from "react-icons/fa";
 // import Comment from "../../components/blogComment";
 import { FaSpinner } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { Footer } from "../../components/footer";
 // import { useSelector } from "react-redux";
 
 function ViewBlog() {
@@ -23,6 +24,8 @@ function ViewBlog() {
     const getBlogData = async () => {
       try {
         const res = await fetchBlogData(blogId);
+        console.log(res);
+        console.log(res.data.data.comments[0].postedBy);
         if (res.status === "fulfilled") {
           setBlogData((prevValue) => {
             return { ...prevValue, isLoading: false, data: res.data.data };
@@ -76,36 +79,37 @@ function ViewBlog() {
   return (
     <>
       {blogData.data ? (
-        <div className="sm:w-2/3  w-full mx-auto bg-slate-100 p-4">
-          <div className="w-full bg-black">
-            <div className="sm:w-2/3 h-96 sm:mx-auto">
-              <img
-                className="w-full h-full object-contain rounded-lg"
-                src={blogData.data.image.remote_url}
-              />
-            </div>
-          </div>
-
-          <div>
-            <h1 className="text-5xl uppercase font-extrabold mt-10">
-              {blogData.data.title}
-            </h1>
-
-            <div className="flex gap-4 items-center">
-              <FaEye />
-              {blogData.data.views}
+        <>
+          <div className="sm:w-2/3 my-8  w-full mx-auto bg-slate-100 p-4">
+            <div className="w-full bg-black">
+              <div className="sm:w-2/3 h-96 sm:mx-auto">
+                <img
+                  className="w-full h-full object-contain rounded-lg"
+                  src={blogData.data.image.remote_url}
+                />
+              </div>
             </div>
 
-            <div className="flex gap-4 items-center mt-4">
-              <p className="font-bold text-lg">
-                {blogData.data.created_by.name}
-              </p>
+            <div>
+              <h1 className="text-5xl uppercase font-extrabold mt-10">
+                {blogData.data.title}
+              </h1>
+
+              <div className="flex gap-4 items-center">
+                <FaEye />
+                {blogData.data.views}
+              </div>
+
+              <div className="flex gap-4 items-center mt-4">
+                <p className="font-bold text-lg">
+                  {blogData.data.created_by.name}
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div className="text-lg my-10">{blogData.data.content}</div>
+            <div className="text-lg my-10">{blogData.data.content}</div>
 
-          {/* <div>
+            {/* <div>
             <p className="text-2xl capitalize font-bold border-b-2 mb-16">
               {blogData.data.comments.length} Comments
             </p>
@@ -154,7 +158,42 @@ function ViewBlog() {
               </div>
             </form>
           </div> */}
-        </div>
+
+            <div>{blogData.data.comments.length} Comments</div>
+
+            <hr className="h-[2px] bg-gray-300" />
+
+            <div className="my-8 flex flex-col gap-8">
+              {blogData.data.comments.map((c) => {
+                return (
+                  <div
+                    key={c._id}
+                    className="flex gap-2 justify-center items-center"
+                  >
+                    <div className="h-12 w-12 rounded-full">
+                      <img
+                        className="w-full h-full rounded-full"
+                        src={c.postedBy.profile_pic}
+                      />
+                    </div>
+                    <div className="grow">{c.commentText}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex justify-center items-center gap-4">
+              <input
+                placeholder="Enter your comment"
+                className="grow p-4 rounded-lg"
+              />
+              <button className="p-4 bg-blue-600 text-white rounded-lg">
+                Add Comment
+              </button>
+            </div>
+          </div>
+          <Footer />
+        </>
       ) : (
         <div className="w-full h-[36rem] flex justify-center items-center">
           <FaSpinner className="animate-spin text-5xl" />

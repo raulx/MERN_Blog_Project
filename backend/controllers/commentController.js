@@ -51,19 +51,17 @@ const deleteComment = asyncHandler(async (req, res) => {
     },
   ]);
 
-  if (!commentToBeDeleted) throw new ApiError(404, "Comment not found");
+  if (!commentToBeDeleted[0]) throw new ApiError(404, "Comment not found");
 
   // delete the comment if comment is posted by the user or blog for which the comment was made was also created by the user.
   if (
     user._id.toString() === commentToBeDeleted[0].userId.toString() ||
     user._id.toString() === commentToBeDeleted[0].blog.created_by.toString()
   ) {
+    const commentDeleted = await Comment.findByIdAndDelete(id);
+
     res.json(
-      new ApiResponse(
-        200,
-        commentToBeDeleted[0],
-        "comment deleted successfully !"
-      )
+      new ApiResponse(200, commentDeleted, "comment deleted successfully !")
     );
   } else {
     throw new ApiError(401, "unauthorized");

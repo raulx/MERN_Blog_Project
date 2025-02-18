@@ -5,6 +5,7 @@ import { blogCategories } from "../../utils/variables";
 import { usePostBlogMutation } from "../../store";
 import toast from "react-hot-toast";
 import { compressImage } from "../../utils/functions";
+import { Footer } from "../../components/footer";
 
 function CreateBlog() {
   const [image, setImage] = useState({
@@ -199,9 +200,8 @@ function CreateBlog() {
           </div>
         </form>
       </div>
-      <footer className="flex justify-center items-center h-48 bg-black text-white">
-        Footer
-      </footer>
+
+      <Footer />
     </>
   );
 }
