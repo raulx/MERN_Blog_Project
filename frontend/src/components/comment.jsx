@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, onDelete }) => {
   const [showReply, setShowReply] = useState(false);
   return (
     <div className="border-2 flex flex-col gap-4 border-gray-300 rounded-lg py-4">
@@ -14,9 +14,14 @@ const Comment = ({ comment }) => {
         </div>
         <div className="grow">{comment.commentText}</div>
       </div>
-      <button className="w-48" onClick={() => setShowReply(!showReply)}>
-        {comment.replies.length} show replies
-      </button>
+      <div className="flex items-center justify-between">
+        <button className="w-48" onClick={() => setShowReply(!showReply)}>
+          {comment.replies.length} show replies
+        </button>
+        <button onClick={onDelete} className="w-48">
+          Delete
+        </button>
+      </div>
       {showReply && (
         <div className="flex flex-col gap-4 w-11/12 mx-auto ">
           {comment.replies.map((reply) => {

@@ -101,6 +101,20 @@ function ViewBlog() {
     setComment("");
   };
 
+  const handleDeleteComment = async (id) => {
+    console.log(id);
+
+    setBlogData((prevValue) => {
+      return {
+        ...prevValue,
+        data: {
+          ...prevValue.data,
+          comments: prevValue.data.comments.filter((c) => c._id != id),
+        },
+      };
+    });
+  };
+
   return (
     <>
       {isLoading || isFetching ? (
@@ -144,7 +158,13 @@ function ViewBlog() {
 
             <div className="my-8 flex flex-col gap-8">
               {blogData.data.comments.map((c) => {
-                return <Comment key={c._id} comment={c} />;
+                return (
+                  <Comment
+                    key={c._id}
+                    comment={c}
+                    onDelete={() => handleDeleteComment(c._id)}
+                  />
+                );
               })}
             </div>
 
