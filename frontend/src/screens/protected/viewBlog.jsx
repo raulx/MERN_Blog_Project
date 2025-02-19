@@ -1,15 +1,21 @@
 import { useSearchParams } from "react-router-dom";
-import { useAddCommentMutation, useLazyBlogDataQuery } from "../../store";
+import {
+  useAddCommentMutation,
+  useDeleteCommentMutation,
+  useLazyBlogDataQuery,
+} from "../../store";
 import { FaEye } from "react-icons/fa";
 import { FaSpinner } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Footer } from "../../components/footer";
 import Comment from "../../components/comment";
+import UseUserData from "../../hooks/useUserData";
 
 function ViewBlog() {
   const [searchParams] = useSearchParams();
 
   const blogId = searchParams.get("blogId");
+  const { userData } = UseUserData();
 
   const [blogData, setBlogData] = useState({
     data: {
@@ -58,6 +64,9 @@ function ViewBlog() {
   const [fetchBlogData, { isLoading, isFetching }] = useLazyBlogDataQuery();
 
   const [addComment, { isLoading: isAddingComment }] = useAddCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
+
+  const isBlogByUser = blogData.data.created_by._id === userData._id; // blog viewed is created by the user logged in
 
   useEffect(() => {
     const getBlogData = async () => {
@@ -75,7 +84,8 @@ function ViewBlog() {
     getBlogData();
   }, [blogId, fetchBlogData]);
 
-  const handlePostComment = async () => {
+  const handlePostComment = async (e) => {
+    e.preventDefault();
     const newComment = { blogId, commentText: comment };
 
     try {
@@ -91,8 +101,6 @@ function ViewBlog() {
             },
           };
         });
-
-      // console.log(res.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -102,17 +110,50 @@ function ViewBlog() {
   };
 
   const handleDeleteComment = async (id) => {
-    console.log(id);
+    try {
+      const res = await deleteComment(id);
 
-    setBlogData((prevValue) => {
-      return {
-        ...prevValue,
-        data: {
-          ...prevValue.data,
-          comments: prevValue.data.comments.filter((c) => c._id != id),
-        },
-      };
-    });
+      if (res.data) {
+        setBlogData((prevValue) => {
+          return {
+            ...prevValue,
+            data: {
+              ...prevValue.data,
+              comments: prevValue.data.comments.filter((c) => c._id != id),
+            },
+          };
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleReplyAdd = async (e, commentId, replyText, setReplyText) => {
+    e.preventDefault();
+    const replyData = { blogId, commentText: replyText, parentId: commentId };
+
+    try {
+      const res = await addComment(replyData);
+      if (res.data) {
+        setBlogData((prevValue) => {
+          return {
+            ...prevValue,
+            data: {
+              ...prevValue.data,
+              comments: prevValue.data.comments.map((c) =>
+                c._id === commentId
+                  ? { ...c, replies: [...c.replies, res.data.data] }
+                  : c
+              ),
+            },
+          };
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setReplyText(""); // reset replyText
   };
 
   return (
@@ -162,13 +203,18 @@ function ViewBlog() {
                   <Comment
                     key={c._id}
                     comment={c}
+                    isBlogByUser={isBlogByUser}
                     onDelete={() => handleDeleteComment(c._id)}
+                    onReplyAdd={handleReplyAdd}
                   />
                 );
               })}
             </div>
 
-            <div className="flex justify-center items-center gap-4">
+            <form
+              className="flex justify-center items-center gap-4"
+              onSubmit={handlePostComment}
+            >
               <input
                 placeholder="Enter your comment"
                 className="grow p-4 rounded-lg"
@@ -177,7 +223,7 @@ function ViewBlog() {
               />
               <button
                 className="p-4 w-24 bg-blue-600 flex justify-center items-center text-white rounded-lg"
-                onClick={handlePostComment}
+                type="submit"
               >
                 {isAddingComment ? (
                   <FaSpinner className="animate-spin" />
@@ -185,7 +231,7 @@ function ViewBlog() {
                   <>Post</>
                 )}
               </button>
-            </div>
+            </form>
           </div>
           <Footer />
         </>

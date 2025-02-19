@@ -15,33 +15,65 @@ const postComment = asyncHandler(async (req, res) => {
 
   const newComment = await Comment.create(commentData);
 
-  const comment = await Comment.aggregate([
-    {
-      $match: {
-        _id: newComment._id,
+  let comment;
+
+  // if parentId present in request then that comment is a reply so send replyComment data back to frontend
+  if (parentId) {
+    comment = await Comment.aggregate([
+      {
+        $match: {
+          _id: newComment._id,
+        },
       },
-    },
-    {
-      $lookup: {
-        from: "users",
-        localField: "userId",
-        foreignField: "_id",
-        as: "postedBy",
-        pipeline: [{ $project: { name: 1, email: 1, profile_pic: 1 } }],
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "replyPostedBy",
+          pipeline: [{ $project: { name: 1, email: 1, profile_pic: 1 } }],
+        },
       },
-    },
-    {
-      $addFields: {
-        postedBy: { $first: "$postedBy" },
-        replies: [],
+      {
+        $addFields: {
+          replyPostedBy: { $first: "$replyPostedBy" },
+        },
       },
-    },
-    {
-      $project: {
-        userId: 0,
+      {
+        $project: {
+          userId: 0,
+        },
       },
-    },
-  ]);
+    ]);
+  } else {
+    comment = await Comment.aggregate([
+      {
+        $match: {
+          _id: newComment._id,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "postedBy",
+          pipeline: [{ $project: { name: 1, email: 1, profile_pic: 1 } }],
+        },
+      },
+      {
+        $addFields: {
+          postedBy: { $first: "$postedBy" },
+          replies: [],
+        },
+      },
+      {
+        $project: {
+          userId: 0,
+        },
+      },
+    ]);
+  }
 
   res.json(new ApiResponse(200, comment[0], "comment posted successfully"));
 });
