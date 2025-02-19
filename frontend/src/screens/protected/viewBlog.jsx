@@ -156,6 +156,32 @@ function ViewBlog() {
     setReplyText(""); // reset replyText
   };
 
+  const handleReplyDelete = async (replyId, commentId) => {
+    try {
+      const res = await deleteComment(replyId);
+      if (res.data) {
+        setBlogData((prevValue) => {
+          return {
+            ...prevValue,
+            data: {
+              ...prevValue.data,
+              comments: prevValue.data.comments.map((c) =>
+                c._id === commentId
+                  ? {
+                      ...c,
+                      replies: c.replies.filter((r) => r._id != replyId),
+                    }
+                  : c
+              ),
+            },
+          };
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       {isLoading || isFetching ? (
@@ -206,6 +232,7 @@ function ViewBlog() {
                     isBlogByUser={isBlogByUser}
                     onDelete={() => handleDeleteComment(c._id)}
                     onReplyAdd={handleReplyAdd}
+                    onReplyDelete={handleReplyDelete}
                   />
                 );
               })}

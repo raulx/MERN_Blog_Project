@@ -2,7 +2,13 @@
 import { useState } from "react";
 import UseUserData from "../hooks/useUserData";
 
-const Comment = ({ comment, onDelete, isBlogByUser, onReplyAdd }) => {
+const Comment = ({
+  comment,
+  onDelete,
+  isBlogByUser,
+  onReplyAdd,
+  onReplyDelete,
+}) => {
   const { userData } = UseUserData();
   const [replyText, setReplyText] = useState("");
   const [showReply, setShowReply] = useState(false);
@@ -36,7 +42,7 @@ const Comment = ({ comment, onDelete, isBlogByUser, onReplyAdd }) => {
             return (
               <div
                 key={reply._id}
-                className="py-4 border-gray-300 rounded-lg border-2"
+                className="py-4 border-gray-300 rounded-lg border-2 flex flex-col gap-2"
               >
                 <div className="flex gap-2 justify-center items-center">
                   <div className="h-12 w-12 rounded-full">
@@ -47,6 +53,15 @@ const Comment = ({ comment, onDelete, isBlogByUser, onReplyAdd }) => {
                   </div>
                   <div className="grow">{reply.commentText}</div>
                 </div>
+
+                {reply.replyPostedBy._id === userData._id || isBlogByUser ? (
+                  <button
+                    className="w-48 self-end"
+                    onClick={() => onReplyDelete(reply._id, comment._id)}
+                  >
+                    Delete
+                  </button>
+                ) : null}
               </div>
             );
           })}
@@ -58,7 +73,7 @@ const Comment = ({ comment, onDelete, isBlogByUser, onReplyAdd }) => {
             }
           >
             <input
-              placeholder="Enter your comment"
+              placeholder="Enter your Reply"
               className="grow p-2 rounded-lg"
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
