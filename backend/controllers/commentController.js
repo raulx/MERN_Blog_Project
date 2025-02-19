@@ -15,7 +15,35 @@ const postComment = asyncHandler(async (req, res) => {
 
   const newComment = await Comment.create(commentData);
 
-  res.json(new ApiResponse(200, newComment, "comment posted successfully"));
+  const comment = await Comment.aggregate([
+    {
+      $match: {
+        _id: newComment._id,
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "postedBy",
+        pipeline: [{ $project: { name: 1, email: 1, profile_pic: 1 } }],
+      },
+    },
+    {
+      $addFields: {
+        postedBy: { $first: "$postedBy" },
+        replies: [],
+      },
+    },
+    {
+      $project: {
+        userId: 0,
+      },
+    },
+  ]);
+
+  res.json(new ApiResponse(200, comment[0], "comment posted successfully"));
 });
 
 const deleteComment = asyncHandler(async (req, res) => {

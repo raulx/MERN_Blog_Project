@@ -6,12 +6,14 @@ import userSlice from "./slices/userSlice";
 import authSlice from "./slices/authSlice";
 import userApi from "./api/userApi";
 import authApi from "./api/authApi";
+import commentApi from "./api/commentApi";
 
 const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
     [blogApi.reducerPath]: blogApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [commentApi.reducerPath]: commentApi.reducer,
 
     blogs: blogsSlice,
     user: userSlice,
@@ -21,7 +23,8 @@ const store = configureStore({
     return getDefaultMiddleware()
       .concat(authApi.middleware)
       .concat(blogApi.middleware)
-      .concat(userApi.middleware);
+      .concat(userApi.middleware)
+      .concat(commentApi.middleware);
   },
 });
 setupListeners(store.dispatch);
@@ -31,6 +34,7 @@ export * from "./slices/blogsSlice";
 export * from "./api/blogApi";
 export * from "./api/userApi";
 export * from "./api/authApi";
+export * from "./api/commentApi";
 
 export * from "./slices/userSlice";
 export default store;

@@ -69,56 +69,6 @@ const blogApi = createApi({
         },
       }),
 
-      addComment: builder.mutation({
-        query: (data) => {
-          return {
-            url: `/blogs/addComment`,
-            method: "POST",
-            body: { ...data },
-          };
-        },
-      }),
-
-      removeComment: builder.mutation({
-        query: (data) => {
-          return {
-            url: `/blogs/removeComment`,
-            method: "POST",
-            body: { ...data },
-          };
-        },
-      }),
-
-      editComment: builder.mutation({
-        query: (data) => {
-          return {
-            url: `/blogs/editComment`,
-            method: "POST",
-            body: { ...data },
-          };
-        },
-      }),
-
-      authorReply: builder.mutation({
-        query: (data) => {
-          return {
-            url: `/blogs/authorReply`,
-            method: "POST",
-            body: { ...data },
-          };
-        },
-      }),
-
-      replyDelete: builder.mutation({
-        query: (data) => {
-          return {
-            url: `/blogs/replyDelete`,
-            method: "POST",
-            body: { ...data },
-          };
-        },
-      }),
-
       getBlogs: builder.query({
         query: ({ page, pageSize, category }) => {
           return {
@@ -140,11 +90,6 @@ export const {
   usePostBlogMutation,
   useDeleteBlogMutation,
   useLazyBlogDataQuery,
-  useAddCommentMutation,
-  useRemoveCommentMutation,
-  useEditCommentMutation,
-  useAuthorReplyMutation,
-  useReplyDeleteMutation,
 } = blogApi;
 
 export default blogApi;
