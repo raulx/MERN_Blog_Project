@@ -5,7 +5,6 @@ const blogSchema = new Schema(
     title: { type: String, required: true },
     content: { type: String, required: true },
     views: { type: Number, default: 0 },
-    likes: { type: Number, default: 0 },
 
     category: {
       type: String,

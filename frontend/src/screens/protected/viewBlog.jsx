@@ -18,45 +18,43 @@ function ViewBlog() {
   const { userData } = UseUserData();
 
   const [blogData, setBlogData] = useState({
-    data: {
-      _id: "",
-      title: "",
-      content: "",
-      views: 0,
-      likes: 0,
-      category: "",
-      image: { public_id: "", remote_url: "" },
-      created_by: { _id: "", name: "", email: "", profile_pic: "" },
-      createdAt: "",
-      updatedAt: "",
-      comments: [
-        {
-          _id: "",
-          blogId: "",
-          commentText: "",
-          parentId: "",
-          createdAt: "",
-          updatedAt: "",
-          postedBy: { _id: "", name: "", email: "", profile_pic: "" },
-          replies: [
-            {
+    _id: "",
+    title: "",
+    content: "",
+    views: 0,
+    likes: 0,
+    category: "",
+    image: { public_id: "", remote_url: "" },
+    created_by: { _id: "", name: "", email: "", profile_pic: "" },
+    createdAt: "",
+    updatedAt: "",
+    comments: [
+      {
+        _id: "",
+        blogId: "",
+        commentText: "",
+        parentId: "",
+        createdAt: "",
+        updatedAt: "",
+        postedBy: { _id: "", name: "", email: "", profile_pic: "" },
+        replies: [
+          {
+            _id: "",
+            blogId: "",
+            commentText: "",
+            parentId: "",
+            createdAt: "",
+            updatedAt: "",
+            replyPostedBy: {
               _id: "",
-              blogId: "",
-              commentText: "",
-              parentId: "",
-              createdAt: "",
-              updatedAt: "",
-              replyPostedBy: {
-                _id: "",
-                name: "",
-                email: "",
-                profile_pic: "",
-              },
+              name: "",
+              email: "",
+              profile_pic: "",
             },
-          ],
-        },
-      ],
-    },
+          },
+        ],
+      },
+    ],
   });
 
   const [comment, setComment] = useState("");
@@ -66,15 +64,16 @@ function ViewBlog() {
   const [addComment, { isLoading: isAddingComment }] = useAddCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
 
-  const isBlogByUser = blogData.data.created_by._id === userData._id; // blog viewed is created by the user logged in
+  const isBlogByUser = blogData.created_by._id === userData._id; // blog viewed is created by the user logged in
 
   useEffect(() => {
     const getBlogData = async () => {
       try {
         const res = await fetchBlogData(blogId);
         if (res.status === "fulfilled") {
+          // set the initial blog data.
           setBlogData((prevValue) => {
-            return { ...prevValue, isLoading: false, data: res.data.data };
+            return { ...prevValue, ...res.data.data };
           });
         }
       } catch (err) {
@@ -89,18 +88,17 @@ function ViewBlog() {
     const newComment = { blogId, commentText: comment };
 
     try {
-      const res = await addComment(newComment);
+      const res = await addComment(newComment); // add comment in the database
 
-      if (res.data)
+      if (res.data) {
+        // add comment in the local state
         setBlogData((prevValue) => {
           return {
             ...prevValue,
-            data: {
-              ...prevValue.data,
-              comments: [res.data.data, ...prevValue.data.comments],
-            },
+            comments: [res.data.data, ...prevValue.comments],
           };
         });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -111,16 +109,14 @@ function ViewBlog() {
 
   const handleDeleteComment = async (id) => {
     try {
-      const res = await deleteComment(id);
+      const res = await deleteComment(id); // remove comment from database
 
       if (res.data) {
+        // remove comment from local state
         setBlogData((prevValue) => {
           return {
             ...prevValue,
-            data: {
-              ...prevValue.data,
-              comments: prevValue.data.comments.filter((c) => c._id != id),
-            },
+            comments: prevValue.comments.filter((c) => c._id != id),
           };
         });
       }
@@ -131,22 +127,21 @@ function ViewBlog() {
 
   const handleReplyAdd = async (e, commentId, replyText, setReplyText) => {
     e.preventDefault();
+
     const replyData = { blogId, commentText: replyText, parentId: commentId };
 
     try {
-      const res = await addComment(replyData);
+      const res = await addComment(replyData); // add the comment to the replies array in the database
       if (res.data) {
+        // add the comment to the replies array in the local state.
         setBlogData((prevValue) => {
           return {
             ...prevValue,
-            data: {
-              ...prevValue.data,
-              comments: prevValue.data.comments.map((c) =>
-                c._id === commentId
-                  ? { ...c, replies: [...c.replies, res.data.data] }
-                  : c
-              ),
-            },
+            comments: prevValue.comments.map((c) =>
+              c._id === commentId
+                ? { ...c, replies: [...c.replies, res.data.data] }
+                : c
+            ),
           };
         });
       }
@@ -158,22 +153,18 @@ function ViewBlog() {
 
   const handleReplyDelete = async (replyId, commentId) => {
     try {
-      const res = await deleteComment(replyId);
+      const res = await deleteComment(replyId); // delete the comment reply from backend database
+
       if (res.data) {
+        // delete the comment reply from local state
         setBlogData((prevValue) => {
           return {
             ...prevValue,
-            data: {
-              ...prevValue.data,
-              comments: prevValue.data.comments.map((c) =>
-                c._id === commentId
-                  ? {
-                      ...c,
-                      replies: c.replies.filter((r) => r._id != replyId),
-                    }
-                  : c
-              ),
-            },
+            comments: prevValue.comments.map((c) =>
+              c._id === commentId
+                ? { ...c, replies: c.replies.filter((r) => r._id != replyId) }
+                : c
+            ),
           };
         });
       }
@@ -195,36 +186,34 @@ function ViewBlog() {
               <div className="sm:w-2/3 h-96 sm:mx-auto">
                 <img
                   className="w-full h-full object-contain rounded-lg"
-                  src={blogData.data.image.remote_url}
+                  src={blogData.image.remote_url}
                 />
               </div>
             </div>
 
             <div>
               <h1 className="text-5xl uppercase font-extrabold mt-10">
-                {blogData.data.title}
+                {blogData.title}
               </h1>
 
               <div className="flex gap-4 items-center">
                 <FaEye />
-                {blogData.data.views}
+                {blogData.views}
               </div>
 
               <div className="flex gap-4 items-center mt-4">
-                <p className="font-bold text-lg">
-                  {blogData.data.created_by.name}
-                </p>
+                <p className="font-bold text-lg">{blogData.created_by.name}</p>
               </div>
             </div>
 
-            <div className="text-lg my-10">{blogData.data.content}</div>
+            <div className="text-lg my-10">{blogData.content}</div>
 
-            <div>{blogData.data.comments.length} Comments</div>
+            <div>{blogData.comments.length} Comments</div>
 
             <hr className="h-[2px] bg-gray-300" />
 
             <div className="my-8 flex flex-col gap-8">
-              {blogData.data.comments.map((c) => {
+              {blogData.comments.map((c) => {
                 return (
                   <Comment
                     key={c._id}

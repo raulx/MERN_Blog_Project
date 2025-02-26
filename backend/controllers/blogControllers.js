@@ -21,7 +21,6 @@ const addBlog = asyncHandler(async (req, res) => {
   const newBlog = {
     title,
     content,
-    likes: 0,
     views: 0,
     category,
     image: { public_id: blogPhoto.public_id, remote_url: blogPhoto.secure_url },

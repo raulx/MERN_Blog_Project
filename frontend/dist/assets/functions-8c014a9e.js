@@ -1,1 +1,0 @@
-const i=s=>{const a=new Date(s).getTime(),e=((new Date().getTime()-a)/36e5).toFixed();let t;return e<1?t="Just Now":10<e&&e<24?t="yesterday":e>24&&e<720?t=`${(e/24).toFixed()}d ago`:e>720&&e<8640?t=`${(e/24/30).toFixed()}months ago`:e>8640?t=`${(e/24/30/12).toFixed()}years ago`:t=`${e}h ago`,t};export{i as f};

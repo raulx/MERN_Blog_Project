@@ -32,12 +32,14 @@ import commentRouter from "./routes/commentRoutes.js";
 import userRouter from "./routes/userRoute.js";
 import blogRouter from "./routes/blogRoutes.js";
 import authRouter from "./routes/authRoutes.js";
+import likesRouter from "./routes/likesRoutes.js";
 
 // routes declaration
 app.use("/api/user", userRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/likes", likesRouter);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();

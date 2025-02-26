@@ -20,7 +20,7 @@ const commentSchema = new Schema(
   { timestamps: true }
 );
 
-commentSchema.index({ blogId: 1, parentId: 1, createdAt: -1 });
+// commentSchema.index({ blogId: 1, parentId: 1, createdAt: -1 });
 const Comment = mongoose.model("Comment", commentSchema);
 
 export default Comment;
