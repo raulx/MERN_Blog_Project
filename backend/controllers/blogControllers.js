@@ -6,6 +6,7 @@ import { faker } from "@faker-js/faker";
 import { uploadOnCloudinary } from "../services/cloudinary.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import Likes from "../models/likesModel.js";
 
 const addBlog = asyncHandler(async (req, res) => {
   const { title, content, category } = req.body;
@@ -93,7 +94,7 @@ const getBlogs = asyncHandler(async (req, res) => {
 });
 
 const getBlogData = asyncHandler(async (req, res) => {
-  const { blogId } = req.query;
+  const { blogId, userId } = req.query;
 
   // first view incremented if blog found.
   const blog = await Blog.findByIdAndUpdate(
@@ -106,14 +107,24 @@ const getBlogData = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Blog not found");
   }
 
-  //  blog sent with creator and comment data.
+  // check if user liked this blog or not
+  let isLikedByUser = false;
 
+  if (userId) {
+    const likeFound = await Likes.findOne({ userId, blogId });
+    if (likeFound) {
+      isLikedByUser = true;
+    }
+  }
+
+  // aggregate blog  with creator , comment and like data.
   const blogData = await Blog.aggregate([
     {
       $match: {
         _id: mongoose.Types.ObjectId.createFromHexString(blogId),
       },
     },
+
     {
       $lookup: {
         from: "users",
@@ -131,6 +142,7 @@ const getBlogData = asyncHandler(async (req, res) => {
         ],
       },
     },
+
     {
       $addFields: {
         created_by: {
@@ -138,6 +150,24 @@ const getBlogData = asyncHandler(async (req, res) => {
         },
       },
     },
+
+    {
+      $lookup: {
+        from: "likes",
+        localField: "_id",
+        foreignField: "blogId",
+        as: "totalLikes",
+      },
+    },
+
+    {
+      $set: {
+        totalLikes: {
+          $size: "$totalLikes",
+        },
+      },
+    },
+
     {
       $lookup: {
         from: "comments",
@@ -150,6 +180,7 @@ const getBlogData = asyncHandler(async (req, res) => {
               parentId: null,
             },
           },
+
           {
             $lookup: {
               from: "users",
@@ -167,11 +198,13 @@ const getBlogData = asyncHandler(async (req, res) => {
               ],
             },
           },
+
           {
             $addFields: {
               postedBy: { $first: "$postedBy" },
             },
           },
+
           {
             $lookup: {
               from: "comments",
@@ -212,6 +245,7 @@ const getBlogData = asyncHandler(async (req, res) => {
               ],
             },
           },
+
           {
             $project: {
               blogId: 1,
@@ -231,17 +265,9 @@ const getBlogData = asyncHandler(async (req, res) => {
         ],
       },
     },
+
     {
-      $project: {
-        title: 1,
-        content: 1,
-        created_by: 1,
-        views: 1,
-        likes: 1,
-        createdAt: 1,
-        updatedAt: 1,
-        category: 1,
-        image: 1,
+      $set: {
         comments: {
           $sortArray: {
             input: "$comments",
@@ -252,7 +278,21 @@ const getBlogData = asyncHandler(async (req, res) => {
     },
   ]);
 
-  res.json(new ApiResponse(200, blogData[0]));
+  const data = {
+    title: blogData[0].title,
+    content: blogData[0].content,
+    created_by: blogData[0].created_by,
+    createdAt: blogData[0].createdAt,
+    updatedAt: blogData[0].updatedAt,
+    views: blogData[0].views,
+    category: blogData[0].category,
+    image: blogData[0].image,
+    totalLikes: blogData[0].totalLikes,
+    comments: blogData[0].comments,
+    isLikedByUser,
+  };
+
+  res.json(new ApiResponse(200, data));
 });
 
 const getUserBlogs = asyncHandler(async (req, res) => {

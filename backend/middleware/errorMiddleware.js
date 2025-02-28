@@ -15,9 +15,16 @@ const errorHandler = (err, req, res, next) => {
     statusCode = 404;
     message = "Resource not Found";
   }
+  // if validation error occurs
   if (err.name === "ValidationError") {
     statusCode = 409;
     message = "Validation failed";
+  }
+  // if duplicate data is send.
+  if (err.name === "MongoServerError" && err.code === 11000) {
+    const field = Object.keys(err.keyValue)[0]; // Get the duplicate field
+    (statusCode = 400),
+      (message = `Duplicate key error: ${field} already exists`);
   }
 
   res.status(statusCode).json(new ApiResponse(statusCode, {}, message));

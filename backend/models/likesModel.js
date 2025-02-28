@@ -15,7 +15,7 @@ const likeSchema = new Schema({
   },
 });
 
-likeSchema.index({ userId: 1, blogId: 1 });
+likeSchema.index({ userId: 1, blogId: 1 }, { unique: true });
 
 const Likes = mongoose.model("Likes", likeSchema);
 
