@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { loggedIn } from "../../store";
 import { useLogInMutation } from "../../store";
 import { useRegisterUserMutation } from "../../store";
@@ -12,6 +12,8 @@ function AuthScreen() {
   const [loginState, setLoginState] = useState({ email: "", password: "" });
   const [logIn, logging] = useLogInMutation();
   const [registerUser, registering] = useRegisterUserMutation();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/content";
   const [registerState, setRegisterState] = useState({
     name: "",
     email: "",
@@ -27,7 +29,7 @@ function AuthScreen() {
       const userId = res.data.id;
       if (userId) {
         dispatch(loggedIn(userId));
-        navigate("/content");
+        navigate(redirect);
       } else {
         throw new Error(res.data.message);
       }

@@ -1,8 +1,10 @@
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   useAddCommentMutation,
+  useAddLikeMutation,
   useDeleteCommentMutation,
   useLazyBlogDataQuery,
+  useRemoveLikeMutation,
 } from "../../store";
 import { FaEye } from "react-icons/fa";
 import { FaSpinner } from "react-icons/fa";
@@ -23,6 +25,7 @@ function ViewBlog() {
     content: "",
     views: 0,
     likes: 0,
+    isLikedByUser: false,
     category: "",
     image: { public_id: "", remote_url: "" },
     created_by: { _id: "", name: "", email: "", profile_pic: "" },
@@ -62,14 +65,20 @@ function ViewBlog() {
   const [fetchBlogData, { isLoading, isFetching }] = useLazyBlogDataQuery();
 
   const [addComment, { isLoading: isAddingComment }] = useAddCommentMutation();
+
+  const [removeLike] = useRemoveLikeMutation();
+  const [addLike] = useAddLikeMutation();
   const [deleteComment] = useDeleteCommentMutation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const isBlogByUser = blogData.created_by._id === userData._id; // blog viewed is created by the user logged in
 
   useEffect(() => {
     const getBlogData = async () => {
       try {
-        const res = await fetchBlogData(blogId);
+        const res = await fetchBlogData({ blogId, userId: userData._id });
+
         if (res.status === "fulfilled") {
           // set the initial blog data.
           setBlogData((prevValue) => {
@@ -81,6 +90,7 @@ function ViewBlog() {
       }
     };
     getBlogData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blogId, fetchBlogData]);
 
   const handlePostComment = async (e) => {
@@ -173,6 +183,37 @@ function ViewBlog() {
     }
   };
 
+  const handleAddLike = async () => {
+    try {
+      const res = await addLike(blogData._id);
+
+      if (res.data) {
+        setBlogData((prevValue) => {
+          return { ...prevValue, isLikedByUser: true };
+        });
+      } else {
+        const redirectUrl = `${location.pathname}${location.search}`;
+        navigate(`/auth?redirect=${encodeURIComponent(redirectUrl)}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRemoveLike = async () => {
+    try {
+      const res = await removeLike(blogData._id);
+
+      if (res.data) {
+        setBlogData((prevValue) => {
+          return { ...prevValue, isLikedByUser: false };
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       {isLoading || isFetching ? (
@@ -199,6 +240,20 @@ function ViewBlog() {
               <div className="flex gap-4 items-center">
                 <FaEye />
                 {blogData.views}
+              </div>
+
+              <div>
+                {blogData.isLikedByUser ? (
+                  <div>
+                    <div>Liked</div>
+                    <button onClick={handleRemoveLike}>Remove Like</button>
+                  </div>
+                ) : (
+                  <div>
+                    <div>Not Like</div>
+                    <button onClick={handleAddLike}>Add Like</button>
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-4 items-center mt-4">

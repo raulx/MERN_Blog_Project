@@ -279,6 +279,7 @@ const getBlogData = asyncHandler(async (req, res) => {
   ]);
 
   const data = {
+    _id: blogData[0]._id,
     title: blogData[0].title,
     content: blogData[0].content,
     created_by: blogData[0].created_by,

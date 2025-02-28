@@ -15,7 +15,7 @@ const blogApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     fetchFn: async (...args) => {
-      await pause(2000);
+      // await pause(2000);
       return fetch(...args);
     },
   }),
@@ -36,10 +36,11 @@ const blogApi = createApi({
         providesTags: () => {
           return [{ type: "getBlogData" }];
         },
-        query: (id) => {
+        query: ({ blogId, userId }) => {
           return {
-            url: `/blogs/getBlogData?blogId=${id}`,
+            url: `/blogs/getBlogData`,
             method: "GET",
+            params: { blogId, userId },
           };
         },
       }),
