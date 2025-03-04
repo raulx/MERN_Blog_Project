@@ -57,7 +57,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="bg-neutral-dark w-screen flex justify-between items-center sm:px-8 px-4 fixed h-20 overflow-hidden">
+      <nav className="bg-neutral-dark w-screen flex justify-between items-center z-10 sm:px-8 px-4 fixed h-20 overflow-hidden">
         <div className="flex text-white justify-center items-center gap-2">
           <button onClick={() => setIsOpen(true)} className="sm:hidden block">
             <FaBars />

@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import UseUserData from "../hooks/useUserData";
+import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 
 const Comment = ({
   comment,
@@ -14,49 +15,54 @@ const Comment = ({
   const [showReply, setShowReply] = useState(false);
 
   return (
-    <div className="border-2 flex flex-col gap-4 border-gray-300 rounded-lg py-4">
-      <div className="flex gap-2 justify-center items-center">
-        <div className="h-12 w-12 rounded-full">
-          <img
-            className="w-full h-full rounded-full"
-            src={comment.postedBy?.profile_pic}
-          />
-        </div>
-        <div className="grow">{comment.commentText}</div>
+    <div className="border-l-2 flex flex-col gap-2 relative  px-8 border-black">
+      <div className="h-8 w-8 rounded-full absolute left-0 top-0 -translate-x-1/2">
+        <img
+          className="w-full h-full rounded-full"
+          src={comment.postedBy?.profile_pic}
+        />
       </div>
+      <h1 className="font-semibold">{comment.postedBy?.name}</h1>
+      <p className="text-gray-600">{comment.commentText}</p>
+
       <div className="flex items-center justify-between">
-        <button className="w-48" onClick={() => setShowReply(!showReply)}>
-          {comment.replies.length} show replies
-        </button>
+        <div
+          onClick={() => setShowReply(!showReply)}
+          className="flex cursor-pointer gap-2 items-center"
+        >
+          <span>replies {comment.replies.length}</span>
+          {showReply ? <FaCaretDown /> : <FaCaretUp />}
+        </div>
 
         {/* show delete button only if comment is created by user or the blog  viewed is created by user  */}
         {comment.postedBy._id === userData._id || isBlogByUser ? (
-          <button onClick={onDelete} className="w-48">
+          <button onClick={onDelete} className="w-48 text-sm text-red-600">
             Delete
           </button>
         ) : null}
       </div>
       {showReply && (
-        <div className="flex flex-col gap-4 w-11/12 mx-auto ">
+        <div className="flex flex-col gap-4 ml-4 mt-2">
           {comment.replies.map((reply) => {
             return (
               <div
                 key={reply._id}
-                className="py-4 border-gray-300 rounded-lg border-2 flex flex-col gap-2"
+                className="border-l-2 flex flex-col gap-2 border-black"
               >
-                <div className="flex gap-2 justify-center items-center">
-                  <div className="h-12 w-12 rounded-full">
+                <div className="flex gap-2 flex-col relative px-8">
+                  <div className="h-8 w-8 absolute left-0 top-0 -translate-x-1/2 rounded-full">
                     <img
                       className="w-full h-full rounded-full"
                       src={reply.replyPostedBy?.profile_pic}
                     />
                   </div>
-                  <div className="grow">{reply.commentText}</div>
+                  <h1>{reply.replyPostedBy.name}</h1>
+                  <p>{reply.commentText}</p>
                 </div>
 
                 {reply.replyPostedBy._id === userData._id || isBlogByUser ? (
                   <button
-                    className="w-48 self-end"
+                    className="w-48 self-end text-sm text-red-600"
                     onClick={() => onReplyDelete(reply._id, comment._id)}
                   >
                     Delete
@@ -74,7 +80,7 @@ const Comment = ({
           >
             <input
               placeholder="Enter your Reply"
-              className="grow p-2 rounded-lg"
+              className="grow p-2 border-2 rounded-lg"
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
             />

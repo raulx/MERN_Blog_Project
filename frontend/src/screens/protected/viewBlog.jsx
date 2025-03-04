@@ -6,7 +6,7 @@ import {
   useLazyBlogDataQuery,
   useRemoveLikeMutation,
 } from "../../store";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaThumbsUp } from "react-icons/fa";
 import { FaSpinner } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Footer } from "../../components/footer";
@@ -24,7 +24,7 @@ function ViewBlog() {
     title: "",
     content: "",
     views: 0,
-    likes: 0,
+    totalLikes: 0,
     isLikedByUser: false,
     category: "",
     image: { public_id: "", remote_url: "" },
@@ -189,7 +189,11 @@ function ViewBlog() {
 
       if (res.data) {
         setBlogData((prevValue) => {
-          return { ...prevValue, isLikedByUser: true };
+          return {
+            ...prevValue,
+            isLikedByUser: true,
+            totalLikes: prevValue.totalLikes + 1,
+          };
         });
       } else {
         const redirectUrl = `${location.pathname}${location.search}`;
@@ -206,7 +210,11 @@ function ViewBlog() {
 
       if (res.data) {
         setBlogData((prevValue) => {
-          return { ...prevValue, isLikedByUser: false };
+          return {
+            ...prevValue,
+            isLikedByUser: false,
+            totalLikes: prevValue.totalLikes - 1,
+          };
         });
       }
     } catch (error) {
@@ -222,7 +230,7 @@ function ViewBlog() {
         </div>
       ) : (
         <>
-          <div className="sm:w-2/3 my-8  w-full mx-auto bg-slate-100 p-4">
+          <div className="sm:w-2/3 my-4 w-full flex flex-col gap-4 shadow-lg mx-auto bg-white border rounded-lg border-slate-100 p-4">
             <div className="w-full bg-black">
               <div className="sm:w-2/3 h-96 sm:mx-auto">
                 <img
@@ -232,42 +240,69 @@ function ViewBlog() {
               </div>
             </div>
 
-            <div>
-              <h1 className="text-5xl uppercase font-extrabold mt-10">
-                {blogData.title}
-              </h1>
+            <div className="flex justify-between items-center px-4">
+              <div className="text-3xl uppercase font-bold w-2/3">
+                {blogData.title} the thanos destroyer, saviour of earth,a
+                billionaire
+              </div>
+              <div className=" text-gray-400 tracking-wide">
+                Posted On : 22/12/23
+              </div>
+            </div>
 
+            <div className="px-4 flex gap-4">
               <div className="flex gap-4 items-center">
                 <FaEye />
                 {blogData.views}
               </div>
 
-              <div>
-                {blogData.isLikedByUser ? (
-                  <div>
-                    <div>Liked</div>
-                    <button onClick={handleRemoveLike}>Remove Like</button>
-                  </div>
-                ) : (
-                  <div>
-                    <div>Not Like</div>
-                    <button onClick={handleAddLike}>Add Like</button>
-                  </div>
-                )}
-              </div>
+              {/* condionally show the add like and remove like button  */}
 
-              <div className="flex gap-4 items-center mt-4">
-                <p className="font-bold text-lg">{blogData.created_by.name}</p>
+              {blogData.isLikedByUser ? (
+                <div
+                  className={
+                    "flex items-center gap-4 text-blue-600 cursor-pointer"
+                  }
+                  onClick={handleRemoveLike}
+                >
+                  <FaThumbsUp />
+                  {blogData.totalLikes}
+                </div>
+              ) : (
+                <div
+                  className="flex gap-4 items-center cursor-pointer"
+                  onClick={handleAddLike}
+                >
+                  <FaThumbsUp /> {blogData.totalLikes}
+                </div>
+              )}
+            </div>
+
+            <div className="text-lg px-4 leading-8">{blogData.content}</div>
+            <div className="px-4 flex justify-end">
+              <div className="flex flex-col gap-4 mr-8">
+                <div className="font-bold text-black border-b-2">Author:</div>
+                <div className="flex justify-center items-center gap-4">
+                  <div className="h-8 w-8  rounded-full">
+                    <img
+                      className="w-full h-full rounded-full"
+                      src={blogData.created_by.profile_pic}
+                    />
+                  </div>
+                  <div className="font-semibold">
+                    {/* {blogData.created_by.name} */} Rahul Sinha
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="text-lg my-10">{blogData.content}</div>
-
-            <div>{blogData.comments.length} Comments</div>
+            <div className="px-4 font-semibold">
+              {blogData.comments.length} Comments
+            </div>
 
             <hr className="h-[2px] bg-gray-300" />
 
-            <div className="my-8 flex flex-col gap-8">
+            <div className="my-8 py-4 px-8 max-h-[500px] overflow-y-scroll scrollbar-none scroll-smooth overflow-x-hidden flex flex-col gap-8">
               {blogData.comments.map((c) => {
                 return (
                   <Comment
@@ -288,7 +323,7 @@ function ViewBlog() {
             >
               <input
                 placeholder="Enter your comment"
-                className="grow p-4 rounded-lg"
+                className="grow p-4 rounded-lg border"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
               />
