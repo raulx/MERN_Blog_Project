@@ -1,6 +1,6 @@
 import { Router } from "express";
 import protect from "../middleware/authMiddleware.js";
-import { addLike, removeLike } from "../controllers/LikesController.js";
+import { addLike, removeLike } from "../controllers/likesController.js";
 
 const router = Router();
 
