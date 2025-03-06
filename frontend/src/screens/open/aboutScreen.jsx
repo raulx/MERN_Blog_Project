@@ -1,9 +1,12 @@
-import aboutUs from "../../assets/screenAssets/aboutUs.jpg";
 function AboutPage() {
   return (
     <div className="h-screen md:overflow-auto overflow-y-scroll w-full  flex md:flex-row  flex-col gap-4  ">
       <div>
-        <img className="p-6" src={aboutUs} alt="about Us" />
+        <img
+          className="p-6"
+          src="https://res.cloudinary.com/dj5yf27lr/image/upload/v1741198977/blogsImages/bikby9mns30jtawotwjn.jpg"
+          alt="about Us"
+        />
       </div>
       <div className="flex flex-col gap-6 md:text-start text-center md:px-0 px-2 p-6">
         <h1 className="text-2xl my-4">

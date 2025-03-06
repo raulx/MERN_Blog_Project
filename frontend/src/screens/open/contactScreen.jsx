@@ -1,5 +1,3 @@
-import contactImg from "../../assets/screenAssets/contact.jpg";
-
 function ContactPage() {
   return (
     <div className="w-full h-screen text-center md:flex-row  flex flex-col md:overflow-auto overflow-y-scroll ">
@@ -31,7 +29,11 @@ function ContactPage() {
         <p className="font-extrabold text-xl">+12398723943,+3298737992</p>
       </div>
       <div className=" rounded-full border-2 md:overflow-hidden ">
-        <img src={contactImg} alt="contact image" className="h-full w-full" />
+        <img
+          src="https://res.cloudinary.com/dj5yf27lr/image/upload/v1741165804/blogsImages/wpcq7pq4x4fqqaoafjzc.jpg"
+          alt="contact image"
+          className="h-full w-full"
+        />
       </div>
     </div>
   );
