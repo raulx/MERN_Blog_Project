@@ -1,0 +1,1 @@
+import{i as s,j as t,O as r,N as a}from"./index-B_dqLsKw.js";function i(){const e=localStorage.getItem("user"),o=s();return e?t.jsx(r,{}):t.jsx(a,{to:"/",state:{from:o,message:"You Need to Login or Register First."},replace:!0})}export{i as default};

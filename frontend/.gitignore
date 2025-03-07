@@ -15,8 +15,7 @@ resource
 screenAssets
 dev
 
-dist
-dist-ssr
+
 *.local
 db.json
 testApi.js

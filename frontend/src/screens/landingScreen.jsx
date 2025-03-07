@@ -18,7 +18,7 @@ function LandingScreen() {
   }, [auth, navigate]);
 
   return (
-    <div className="custom-height bg-[url('./dev/bg.png')] bg-cover  relative">
+    <div className="custom-height bg-[url('https://res.cloudinary.com/dj5yf27lr/image/upload/v1741344763/blogsImages/y47ssl888vkvjgcmsr2w.jpg')] bg-cover  relative">
       <h1 className="absolute expand-up text-4xl sm:w-1/2 w-full text-center tracking-widest leading-snug  font-semibold font-pota-one-regular uppercase">
         <span className="text-white">Little things do make a difference</span>
         <span className="span-2">Little things do make a difference</span>

@@ -23,7 +23,7 @@ app.use("/api/comment", commentRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/likes", likesRouter);
 
-app.use(notFound);
+// app.use(notFound);
 
 app.use(errorHandler);
 
