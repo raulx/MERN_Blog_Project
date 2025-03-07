@@ -16,6 +16,7 @@ screenAssets
 dev
 
 
+dist
 *.local
 db.json
 testApi.js

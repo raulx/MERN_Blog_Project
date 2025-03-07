@@ -3,7 +3,6 @@ import connectDB from "./db/index.js";
 import express from "express";
 import { app } from "./app.js";
 import path from "path";
-
 import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config();
