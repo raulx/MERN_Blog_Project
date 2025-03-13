@@ -15,6 +15,7 @@ import userRouter from "./routes/userRoute.js";
 import blogRouter from "./routes/blogRoutes.js";
 import authRouter from "./routes/authRoutes.js";
 import likesRouter from "./routes/likesRoutes.js";
+import followerRouter from "./routes/followerRoutes.js";
 
 // routes declaration
 app.use("/api/user", userRouter);
@@ -22,8 +23,9 @@ app.use("/api/blogs", blogRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/likes", likesRouter);
+app.use("/api/follower", followerRouter);
 
-// app.use(notFound);
+app.use(notFound);
 
 app.use(errorHandler);
 

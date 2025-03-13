@@ -3,7 +3,9 @@ import { FaPlus } from "react-icons/fa";
 
 const allBlogScreens = [
   { name: "explore", url: "/content" },
-  { name: "your blogs", url: "/content/blog/me" },
+  { name: "trending", url: "/content/blog/trending" },
+  { name: "following", url: "/content/blog/following" },
+  // { name: "your blogs", url: "/content/blog/me" },
 ];
 
 function Home() {

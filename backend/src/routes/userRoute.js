@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.route("/getuser").get(protect, getUser);
 
-//for dev only
+//for dev only,must be commented in production
 router.get("/allusers", getAllUser);
 router.post("/addfakeuser", addFakerUser);
 

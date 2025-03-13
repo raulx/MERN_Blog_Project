@@ -16,6 +16,12 @@ const AllBlogs = lazy(() => import("../src/screens/protected/allBlogs.jsx"));
 const NotFound = lazy(() => import("../src/screens/open/notFoundScreen"));
 const ContactPage = lazy(() => import("../src/screens/open/contactScreen"));
 const AboutPage = lazy(() => import("../src/screens/open/aboutScreen"));
+const FollowingBlogs = lazy(() =>
+  import("../src/screens/protected/followingBlogs.jsx")
+);
+const TrendingBlogs = lazy(() =>
+  import("../src/screens/protected/trendingBlogs.jsx")
+);
 const ProtectedRoutes = lazy(() =>
   import("../src/hooks/authenticateRoutesHook")
 );
@@ -52,6 +58,14 @@ const router = createBrowserRouter([
                 element: <Home />,
                 children: [
                   { index: true, element: <AllBlogs /> },
+                  {
+                    path: "/content/blog/following",
+                    element: <FollowingBlogs />,
+                  },
+                  {
+                    path: "/content/blog/trending",
+                    element: <TrendingBlogs />,
+                  },
                   { path: "/content/blog/me", element: <UserBlogs /> },
                   { path: "/content/blog/create", element: <CreateBlog /> },
                 ],
