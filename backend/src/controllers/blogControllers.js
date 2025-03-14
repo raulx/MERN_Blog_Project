@@ -7,6 +7,8 @@ import { uploadOnCloudinary } from "../services/cloudinary.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import Likes from "../models/likesModel.js";
+import User from "../models/userModel.js";
+import View from "../models/viewModel.js";
 
 const addBlog = asyncHandler(async (req, res) => {
   const { title, content, category } = req.body;
@@ -96,7 +98,7 @@ const getBlogs = asyncHandler(async (req, res) => {
 const getBlogData = asyncHandler(async (req, res) => {
   const { blogId, userId } = req.query;
 
-  // first view incremented if blog found.
+  // first increment view if blog found.
   const blog = await Blog.findByIdAndUpdate(
     blogId,
     { $inc: { views: 1 } }, // Increment the views by 1
@@ -106,6 +108,14 @@ const getBlogData = asyncHandler(async (req, res) => {
   if (!blog) {
     throw new ApiError(404, "Blog not found");
   }
+
+  // update/add view
+
+  await View.findOneAndReplace(
+    { blogId, userId },
+    { blogId, userId },
+    { upsert: true }
+  );
 
   // check if user liked this blog or not
   let isLikedByUser = false;
@@ -348,8 +358,6 @@ export { addBlog, getBlogs, getBlogData, getUserBlogs, deleteBlog };
 export const addFakeBlogs = asyncHandler(async (req, res) => {
   const amount = Number(req.body.amount);
 
-  const user = req.user;
-
   const categories = [
     "politics",
     "sports",
@@ -365,6 +373,8 @@ export const addFakeBlogs = asyncHandler(async (req, res) => {
   let totalCreated = 0;
 
   for (let i = 0; i < amount; i++) {
+    const result = await User.aggregate([{ $sample: { size: 1 } }]);
+    const randomUser = result[0];
     const newBlog = {
       title: faker.lorem.sentence({ min: 5, max: 10 }),
       content: faker.lorem.paragraph({ min: 15, max: 75 }),
@@ -373,9 +383,9 @@ export const addFakeBlogs = asyncHandler(async (req, res) => {
 
       image: {
         public_id: faker.lorem.word(),
-        remote_url: faker.image.urlLoremFlickr({ height: 400, width: 400 }),
+        remote_url: faker.image.url(),
       },
-      created_by: user._id,
+      created_by: randomUser._id,
     };
 
     const createdBlog = await Blog.create(newBlog);
@@ -385,4 +395,30 @@ export const addFakeBlogs = asyncHandler(async (req, res) => {
   res.json(
     new ApiResponse(200, totalCreated, "fake blogs created successfully")
   );
+});
+
+export const addFakeViews = asyncHandler(async (req, res) => {
+  const amount = Number(req.body.amount);
+
+  for (let i = 0; i < amount; i++) {
+    const userResult = await User.aggregate([{ $sample: { size: 1 } }]);
+    const randomUser = userResult[0];
+    const blogResult = await Blog.aggregate([{ $sample: { size: 1 } }]);
+    const randomBlog = blogResult[0];
+
+    // first increment view
+    await Blog.findByIdAndUpdate(
+      randomBlog._id,
+      { $inc: { views: 1 } }, // Increment the views by 1
+      { new: true, runValidators: true }
+    );
+
+    // add/update view
+    await View.findOneAndReplace(
+      { blogId: randomBlog._id, userId: randomUser._id },
+      { blogId: randomBlog._id, userId: randomUser._id },
+      { upsert: true }
+    );
+  }
+  res.json(new ApiResponse(200, amount, "fake views added successfully"));
 });

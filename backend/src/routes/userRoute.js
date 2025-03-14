@@ -1,10 +1,6 @@
 import express from "express";
 
-import {
-  getUser,
-  getAllUser,
-  addFakerUser,
-} from "../controllers/userController.js";
+import { getUser } from "../controllers/userController.js";
 
 import protect from "../middleware/authMiddleware.js";
 
@@ -12,8 +8,11 @@ const router = express.Router();
 
 router.route("/getuser").get(protect, getUser);
 
-//for dev only,must be commented in production
-router.get("/allusers", getAllUser);
-router.post("/addfakeuser", addFakerUser);
+//FOR DEV ONLY,
+// MUST BE COMMENTED IN PRODUCTION
+
+import { addFakeUser } from "../controllers/userController.js";
+
+router.post("/addfakeuser", addFakeUser);
 
 export default router;

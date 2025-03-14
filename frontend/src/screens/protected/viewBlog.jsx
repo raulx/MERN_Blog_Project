@@ -290,7 +290,7 @@ function ViewBlog() {
                     />
                   </div>
                   <div className="font-semibold">
-                    {/* {blogData.created_by.name} */} Rahul Sinha
+                    {blogData.created_by.name}
                   </div>
                 </div>
               </div>

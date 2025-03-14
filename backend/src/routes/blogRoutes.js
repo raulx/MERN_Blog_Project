@@ -4,7 +4,6 @@ import {
   addBlog,
   deleteBlog,
   getUserBlogs,
-  addFakeBlogs,
 } from "../controllers/blogControllers.js";
 import { getBlogs, getBlogData } from "../controllers/blogControllers.js";
 import upload from "../middleware/multerMiddleware.js";
@@ -17,8 +16,12 @@ router.route("/getBlogData").get(getBlogData);
 router.route("/getUserBlogs").get(protect, getUserBlogs);
 router.route("/deleteBlog").delete(protect, deleteBlog);
 
+//DEV ONLY
 // fake data generation routes, must be commented in production
 
-router.route("/addFakeBlogs").post(protect, addFakeBlogs);
+import { addFakeViews, addFakeBlogs } from "../controllers/blogControllers.js";
+
+router.route("/addFakeBlogs").post(addFakeBlogs);
+router.route("/addFakeViews").post(addFakeViews);
 
 export default router;
