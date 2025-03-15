@@ -35,7 +35,10 @@ import Blog from "../models/blogModel.js";
 export const addFakeLikes = asyncHandler(async (req, res) => {
   const amount = Number(req.body.amount);
 
+  if (!amount) throw new ApiError(400, "amount field is required");
+
   let likesAdded = 0;
+
   for (let i = 0; i < amount; i++) {
     const userResult = await User.aggregate([{ $sample: { size: 1 } }]);
     const randomUser = userResult[0];
@@ -48,7 +51,19 @@ export const addFakeLikes = asyncHandler(async (req, res) => {
     });
 
     if (!likeFound) {
+      // first increment view
+      await Blog.findByIdAndUpdate(
+        randomBlog._id,
+        { $inc: { views: 1 } }, // Increment the views by 1
+        { new: true, runValidators: true }
+      );
+
       await Likes.create({ userId: randomUser._id, blogId: randomBlog._id });
+      await View.findOneAndReplace(
+        { blogId: randomBlog._id, userId: randomUser._id },
+        { blogId: randomBlog._id, userId: randomUser._id },
+        { upsert: true }
+      );
       likesAdded++;
     }
   }

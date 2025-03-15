@@ -3,6 +3,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import Comment from "../models/commentModel.js";
 import mongoose from "mongoose";
+import User from "../models/userModel.js";
+import { faker } from "@faker-js/faker";
 
 const postComment = asyncHandler(async (req, res) => {
   const { blogId, commentText, parentId } = req.body;
@@ -134,3 +136,99 @@ const deleteComment = asyncHandler(async (req, res) => {
 });
 
 export { postComment, deleteComment };
+
+// DEV ONLY
+// MUST BE COMMENTED IN PRODUCTION
+
+import Blog from "../models/blogModel.js";
+import View from "../models/viewModel.js";
+
+export const addFakeComment = asyncHandler(async (req, res) => {
+  const amount = Number(req.body.amount);
+
+  if (!amount) throw new ApiError(400, "amount field is required.");
+
+  for (let i = 0; i < amount; i++) {
+    const userResult = await User.aggregate([{ $sample: { size: 1 } }]);
+    const blogResult = await Blog.aggregate([{ $sample: { size: 1 } }]);
+    const randomUser = userResult[0];
+    const randomBlog = blogResult[0];
+
+    const commentData = {
+      blogId: randomBlog._id,
+      userId: randomUser._id,
+      commentText: faker.lorem.lines({ min: 1, max: 2 }),
+    };
+
+    await Comment.create(commentData);
+
+    // first increment view
+    await Blog.findByIdAndUpdate(
+      randomBlog._id,
+      { $inc: { views: 1 } }, // Increment the views by 1
+      { new: true, runValidators: true }
+    );
+
+    // add/update view
+    await View.findOneAndReplace(
+      { blogId: randomBlog._id, userId: randomUser._id },
+      { blogId: randomBlog._id, userId: randomUser._id },
+      { upsert: true }
+    );
+  }
+  res.json(new ApiResponse(200, {}, "fake comment added successfully"));
+});
+
+export const addFakeReplies = asyncHandler(async (req, res) => {
+  const amount = Number(req.body.amount);
+
+  if (!amount) throw new ApiError(400, "amount field is required.");
+
+  for (let i = 0; i < amount; i++) {
+    const userResult = await User.aggregate([{ $sample: { size: 1 } }]);
+    const blogResult = await Blog.aggregate([{ $sample: { size: 1 } }]);
+    const commentResult = await Comment.aggregate([
+      {
+        $match: {
+          parentId: null,
+        },
+      },
+      {
+        $sample: {
+          size: 1,
+        },
+      },
+    ]);
+
+    if (commentResult) {
+      const randomUser = userResult[0];
+      const randomBlog = blogResult[0];
+      const randomComment = commentResult[0];
+
+      const commentData = {
+        blogId: randomBlog._id,
+        userId: randomUser._id,
+        commentText: faker.lorem.lines({ min: 1, max: 2 }),
+        parentId: randomComment._id,
+      };
+
+      await Comment.create(commentData);
+
+      // first increment view
+      await Blog.findByIdAndUpdate(
+        randomBlog._id,
+        { $inc: { views: 1 } }, // Increment the views by 1
+        { new: true, runValidators: true }
+      );
+
+      // add/update view
+      await View.findOneAndReplace(
+        { blogId: randomBlog._id, userId: randomUser._id },
+        { blogId: randomBlog._id, userId: randomUser._id },
+        { upsert: true }
+      );
+    }
+  }
+
+  res.json(new ApiResponse(200, {}, "fake replies addedd successfully"));
+});

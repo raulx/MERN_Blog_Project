@@ -358,6 +358,8 @@ export { addBlog, getBlogs, getBlogData, getUserBlogs, deleteBlog };
 export const addFakeBlogs = asyncHandler(async (req, res) => {
   const amount = Number(req.body.amount);
 
+  if (!amount) throw new ApiError(400, "amount field is required");
+
   const categories = [
     "politics",
     "sports",
