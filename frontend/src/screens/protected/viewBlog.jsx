@@ -17,7 +17,7 @@ function ViewBlog() {
   const [searchParams] = useSearchParams();
 
   const blogId = searchParams.get("blogId");
-  const { userData } = UseUserData();
+  const userData = UseUserData();
 
   const [blogData, setBlogData] = useState({
     _id: "",
@@ -90,8 +90,7 @@ function ViewBlog() {
       }
     };
     getBlogData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blogId, fetchBlogData]);
+  }, [blogId, fetchBlogData, userData._id]);
 
   const handlePostComment = async (e) => {
     e.preventDefault();

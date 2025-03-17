@@ -31,6 +31,7 @@ export { addLike, removeLike };
 
 import User from "../models/userModel.js";
 import Blog from "../models/blogModel.js";
+import View from "../models/viewModel.js";
 
 export const addFakeLikes = asyncHandler(async (req, res) => {
   const amount = Number(req.body.amount);

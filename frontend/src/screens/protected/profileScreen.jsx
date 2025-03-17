@@ -1,31 +1,147 @@
-import { Link } from "react-router-dom";
-import { useGetUserQuery } from "../../store";
+import { GoDotFill } from "react-icons/go";
+import UseUserData from "../../hooks/useUserData";
+import { BsFillPeopleFill } from "react-icons/bs";
+import { formatDate } from "../../utils/functions";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { useLazyUsersBlogsQuery } from "../../store";
+import { useState, useEffect } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Card from "../../components/card";
 
-function ProfileScreen() {
-  const { id } = JSON.parse(localStorage.getItem("user"));
+const profileLinks = [
+  { url: "/profile", name: "posts" },
+  { url: "/profile/history", name: "history" },
+  { url: "/profile/liked", name: "liked" },
+  { url: "/profile/favourites", name: "favourites" },
+];
 
-  const { data, isLoading } = useGetUserQuery(id);
+export function Posts() {
+  const [getUserBlogs, { isFetching, isLoading }] = useLazyUsersBlogsQuery();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [userBlogs, setUserBlogs] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
 
-  let userData;
+  useEffect(() => {
+    const fetchUserBlogs = async () => {
+      try {
+        const res = await getUserBlogs(pageNumber);
+        if (res.data) {
+          setUserBlogs((prevValue) => {
+            return [...prevValue, ...res.data.data];
+          });
+        }
+        if (res.data.data.length === 0) setHasMore(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  if (isLoading) {
-    userData = <div>isFetching...</div>;
-  } else if (data) {
-    userData = (
-      <div>
-        <p>{data.data._id}</p>
-        <p>{data.data.name}</p>
-        <img src={data.data.profile_pic} className="h-40 w-40" />
-        <button>
-          <Link to={"/content"}>Go Back</Link>
-        </button>
-      </div>
-    );
-  }
+    fetchUserBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber]);
 
   return (
-    <div>
-      <h1>{userData}</h1>
+    <>
+      {isLoading ? (
+        <div>loading</div>
+      ) : (
+        <InfiniteScroll
+          dataLength={userBlogs.length}
+          next={() => setPageNumber(pageNumber + 1)}
+          className="flex flex-wrap gap-8 justify-between sm:px-0 px-4 sm:w-11/12 w-screen mx-auto py-6"
+          hasMore={hasMore}
+          endMessage={
+            <p className="w-screen justify-center flex items-center">
+              You have seen it all !
+            </p>
+          }
+        >
+          {userBlogs.map((blog, index) => {
+            return (
+              <Card
+                key={index}
+                cardData={blog}
+                afterDelete={() =>
+                  setUserBlogs((prevValue) =>
+                    prevValue.filter((b) => b._id != blog._id)
+                  )
+                }
+              />
+            );
+          })}
+        </InfiniteScroll>
+      )}
+
+      {isFetching && <div> Fetching more data...</div>}
+    </>
+  );
+}
+
+export function History() {
+  return <div>History</div>;
+}
+
+export function Favourites() {
+  return <div>Favourites</div>;
+}
+
+export function Liked() {
+  return <div>Liked</div>;
+}
+
+function ProfileScreen() {
+  const userData = UseUserData();
+  const profileLocation = useLocation().pathname;
+
+  return (
+    <div className="w-11/12 mx-auto ">
+      <div className="flex gap-8 p-6 ml-12 my-6">
+        <div className="h-28 w-28 ">
+          <img
+            className="w-full h-full rounded-full object-cover"
+            src={userData.profile_pic}
+          />
+        </div>
+        <div className="flex flex-col gap-4">
+          <h1 className="text-3xl font-bold">{userData.name}</h1>
+          <div className="flex gap-2 items-center">
+            <span>{userData.email} </span> <GoDotFill />
+            <span>{userData.blogsWritten}</span>
+            <span>blogs</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <BsFillPeopleFill />
+            <span>followers</span>
+            <span>{userData.totalFollowers}</span>
+          </div>
+          <div className="text-sm">
+            <span>Joined in : </span>
+            {userData.createdAt && (
+              <span>{formatDate(userData.createdAt)}</span>
+            )}
+          </div>
+        </div>
+      </div>
+      <nav className="flex gap-8 items-center px-6 ">
+        {profileLinks.map((link, index) => {
+          return (
+            <Link
+              to={link.url}
+              key={index}
+              className={`border-b px-2 capitalize ${
+                link.url === profileLocation && "border-black"
+              }`}
+            >
+              {link.name}
+            </Link>
+          );
+        })}
+      </nav>
+      <hr className="h-[1px] bg-black" />
+
+      <div className="sm:p-6">
+        <Outlet />
+      </div>
     </div>
   );
 }

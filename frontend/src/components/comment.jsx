@@ -10,7 +10,7 @@ const Comment = ({
   onReplyAdd,
   onReplyDelete,
 }) => {
-  const { userData } = UseUserData();
+  const userData = UseUserData();
   const [replyText, setReplyText] = useState("");
   const [showReply, setShowReply] = useState(false);
 

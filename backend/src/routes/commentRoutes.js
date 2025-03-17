@@ -20,7 +20,6 @@ import {
 router.route("/addFakeComment").post(addFakeComment);
 router.route("/addFakeReplies").post(addFakeReplies);
 
-// FOR DEV ONLY
-// MUST BE COMMENTED IN PRODUCTION
+
 
 export default router;

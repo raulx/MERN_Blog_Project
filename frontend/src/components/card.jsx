@@ -3,19 +3,18 @@ import { Link } from "react-router-dom";
 import { FaTag, FaEye } from "react-icons/fa";
 import { Avatar } from "@radix-ui/themes";
 import classNames from "classnames";
-import { useSelector } from "react-redux";
 import { useDeleteBlogMutation } from "../store";
 import { removeBlog } from "../store";
 import { useDispatch } from "react-redux";
 import { FaSync, FaTrash } from "react-icons/fa";
 import { filterDate } from "../utils/functions";
 import toast from "react-hot-toast";
+import UseUserData from "../hooks/useUserData";
 
 function Card({ cardData, afterDelete }) {
   const category = cardData.category;
-  const { userData } = useSelector((state) => {
-    return state.user;
-  });
+  const userData = UseUserData;
+
   const [deleteBlog, results] = useDeleteBlogMutation();
   const dispatch = useDispatch();
 

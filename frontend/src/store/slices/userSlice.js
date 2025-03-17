@@ -2,14 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
   name: "user",
-  initialState: { userData: "", blogs: [] },
+  initialState: {
+    data: {
+      _id: "",
+      name: "",
+      email: "",
+      profile_pic: "",
+      createdAt: "",
+      updatedAt: "",
+      blogsWritten: 0,
+      totalFollowers: 0,
+    },
+  },
   reducers: {
     setUserData(state, action) {
-      state.userData = action.payload;
-    },
-    setUserBlogs(state, action) {
-      const newData = action.payload;
-      state.blogs = [...state.blogs, ...newData];
+      state.data = action.payload;
     },
   },
 });

@@ -9,7 +9,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { MyContext } from "./context/myContext";
 
 // page imports
-const UserBlogs = lazy(() => import("../src/screens/protected/userBlogs"));
 const CreateBlog = lazy(() => import("../src/screens/protected/createBlog"));
 const App = lazy(() => import("../src/App"));
 const AllBlogs = lazy(() => import("../src/screens/protected/allBlogs.jsx"));
@@ -27,12 +26,43 @@ const ProtectedRoutes = lazy(() =>
 );
 const AuthScreen = lazy(() => import("../src/screens/open/authScreen"));
 const LandingScreen = lazy(() => import("../src/screens/landingScreen"));
-const ProfileScreen = lazy(() =>
-  import("../src/screens/protected/profileScreen")
-);
+
 const ViewBlog = lazy(() => import("./screens/protected/viewBlog.jsx"));
 const RootScreen = lazy(() => import("../src/screens/rootScreen"));
 const Home = lazy(() => import("../src/screens/protected/home"));
+
+// profile screen views imports
+const ProfileScreen = lazy(() =>
+  import("../src/screens/protected/profileScreen")
+);
+
+const Posts = lazy(() => {
+  return import("../src/screens/protected/profileScreen.jsx").then(
+    (module) => ({
+      default: module.Posts,
+    })
+  );
+});
+
+const Liked = lazy(() => {
+  return import("../src/screens/protected/profileScreen.jsx").then(
+    (module) => ({
+      default: module.Liked,
+    })
+  );
+});
+
+const History = lazy(() =>
+  import("../src/screens/protected/profileScreen.jsx").then((module) => ({
+    default: module.History,
+  }))
+);
+
+const Favourites = lazy(() =>
+  import("../src/screens/protected/profileScreen.jsx").then((module) => ({
+    default: module.Favourites,
+  }))
+);
 
 // router
 const router = createBrowserRouter([
@@ -66,7 +96,7 @@ const router = createBrowserRouter([
                     path: "/content/blog/trending",
                     element: <TrendingBlogs />,
                   },
-                  { path: "/content/blog/me", element: <UserBlogs /> },
+
                   { path: "/content/blog/create", element: <CreateBlog /> },
                 ],
               },
@@ -79,6 +109,15 @@ const router = createBrowserRouter([
           {
             path: "/profile",
             element: <ProfileScreen />,
+            children: [
+              {
+                index: true,
+                element: <Posts />,
+              },
+              { path: "/profile/history", element: <History /> },
+              { path: "/profile/liked", element: <Liked /> },
+              { path: "/profile/favourites", element: <Favourites /> },
+            ],
           },
         ],
       },

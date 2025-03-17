@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import { FaBars, FaHome, FaInfoCircle, FaTimes } from "react-icons/fa";
 import { MdContacts } from "react-icons/md";
 import { useState } from "react";
+import UseUserData from "../hooks/useUserData";
 
 const pages = [
   { name: "about", url: "/about", icon: <FaInfoCircle /> },
@@ -52,7 +53,7 @@ const Navlinks = () => {
 
 function Navbar() {
   const auth = useSelector((state) => state.auth.auth);
-  const userData = useSelector((state) => state.user.userData);
+  const userData = UseUserData();
   const [isOpen, setIsOpen] = useState(false);
 
   return (

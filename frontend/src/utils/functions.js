@@ -42,4 +42,13 @@ const filterDate = (date) => {
   return filteredDate;
 };
 
-export { filterDate, compressImage };
+const formatDate = (createdAt) => {
+  const date = new Date(createdAt);
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+};
+
+export { filterDate, compressImage, formatDate };

@@ -4,16 +4,54 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { faker } from "@faker-js/faker";
 import { ApiError } from "../utils/ApiError.js";
 import { readFile, writeFile } from "fs/promises";
+import mongoose from "mongoose";
 
 const getUser = asyncHandler(async (req, res) => {
   const userId = req.token.userId;
-  const userFound = await User.findOne({ _id: userId }).select("-password");
-  if (userFound) {
-    res.status(200).json({ status: 200, data: userFound });
-  } else {
-    res.status(404);
-    throw new Error("User not Found !");
-  }
+
+  const user = await User.aggregate([
+    {
+      $match: {
+        _id: mongoose.Types.ObjectId.createFromHexString(userId),
+      },
+    },
+    {
+      $lookup: {
+        from: "blogs",
+        localField: "_id",
+        foreignField: "created_by",
+        as: "blogsWritten",
+      },
+    },
+    {
+      $set: {
+        blogsWritten: { $size: "$blogsWritten" },
+      },
+    },
+    {
+      $lookup: {
+        from: "followers",
+        localField: "_id",
+        foreignField: "following",
+        as: "totalFollowers",
+      },
+    },
+    {
+      $set: {
+        totalFollowers: { $size: "$totalFollowers" },
+      },
+    },
+    {
+      $project: {
+        __v: 0,
+        password: 0,
+      },
+    },
+  ]);
+
+  if (!user[0]) throw new ApiError(404, "user not found");
+
+  res.json(new ApiResponse(200, user[0], "user profile fetched successfully"));
 });
 
 export { getUser };
