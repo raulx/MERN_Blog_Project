@@ -1,5 +1,7 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
+import View from "../models/viewModel.js";
+import Likes from "../models/likesModel.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { faker } from "@faker-js/faker";
 import { ApiError } from "../utils/ApiError.js";
@@ -54,7 +56,134 @@ const getUser = asyncHandler(async (req, res) => {
   res.json(new ApiResponse(200, user[0], "user profile fetched successfully"));
 });
 
-export { getUser };
+const getUserHistory = asyncHandler(async (req, res) => {
+  const userId = req.token.userId;
+
+  const { pageNumber } = req.query;
+
+  if (!pageNumber) throw new ApiError(400, "page number is required");
+
+  const userHistory = await View.aggregate([
+    { $match: { userId: mongoose.Types.ObjectId.createFromHexString(userId) } },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+    {
+      $lookup: {
+        from: "blogs",
+        localField: "blogId",
+        foreignField: "_id",
+        as: "blogData",
+        pipeline: [
+          {
+            $lookup: {
+              from: "users",
+              localField: "created_by",
+              foreignField: "_id",
+              as: "created_by",
+              pipeline: [
+                {
+                  $project: {
+                    name: 1,
+                    profile_pic: 1,
+                    _id: 1,
+                  },
+                },
+              ],
+            },
+          },
+          {
+            $addFields: {
+              created_by: { $first: "$created_by" },
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        userId: 1,
+        createdAt: 1,
+        blogData: { $first: "$blogData" },
+      },
+    },
+
+    { $skip: Number(pageNumber - 1) * 5 },
+    { $limit: 5 },
+  ]);
+
+  res.json(
+    new ApiResponse(200, userHistory, "user history fetched successfully")
+  );
+});
+
+const getUserLikes = asyncHandler(async (req, res) => {
+  const userId = req.token.userId;
+  const { pageNumber } = req.query;
+
+  if (!pageNumber) throw new ApiError(400, "page number is required !");
+
+  const userLikes = await Likes.aggregate([
+    {
+      $match: {
+        userId: mongoose.Types.ObjectId.createFromHexString(userId),
+      },
+    },
+    {
+      $lookup: {
+        from: "blogs",
+        localField: "blogId",
+        foreignField: "_id",
+        as: "blogData",
+        pipeline: [
+          {
+            $lookup: {
+              from: "users",
+              localField: "created_by",
+              foreignField: "_id",
+              as: "created_by",
+              pipeline: [
+                {
+                  $project: {
+                    name: 1,
+                    _id: 1,
+                    profile_pic: 1,
+                  },
+                },
+              ],
+            },
+          },
+          {
+            $addFields: {
+              created_by: { $first: "$created_by" },
+            },
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        blogData: { $first: "$blogData" },
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        blogData: 1,
+      },
+    },
+    { $skip: Number(pageNumber - 1) * 5 },
+    { $limit: 5 },
+  ]);
+
+  res.json(
+    new ApiResponse(200, userLikes, "user likes fetched successfully !")
+  );
+});
+
+export { getUser, getUserHistory, getUserLikes };
 
 //FOR DEV ONLY
 // MUST BE COMMENTED IN PRODUCTION

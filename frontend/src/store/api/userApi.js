@@ -18,9 +18,30 @@ const userApi = createApi({
           };
         },
       }),
+
+      getUserHistory: builder.query({
+        query: (pageNumber) => {
+          return {
+            url: `/user/getUserHistory?pageNumber=${pageNumber}`,
+          };
+        },
+      }),
+
+      getUserLikes: builder.query({
+        query: (pageNumber) => {
+          return {
+            url: `/user/getUserLikes?pageNumber=${pageNumber}`,
+          };
+        },
+      }),
     };
   },
 });
 
 export default userApi;
-export const { useGetUserQuery, useLazyGetUserQuery } = userApi;
+export const {
+  useGetUserQuery,
+  useLazyGetUserQuery,
+  useLazyGetUserHistoryQuery,
+  useLazyGetUserLikesQuery,
+} = userApi;

@@ -13,7 +13,7 @@ import UseUserData from "../hooks/useUserData";
 
 function Card({ cardData, afterDelete }) {
   const category = cardData.category;
-  const userData = UseUserData;
+  const userData = UseUserData();
 
   const [deleteBlog, results] = useDeleteBlogMutation();
   const dispatch = useDispatch();

@@ -310,8 +310,7 @@ const getUserBlogs = asyncHandler(async (req, res) => {
   const { userId } = req.token;
   const { pageNumber } = req.query;
 
-  if (!pageNumber)
-    res.json({ status: 401, message: "pagenumber is required !" });
+  if (!pageNumber) throw new ApiError(400, "pagenumber is required !");
 
   const userBlogs = await Blog.aggregate([
     {

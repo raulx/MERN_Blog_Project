@@ -3,7 +3,11 @@ import UseUserData from "../../hooks/useUserData";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { formatDate } from "../../utils/functions";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { useLazyUsersBlogsQuery } from "../../store";
+import {
+  useLazyGetUserHistoryQuery,
+  useLazyGetUserLikesQuery,
+  useLazyUsersBlogsQuery,
+} from "../../store";
 import { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Card from "../../components/card";
@@ -12,7 +16,6 @@ const profileLinks = [
   { url: "/profile", name: "posts" },
   { url: "/profile/history", name: "history" },
   { url: "/profile/liked", name: "liked" },
-  { url: "/profile/favourites", name: "favourites" },
 ];
 
 export function Posts() {
@@ -78,15 +81,128 @@ export function Posts() {
 }
 
 export function History() {
-  return <div>History</div>;
-}
+  const [getUserHistory, { isFetching, isLoading }] =
+    useLazyGetUserHistoryQuery();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [userHistory, setUserHistory] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
 
-export function Favourites() {
-  return <div>Favourites</div>;
+  useEffect(() => {
+    const fetchUserBlogs = async () => {
+      try {
+        const res = await getUserHistory(pageNumber);
+        if (res.data) {
+          setUserHistory((prevValue) => {
+            return [...prevValue, ...res.data.data];
+          });
+        }
+        if (res.data.data.length === 0) setHasMore(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUserBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber]);
+
+  return (
+    <>
+      {isLoading ? (
+        <div>loading</div>
+      ) : (
+        <InfiniteScroll
+          dataLength={userHistory.length}
+          next={() => setPageNumber(pageNumber + 1)}
+          className="flex flex-wrap gap-8 justify-between sm:px-0 px-4 sm:w-11/12 w-screen mx-auto py-6"
+          hasMore={hasMore}
+          endMessage={
+            <p className="w-screen justify-center flex items-center">
+              You have seen it all !
+            </p>
+          }
+        >
+          {userHistory.map((history, index) => {
+            return (
+              <Card
+                key={index}
+                cardData={history.blogData}
+                afterDelete={() =>
+                  setUserHistory((prevValue) =>
+                    prevValue.filter((b) => b._id != history.blogData._id)
+                  )
+                }
+              />
+            );
+          })}
+        </InfiniteScroll>
+      )}
+
+      {isFetching && <div> Fetching more data...</div>}
+    </>
+  );
 }
 
 export function Liked() {
-  return <div>Liked</div>;
+  const [getUserLikes, { isFetching, isLoading }] = useLazyGetUserLikesQuery();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [userLikes, setUserLikes] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+
+  useEffect(() => {
+    const fetchUserBlogs = async () => {
+      try {
+        const res = await getUserLikes(pageNumber);
+        if (res.data) {
+          setUserLikes((prevValue) => {
+            return [...prevValue, ...res.data.data];
+          });
+        }
+        if (res.data.data.length === 0) setHasMore(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUserBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber]);
+
+  return (
+    <>
+      {isLoading ? (
+        <div>loading</div>
+      ) : (
+        <InfiniteScroll
+          dataLength={userLikes.length}
+          next={() => setPageNumber(pageNumber + 1)}
+          className="flex flex-wrap gap-8 justify-between sm:px-0 px-4 sm:w-11/12 w-screen mx-auto py-6"
+          hasMore={hasMore}
+          endMessage={
+            <p className="w-screen justify-center flex items-center">
+              You have seen it all !
+            </p>
+          }
+        >
+          {userLikes.map((likes, index) => {
+            return (
+              <Card
+                key={index}
+                cardData={likes.blogData}
+                afterDelete={() =>
+                  setUserLikes((prevValue) =>
+                    prevValue.filter((b) => b._id != likes.blogData._id)
+                  )
+                }
+              />
+            );
+          })}
+        </InfiniteScroll>
+      )}
+
+      {isFetching && <div> Fetching more data...</div>}
+    </>
+  );
 }
 
 function ProfileScreen() {

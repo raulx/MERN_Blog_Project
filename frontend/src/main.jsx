@@ -58,12 +58,6 @@ const History = lazy(() =>
   }))
 );
 
-const Favourites = lazy(() =>
-  import("../src/screens/protected/profileScreen.jsx").then((module) => ({
-    default: module.Favourites,
-  }))
-);
-
 // router
 const router = createBrowserRouter([
   {
@@ -116,7 +110,6 @@ const router = createBrowserRouter([
               },
               { path: "/profile/history", element: <History /> },
               { path: "/profile/liked", element: <Liked /> },
-              { path: "/profile/favourites", element: <Favourites /> },
             ],
           },
         ],
