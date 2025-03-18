@@ -1,7 +1,7 @@
 import express from "express";
 
 import {
-  getUser,
+  getUserProfile,
   getUserHistory,
   getUserLikes,
 } from "../controllers/userController.js";
@@ -10,7 +10,7 @@ import protect from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/getuser").get(protect, getUser);
+router.route("/getUserProfile").get(protect, getUserProfile);
 router.route("/getUserHistory").get(protect, getUserHistory);
 router.route("/getUserLikes").get(protect, getUserLikes);
 

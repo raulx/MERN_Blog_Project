@@ -1,27 +1,26 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/navbar";
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useLazyGetUserQuery } from "../store";
+import { useDispatch } from "react-redux";
+import { useLazyGetUserProfileQuery } from "../store";
 import { setUserData } from "../store";
 import { Toaster } from "react-hot-toast";
 import { loggedOut } from "../store";
 import { useNavigate } from "react-router-dom";
 
 function RootScreen() {
-  const { auth } = useSelector((state) => {
-    return state.auth;
-  });
+  const user = localStorage.getItem("user");
 
   const navigate = useNavigate();
-  const [fetchUserData] = useLazyGetUserQuery();
+  const [fetchUserData] = useLazyGetUserProfileQuery();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (auth) {
+    if (user) {
+      const { id } = JSON.parse(user);
       const getUser = async () => {
-        const res = await fetchUserData();
+        const res = await fetchUserData(id);
         if (res.status === "fulfilled") {
           dispatch(setUserData(res.data.data));
         } else {
@@ -31,7 +30,7 @@ function RootScreen() {
       };
       getUser();
     }
-  }, [auth, dispatch, fetchUserData, navigate]);
+  }, [user, dispatch, fetchUserData, navigate]);
 
   return (
     <>

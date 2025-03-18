@@ -8,8 +8,10 @@ import { ApiError } from "../utils/ApiError.js";
 import { readFile, writeFile } from "fs/promises";
 import mongoose from "mongoose";
 
-const getUser = asyncHandler(async (req, res) => {
-  const userId = req.token.userId;
+const getUserProfile = asyncHandler(async (req, res) => {
+  const { userId } = req.query;
+
+  if (!userId) throw new ApiError(400, "All fields are required !");
 
   const user = await User.aggregate([
     {
@@ -183,7 +185,7 @@ const getUserLikes = asyncHandler(async (req, res) => {
   );
 });
 
-export { getUser, getUserHistory, getUserLikes };
+export { getUserProfile, getUserHistory, getUserLikes };
 
 //FOR DEV ONLY
 // MUST BE COMMENTED IN PRODUCTION
