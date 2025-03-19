@@ -42,6 +42,7 @@ const userApi = createApi({
 export default userApi;
 export const {
   useGetUserQuery,
+  useGetUserProfileQuery,
   useLazyGetUserProfileQuery,
   useLazyGetUserHistoryQuery,
   useLazyGetUserLikesQuery,

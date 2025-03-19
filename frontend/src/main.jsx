@@ -35,6 +35,9 @@ const Home = lazy(() => import("../src/screens/protected/home"));
 const ProfileScreen = lazy(() =>
   import("../src/screens/protected/profileScreen")
 );
+const AuthorProfile = lazy(() =>
+  import("../src/screens/protected/authorProfile.jsx")
+);
 
 const Posts = lazy(() => {
   return import("../src/screens/protected/profileScreen.jsx").then(
@@ -112,6 +115,7 @@ const router = createBrowserRouter([
               { path: "/profile/liked", element: <Liked /> },
             ],
           },
+          { path: "/author-profile", element: <AuthorProfile /> },
         ],
       },
       { path: "/auth", element: <AuthScreen /> },

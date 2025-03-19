@@ -2,6 +2,7 @@
 import { useState } from "react";
 import UseUserData from "../hooks/useUserData";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { Avatar } from "./avatar";
 
 const Comment = ({
   comment,
@@ -17,9 +18,10 @@ const Comment = ({
   return (
     <div className="border-l-2 flex flex-col gap-2 relative  px-8 border-black">
       <div className="h-8 w-8 rounded-full absolute left-0 top-0 -translate-x-1/2">
-        <img
-          className="w-full h-full rounded-full"
-          src={comment.postedBy?.profile_pic}
+        <Avatar
+          userId={comment.postedBy._id}
+          avatarLink={comment.postedBy?.profile_pic}
+          size="small"
         />
       </div>
       <h1 className="font-semibold">{comment.postedBy?.name}</h1>
@@ -51,9 +53,10 @@ const Comment = ({
               >
                 <div className="flex gap-2 flex-col relative px-8">
                   <div className="h-8 w-8 absolute left-0 top-0 -translate-x-1/2 rounded-full">
-                    <img
-                      className="w-full h-full rounded-full"
-                      src={reply.replyPostedBy?.profile_pic}
+                    <Avatar
+                      userId={reply.replyPostedBy._id}
+                      avatarLink={reply.replyPostedBy?.profile_pic}
+                      size="small"
                     />
                   </div>
                   <h1>{reply.replyPostedBy.name}</h1>

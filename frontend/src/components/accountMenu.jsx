@@ -16,7 +16,7 @@ function AccounMenu({ avatarLink }) {
   const [logOut] = useLogOutMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(avatarLink);
+
   const handleLogout = async () => {
     try {
       await logOut().unwrap();
