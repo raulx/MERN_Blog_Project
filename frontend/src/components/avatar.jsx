@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-export const Avatar = ({ avatarLink, userId, size, ...rest }) => {
+export const Avatar = ({ avatarLink, authorId, size, ...rest }) => {
   let sizeClasses = "";
 
   if (size === "small") {
@@ -17,7 +17,7 @@ export const Avatar = ({ avatarLink, userId, size, ...rest }) => {
   return (
     <Link
       className={`${sizeClasses}`}
-      to={`/author-profile?userId=${userId}`}
+      to={`/author-profile?authorId=${authorId}`}
       {...rest}
     >
       <img
@@ -30,6 +30,6 @@ export const Avatar = ({ avatarLink, userId, size, ...rest }) => {
 
 Avatar.propTypes = {
   avatarLink: PropTypes.string.isRequired,
-  userId: PropTypes.string.isRequired,
+  authorId: PropTypes.string.isRequired,
   size: PropTypes.oneOf(["small", "medium", "large"]),
 };

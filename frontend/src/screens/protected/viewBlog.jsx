@@ -90,6 +90,7 @@ function ViewBlog() {
         console.log(err);
       }
     };
+
     if (userData._id) {
       getBlogData();
     }
@@ -285,16 +286,10 @@ function ViewBlog() {
               <div className="flex flex-col gap-4 mr-8">
                 <div className="font-bold text-black border-b-2">Author:</div>
                 <div className="flex justify-center items-center gap-4">
-                  {/* <div className="h-8 w-8  rounded-full">
-                    <img
-                      className="w-full h-full rounded-full"
-                      src={blogData.created_by.profile_pic}
-                    />
-                  </div> */}
                   <Avatar
                     avatarLink={blogData.created_by.profile_pic}
                     size="small"
-                    userId={blogData.created_by._id}
+                    authorId={blogData.created_by._id}
                   />
                   <div className="font-semibold">
                     {blogData.created_by.name}

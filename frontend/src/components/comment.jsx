@@ -19,7 +19,7 @@ const Comment = ({
     <div className="border-l-2 flex flex-col gap-2 relative  px-8 border-black">
       <div className="h-8 w-8 rounded-full absolute left-0 top-0 -translate-x-1/2">
         <Avatar
-          userId={comment.postedBy._id}
+          authorId={comment.postedBy._id}
           avatarLink={comment.postedBy?.profile_pic}
           size="small"
         />
@@ -54,7 +54,7 @@ const Comment = ({
                 <div className="flex gap-2 flex-col relative px-8">
                   <div className="h-8 w-8 absolute left-0 top-0 -translate-x-1/2 rounded-full">
                     <Avatar
-                      userId={reply.replyPostedBy._id}
+                      authorId={reply.replyPostedBy._id}
                       avatarLink={reply.replyPostedBy?.profile_pic}
                       size="small"
                     />

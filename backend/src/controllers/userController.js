@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import View from "../models/viewModel.js";
 import Likes from "../models/likesModel.js";
+import Follower from "../models/followersModel.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { faker } from "@faker-js/faker";
 import { ApiError } from "../utils/ApiError.js";
@@ -9,9 +10,7 @@ import { readFile, writeFile } from "fs/promises";
 import mongoose from "mongoose";
 
 const getUserProfile = asyncHandler(async (req, res) => {
-  const { userId } = req.query;
-
-  if (!userId) throw new ApiError(400, "All fields are required !");
+  const { userId } = req.token;
 
   const user = await User.aggregate([
     {
@@ -185,7 +184,76 @@ const getUserLikes = asyncHandler(async (req, res) => {
   );
 });
 
-export { getUserProfile, getUserHistory, getUserLikes };
+const getAuthorProfile = asyncHandler(async (req, res) => {
+  const userId = req.token.userId;
+  const { authorId } = req.query;
+
+  if (!authorId) throw new ApiError(400, "userId parameter is required !");
+
+  let userFollowing = false;
+
+  // find if user is following the requested author.
+  const found = await Follower.findOne({
+    follower: userId,
+    following: authorId,
+  });
+
+  if (found) {
+    userFollowing = true;
+  }
+
+  const user = await User.aggregate([
+    {
+      $match: {
+        _id: mongoose.Types.ObjectId.createFromHexString(authorId),
+      },
+    },
+    {
+      $lookup: {
+        from: "blogs",
+        localField: "_id",
+        foreignField: "created_by",
+        as: "blogsWritten",
+      },
+    },
+    {
+      $set: {
+        blogsWritten: { $size: "$blogsWritten" },
+      },
+    },
+    {
+      $lookup: {
+        from: "followers",
+        localField: "_id",
+        foreignField: "following",
+        as: "totalFollowers",
+      },
+    },
+    {
+      $set: {
+        totalFollowers: { $size: "$totalFollowers" },
+      },
+    },
+    {
+      $project: {
+        __v: 0,
+        password: 0,
+      },
+    },
+  ]);
+
+  if (!user[0]) throw new ApiError(404, "user not found");
+
+  res.json(
+    new ApiResponse(
+      200,
+      { ...user[0], userFollowing },
+      "user profile fetched successfully"
+    )
+  );
+});
+
+export { getUserProfile, getUserHistory, getAuthorProfile, getUserLikes };
 
 //FOR DEV ONLY
 // MUST BE COMMENTED IN PRODUCTION

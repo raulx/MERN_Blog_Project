@@ -307,10 +307,10 @@ const getBlogData = asyncHandler(async (req, res) => {
 });
 
 const getUserBlogs = asyncHandler(async (req, res) => {
-  const { userId } = req.token;
+  const userId = req.token.userId;
   const { pageNumber } = req.query;
 
-  if (!pageNumber) throw new ApiError(400, "pagenumber is required !");
+  if (!pageNumber) throw new ApiError(400, "Page number is required");
 
   const userBlogs = await Blog.aggregate([
     {
@@ -350,7 +350,48 @@ const deleteBlog = asyncHandler(async (req, res) => {
   res.json(new ApiResponse(200, {}, "Blog deleted successfully"));
 });
 
-export { addBlog, getBlogs, getBlogData, getUserBlogs, deleteBlog };
+const getAuthorBlogs = asyncHandler(async (req, res) => {
+  const { authorId, pageNumber } = req.query;
+
+  if (!authorId || !pageNumber)
+    throw new ApiError(400, "All fields are required");
+  const authorBlogs = await Blog.aggregate([
+    {
+      $match: {
+        created_by: mongoose.Types.ObjectId.createFromHexString(authorId),
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "created_by",
+        foreignField: "_id",
+        as: "created_by",
+        pipeline: [{ $project: { name: 1, profile_pic: 1, _id: 1 } }],
+      },
+    },
+    {
+      $addFields: {
+        created_by: { $first: "$created_by" },
+      },
+    },
+    { $skip: Number(pageNumber - 1) * 10 },
+    { $limit: 10 },
+  ]);
+
+  res.json(
+    new ApiResponse(200, authorBlogs, "Author blogs fetched successfully")
+  );
+});
+
+export {
+  addBlog,
+  getBlogs,
+  getAuthorBlogs,
+  getBlogData,
+  getUserBlogs,
+  deleteBlog,
+};
 
 // FOR DEV ONLY
 // FAKE DATA GENERATION CONTROLLERS MUST BE COMMENTED IN PRODUCTION

@@ -18,9 +18,8 @@ function RootScreen() {
 
   useEffect(() => {
     if (user) {
-      const { id } = JSON.parse(user);
       const getUser = async () => {
-        const res = await fetchUserData(id);
+        const res = await fetchUserData();
         if (res.status === "fulfilled") {
           dispatch(setUserData(res.data.data));
         } else {

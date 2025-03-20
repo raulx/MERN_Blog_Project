@@ -12,9 +12,9 @@ const userApi = createApi({
   endpoints(builder) {
     return {
       getUserProfile: builder.query({
-        query: (userId) => {
+        query: () => {
           return {
-            url: `/user/getUserProfile?userId=${userId}`,
+            url: `/user/getUserProfile`,
             method: "GET",
           };
         },
@@ -41,7 +41,6 @@ const userApi = createApi({
 
 export default userApi;
 export const {
-  useGetUserQuery,
   useGetUserProfileQuery,
   useLazyGetUserProfileQuery,
   useLazyGetUserHistoryQuery,

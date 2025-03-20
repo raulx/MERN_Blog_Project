@@ -5,7 +5,11 @@ import {
   deleteBlog,
   getUserBlogs,
 } from "../controllers/blogControllers.js";
-import { getBlogs, getBlogData } from "../controllers/blogControllers.js";
+import {
+  getBlogs,
+  getBlogData,
+  getAuthorBlogs,
+} from "../controllers/blogControllers.js";
 import upload from "../middleware/multerMiddleware.js";
 
 const router = Router();
@@ -15,6 +19,7 @@ router.route("/getblogs").get(getBlogs);
 router.route("/getBlogData").get(getBlogData);
 router.route("/getUserBlogs").get(protect, getUserBlogs);
 router.route("/deleteBlog").delete(protect, deleteBlog);
+router.route("/getAuthorBlogs").get(protect, getAuthorBlogs);
 
 //DEV ONLY
 // fake data generation routes, must be commented in production
